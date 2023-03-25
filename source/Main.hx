@@ -56,25 +56,25 @@ class Main extends Sprite
 	public static var gameWeeks:Array<Dynamic> = [
 		[['Tutorial'], ['gf'], [FlxColor.fromRGB(129, 100, 223)], 'Funky Beginnings'],
 		[
-			['Bopeebo', 'Fresh', 'Dadbattle'],
-			['dad', 'dad', 'dad'],
+			['Interruption', 'Raptor-Love', 'Showdown', 'Retired'],
+			['dad', 'gf', 'dad', 'gf'],
 			[FlxColor.fromRGB(129, 100, 223)],
 			'vs. DADDY DEAREST'
 		],
 		[
-			['Spookeez', 'South', 'Monster'],
-			['spooky', 'spooky', 'monster'],
+			['Haunted', 'South', 'Chocolate', 'Monster'],
+			['spooky', 'spooky', 'spooky', 'monster'],
 			[FlxColor.fromRGB(30, 45, 60)],
 			'Spooky Month'
 		],
 		[
-			['Pico', 'Philly-Nice', 'Blammed'],
+			['Ian', 'Supplies', 'Laser'],
 			['pico'],
 			[FlxColor.fromRGB(111, 19, 60)],
 			'vs. Pico'
 		],
 		[
-			['Satin-Panties', 'High', 'Milf'],
+			['Startup', 'Flying-High', 'Meteorites', 'Crash-Landing'],
 			['mom'],
 			[FlxColor.fromRGB(203, 113, 170)],
 			'MOMMY MUST MURDER'
@@ -90,6 +90,27 @@ class Main extends Sprite
 			['senpai', 'senpai', 'spirit'],
 			[FlxColor.fromRGB(206, 106, 169)],
 			"hating simulator ft. moawling"
+		],
+	];
+
+	public static var bonusSongs:Array<Dynamic> = [
+		[
+			['Overdrive'],
+			['whitty'],
+			[FlxColor.fromRGB(129, 100, 223)],
+			''
+		],
+		[
+			['Target-Practice'],
+			['matt'],
+			[FlxColor.fromRGB(129, 100, 223)],
+			''
+		],
+		[
+			['Massacre'],
+			['tabi'],
+			[FlxColor.fromRGB(129, 100, 223)],
+			''
 		],
 	];
 

@@ -127,8 +127,14 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 
 	override public function update(elapsed:Float)
 	{
-		if (PlayState.cpuControlled) botplayText = ' [BOTPLAY]';
-		else botplayText = '';
+		if (PlayState.cpuControlled) { 
+			botplayText = ' [BOTPLAY]';
+			scoreBar.visible = false;
+		}
+		else {
+			botplayText = '';
+			scoreBar.visible = true;
+		}
 
 		centerMark.text = '- ${infoDisplay + botplayText} -';
 		centerMark.screenCenter(X);

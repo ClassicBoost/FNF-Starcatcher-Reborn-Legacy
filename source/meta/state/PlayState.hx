@@ -1346,7 +1346,7 @@ class PlayState extends MusicBeatState
 		if (!cpuControlled) {
 		score = Std.int(Timings.judgementsMap.get(baseRating)[2]);
 		songScore += score;
-		}
+		} else songScore = 0;
 
 		popUpCombo();
 	}
