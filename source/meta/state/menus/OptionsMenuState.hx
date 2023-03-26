@@ -494,7 +494,7 @@ class OptionsMenuState extends MusicBeatState
 			// lazily hardcoded fps cap
 			var originalFPS = Init.trueSettings.get(activeSubgroup.members[curSelection].text);
 			var increase = 1 * updateBy;
-			if (FlxG.keys.pressed.SHIFT) increase = 10;
+			if (FlxG.keys.pressed.SHIFT) increase = 10 * updateBy;
 			if (originalFPS + increase < 60)
 				increase = 0;
 			// high fps cap
