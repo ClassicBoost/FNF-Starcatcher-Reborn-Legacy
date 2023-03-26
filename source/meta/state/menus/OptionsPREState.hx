@@ -66,7 +66,7 @@ class OptionsPREState extends MusicBeatState
 				[
 					['Controller Mode', getFromOption],
 					['Downscroll', getFromOption],
-					#if !neko ["Framerate Cap", getFromOption], #end
+				//	#if !neko ["Framerate Cap", getFromOption], #end
 					['Auto Pause', getFromOption],
 				]
 			],

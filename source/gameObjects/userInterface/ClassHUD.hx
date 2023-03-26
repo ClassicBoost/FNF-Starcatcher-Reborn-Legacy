@@ -156,8 +156,9 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 			scoreBar.text += divider + 'Accuracy: ' + Std.string(Math.floor(Timings.getAccuracy() * 100) / 100) + '%' + Timings.comboDisplay;
 			scoreBar.text += divider + 'Combo Breaks: ' + Std.string(PlayState.misses);
 			// messups are just mechanic fails, nothing else, as well with note misses, and you only get a P rank if you also have a MFC
-			if (PlayState.misses == 0 && PlayState.messups == 0) scoreBar.text += divider + 'Rank: P';
+			if (PlayState.misses == 0 && PlayState.messups == 0 && PlayState.songScore != 0 && !PlayState.cpuControlled && !PlayState.practiceMode) scoreBar.text += divider + 'Rank: P';
 			else scoreBar.text += divider + 'Rank: ' + Std.string(Timings.returnScoreRating());
+			if (PlayState.practiceMode) scoreBar.text += divider + 'Practice Mode';
 		}
 		scoreBar.text += '\n';
 		scoreBar.x = Math.floor((FlxG.width / 2) - (scoreBar.width / 2));

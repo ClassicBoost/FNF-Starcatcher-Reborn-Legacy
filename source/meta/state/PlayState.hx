@@ -67,6 +67,7 @@ class PlayState extends MusicBeatState
 	public var iconP2:HealthIcon;
 
 	public static var cpuControlled:Bool = false;
+	public static var practiceMode:Bool = false;
 
 	public static var choosenfont:String = 'vcr.ttf';
 
@@ -800,7 +801,7 @@ class PlayState extends MusicBeatState
 				health = 0;
 			}
 
-			if (health <= 0 && startedCountdown)
+			if (health <= 0 && startedCountdown && !practiceMode)
 			{
 				paused = true;
 				// startTimer.active = false;
