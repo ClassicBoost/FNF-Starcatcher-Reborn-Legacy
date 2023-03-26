@@ -32,7 +32,7 @@ class PauseSubState extends MusicBeatSubState
 		// trace('pause call');
 		#end
 
-		pauseMusic = new FlxSound().loadEmbedded(Paths.music('breakfast'), true, true);
+		pauseMusic = new FlxSound().loadEmbedded(Paths.music('Momentia'), true, true);
 		pauseMusic.volume = 0;
 		pauseMusic.play(false, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
 
@@ -169,7 +169,7 @@ class PauseSubState extends MusicBeatSubState
 		// trace('music volume increased');
 		#end
 
-		if (pauseMusic.volume < 0.5)
+		if (pauseMusic.volume < 0.3)
 			pauseMusic.volume += 0.01 * elapsed;
 	}
 

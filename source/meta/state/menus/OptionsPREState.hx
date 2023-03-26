@@ -14,13 +14,15 @@ import gameObjects.userInterface.menu.Selector;
 import meta.MusicBeat.MusicBeatState;
 import meta.data.dependency.Discord;
 import meta.data.dependency.FNFSprite;
+import meta.data.*;
+import meta.state.menus.*;
 import meta.data.font.Alphabet;
 import meta.subState.OptionsSubstate;
 
 /**
 	Options menu rewrite because I'm unhappy with how it was done previously
 **/
-class OptionsMenuState extends MusicBeatState
+class OptionsPREState extends MusicBeatState
 {
 	private var categoryMap:Map<String, Dynamic>;
 	private var activeSubgroup:FlxTypedGroup<Alphabet>;
@@ -57,7 +59,7 @@ class OptionsMenuState extends MusicBeatState
 					['preferences', callNewGroup],
 					['appearance', callNewGroup],
 					['controls', openControlmenu],
-					['exit', exitMenu]
+					['continue to game', exitMenu]
 				]
 			],
 			'preferences' => [
@@ -66,24 +68,10 @@ class OptionsMenuState extends MusicBeatState
 					['', null],
 					['Controller Mode', getFromOption],
 					['Downscroll', getFromOption],
-				//	['Centered Notefield', getFromOption],
-					['Ghost Tapping', getFromOption],
-					['Late Damage', getFromOption],
-					['Anti Mash', getFromOption],
-					['', null],
-					['Text Settings', null],
-					['', null],
-					['Display Accuracy', getFromOption],
-					['Skip Text', getFromOption],
 					['', null],
 					['Meta Settings', null],
 					['', null],
-					['Hitsounds', getFromOption],
 					['Auto Pause', getFromOption],
-				//	#if !neko ["Framerate Cap", getFromOption], #end
-					['FPS Counter', getFromOption],
-					['Memory Counter', getFromOption],
-					#if debug ['Debug Info', getFromOption], #end
 				]
 			],
 			'appearance' => [
@@ -91,26 +79,11 @@ class OptionsMenuState extends MusicBeatState
 					['Judgements', null],
 					['', null],
 					["UI Skin", getFromOption],
-					['Fixed Judgements', getFromOption],
-					['Simply Judgements', getFromOption],
-					['Counter', getFromOption],
-					['', null],
-					['Notes', null],
-					['', null],
-				//	["Note Skin", getFromOption],
-					["Clip Style", getFromOption],
-					['No Camera Note Movement', getFromOption],
-					['Disable Note Splashes', getFromOption],
-					['Opaque Arrows', getFromOption],
-					['Opaque Holds', getFromOption],
 					['', null],
 					['Accessibility Settings', null],
 					['', null],
 					['Filter', getFromOption],
 					['Disable Antialiasing', getFromOption],
-					["Stage Opacity", getFromOption],
-					["Opacity Type", getFromOption],
-					['Reduced Movements', getFromOption],
 				]
 			]
 		];
@@ -120,7 +93,7 @@ class OptionsMenuState extends MusicBeatState
 			categoryMap.get(category)[1] = returnSubgroup(category);
 			categoryMap.get(category)[2] = returnExtrasMap(categoryMap.get(category)[1]);
 		}
-		FlxG.sound.playMusic(Paths.music('Momentia'), 0.5);
+		FlxG.sound.playMusic(Paths.music('no'), 0);
 		// call the options menu
 		var bg = new FlxSprite(-85);
 		bg.loadGraphic(Paths.image('menus/base/menuDesat'));
@@ -130,7 +103,7 @@ class OptionsMenuState extends MusicBeatState
 		bg.updateHitbox();
 		bg.screenCenter();
 		bg.y -= 50;
-		bg.color = 0x5C56FF;
+		bg.color = 0x686868;
 		bg.antialiasing = true;
 		add(bg);
 
@@ -324,8 +297,9 @@ class OptionsMenuState extends MusicBeatState
 			if (curCategory != 'main')
 				loadSubgroup('main');
 			else {
-				FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);
-				Main.switchState(this, new MainMenuState());
+				Init.showPreOptions = false;
+				FlxG.save.flush();
+				Main.switchState(this, new TitleState());
 			}
 		}
 	}
@@ -606,9 +580,11 @@ class OptionsMenuState extends MusicBeatState
 		{
 			FlxG.sound.play(Paths.sound('confirmMenu'));
 			lockedMovement = true;
+			Init.showPreOptions = false;
+			FlxG.save.flush();
 			FlxFlicker.flicker(activeSubgroup.members[curSelection], 0.5, 0.06 * 2, true, false, function(flick:FlxFlicker)
 			{
-				Main.switchState(this, new MainMenuState());
+				Main.switchState(this, new TitleState());
 				lockedMovement = false;
 			});
 		}

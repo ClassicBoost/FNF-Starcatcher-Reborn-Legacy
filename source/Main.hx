@@ -114,6 +114,15 @@ class Main extends Sprite
 		],
 	];
 
+	public static var creditsStuff:Array<Dynamic> = [
+		[
+			['Classic1926','Spades','The-Spooky-Austroraptor','Downfrown','Everton123'],
+			['classic','spades','austro','down','everton'],
+			[FlxColor.fromRGB(255,255,255)],
+			''
+		],
+	];
+
 	// most of these variables are just from the base game!
 	// be sure to mess around with these if you'd like.
 

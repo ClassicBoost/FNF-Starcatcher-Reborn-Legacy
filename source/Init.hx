@@ -8,6 +8,7 @@ import meta.Overlay;
 import meta.data.Highscore;
 import meta.data.dependency.Discord;
 import meta.state.*;
+import meta.state.menus.*;
 import meta.state.charting.*;
 import openfl.filters.BitmapFilter;
 import openfl.filters.ColorMatrixFilter;
@@ -42,6 +43,8 @@ class Init extends FlxState
 	 */
 	public static var FORCED = 'forced';
 	public static var NOT_FORCED = 'not forced';
+
+	public static var showPreOptions:Bool = true;
 
 	public static var gameSettings:Map<String, Dynamic> = [
 		'Downscroll' => [
@@ -289,14 +292,25 @@ class Init extends FlxState
 	{
 		if (trueSettings.get("Custom Titlescreen"))
 			Main.switchState(this, new CustomTitlescreen());
-		else
+		else {
+			if (showPreOptions) {
+			FlxG.save.data.showPreOptions = false;
+			FlxG.save.flush();
+			Main.switchState(this, new OptionsPREState());
+			}
+			else
 			Main.switchState(this, new TitleState());
+		}
 	}
 
 	public static function loadSettings():Void
 	{
 		// set the true settings array
 		// only the first variable will be saved! the rest are for the menu stuffs
+
+		if(FlxG.save.data.showPreOptions != null) {
+			showPreOptions = FlxG.save.data.showPreOptions;
+		}
 
 		// IF YOU WANT TO SAVE MORE THAN ONE VALUE MAKE YOUR VALUE AN ARRAY INSTEAD
 		for (setting in gameSettings.keys())

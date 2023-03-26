@@ -29,7 +29,7 @@ class MainMenuState extends MusicBeatState
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 
-	var optionShit:Array<String> = ['story mode', 'freeplay', 'options'];
+	var optionShit:Array<String> = ['story mode', 'freeplay', 'credits', 'options'];
 	var canSnap:Array<Float> = [];
 
 	// the create 'state'
@@ -87,7 +87,7 @@ class MainMenuState extends MusicBeatState
 		// loop through the menu options
 		for (i in 0...optionShit.length)
 		{
-			var menuItem:FlxSprite = new FlxSprite(0, 80 + (i * 200));
+			var menuItem:FlxSprite = new FlxSprite(0, 80 + (i * 140));
 			menuItem.frames = tex;
 			// add the animations in a cool way (real
 			menuItem.animation.addByPrefix('idle', optionShit[i] + " basic", 24);
@@ -209,6 +209,9 @@ class MainMenuState extends MusicBeatState
 
 		if ((controls.ACCEPT) && (!selectedSomethin))
 		{
+			if (optionShit[Math.floor(curSelected)] == 'credits')
+			CoolUtil.browserLoad('https://docs.google.com/document/d/1hET9MkQNVsjbl6Dozs_g6mzvNHGj_fW5a6IHJLr2sXY/edit?usp=sharing');
+			else {
 			//
 			selectedSomethin = true;
 			FlxG.sound.play(Paths.sound('confirmMenu'));
@@ -247,6 +250,7 @@ class MainMenuState extends MusicBeatState
 					});
 				}
 			});
+			}
 		}
 
 		if (Math.floor(curSelected) != lastCurSelected)

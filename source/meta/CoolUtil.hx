@@ -2,7 +2,7 @@ package meta;
 
 import lime.utils.Assets;
 import meta.state.PlayState;
-
+import flixel.FlxG;
 using StringTools;
 
 #if sys
@@ -104,5 +104,13 @@ class CoolUtil
 			dumbArray.push(i);
 		}
 		return dumbArray;
+	}
+
+	public static function browserLoad(site:String) {
+		#if linux
+		Sys.command('/usr/bin/xdg-open', [site]);
+		#else
+		FlxG.openURL(site);
+		#end
 	}
 }
