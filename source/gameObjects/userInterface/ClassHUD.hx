@@ -155,7 +155,8 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 		//	scoreBar.text += divider + 'HP: ${PlayState.healthBar.percent}%';
 			scoreBar.text += divider + 'Accuracy: ' + Std.string(Math.floor(Timings.getAccuracy() * 100) / 100) + '%' + Timings.comboDisplay;
 			scoreBar.text += divider + 'Combo Breaks: ' + Std.string(PlayState.misses);
-			scoreBar.text += divider + 'Rank: ' + Std.string(Timings.returnScoreRating());
+			if (PlayState.misses == 0 && PlayState.messups == 0) scoreBar.text += divider + 'Rank: P';
+			else scoreBar.text += divider + 'Rank: ' + Std.string(Timings.returnScoreRating());
 		}
 		scoreBar.text += '\n';
 		scoreBar.x = Math.floor((FlxG.width / 2) - (scoreBar.width / 2));

@@ -162,14 +162,14 @@ class Init extends FlxState
 			['StepMania', 'FNF']
 		],
 		"UI Skin" => [
-			'default',
+			'starbound',
 			Selector,
 			'Choose a UI Skin for judgements, combo, etc.',
 			NOT_FORCED,
 			''
 		],
 		"Note Skin" => ['default', Selector, 'Choose a note skin.', NOT_FORCED, ''],
-		"Framerate Cap" => [120, Selector, 'Define your maximum FPS.', NOT_FORCED, ['']],
+		"Framerate Cap" => [60, Selector, 'Define your maximum FPS.', NOT_FORCED, ['']],
 		"Opaque Arrows" => [
 			false,
 			Checkmark,

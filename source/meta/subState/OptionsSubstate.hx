@@ -2,6 +2,7 @@ package meta.subState;
 
 import flixel.FlxBasic;
 import flixel.FlxG;
+import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.effects.FlxFlicker;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -18,7 +19,7 @@ class OptionsSubstate extends MusicBeatSubState
 	private var curSelection = 0;
 	private var submenuGroup:FlxTypedGroup<FlxBasic>;
 	private var submenuoffsetGroup:FlxTypedGroup<FlxBasic>;
-
+	var camFollow:FlxObject;
 	private var offsetTemp:Float;
 
 	// the controls class thingy
@@ -28,11 +29,12 @@ class OptionsSubstate extends MusicBeatSubState
 		var bg = new FlxSprite(-85);
 		bg.loadGraphic(Paths.image('menus/base/menuDesat'));
 		bg.scrollFactor.x = 0;
-		bg.scrollFactor.y = 0.18;
-		bg.setGraphicSize(Std.int(bg.width * 1.1));
+		bg.scrollFactor.y = 0.35;
+		bg.setGraphicSize(Std.int(bg.width * 1.2));
 		bg.updateHitbox();
 		bg.screenCenter();
-		bg.color = 0xCE64DF;
+		bg.y -= 50;
+		bg.color = 0x5C56FF;
 		bg.antialiasing = true;
 		add(bg);
 
@@ -43,19 +45,27 @@ class OptionsSubstate extends MusicBeatSubState
 
 		submenuGroup = new FlxTypedGroup<FlxBasic>();
 		submenuoffsetGroup = new FlxTypedGroup<FlxBasic>();
-
 		submenu = new FlxSprite(0, 0).makeGraphic(FlxG.width - 200, FlxG.height - 200, FlxColor.fromRGB(250, 253, 109));
 		submenu.screenCenter();
+		submenu.scrollFactor.x = 0;
+		submenu.scrollFactor.y = 0;
+
+		camFollow = new FlxObject(0, 0, 1, 1);
+		add(camFollow);
 
 		// submenu group
 		var submenuText = new Alphabet(0, 0, "Press any key to rebind", true, false);
 		submenuText.screenCenter();
 		submenuText.y -= 32;
+		submenuText.scrollFactor.x = 0;
+		submenuText.scrollFactor.y = 0;
 		submenuGroup.add(submenuText);
 
 		var submenuText2 = new Alphabet(0, 0, "Escape to Cancel", true, false);
 		submenuText2.screenCenter();
 		submenuText2.y += 32;
+		submenuText2.scrollFactor.x = 0;
+		submenuText2.scrollFactor.y = 0;
 		submenuGroup.add(submenuText2);
 
 		// submenuoffset group
@@ -63,27 +73,37 @@ class OptionsSubstate extends MusicBeatSubState
 		var submenuOffsetText = new Alphabet(0, 0, "Left or Right to edit.", true, false);
 		submenuOffsetText.screenCenter();
 		submenuOffsetText.y -= 144;
+		submenuOffsetText.scrollFactor.x = 0;
+		submenuOffsetText.scrollFactor.y = 0;
 		submenuoffsetGroup.add(submenuOffsetText);
 
 		var submenuOffsetText2 = new Alphabet(0, 0, "Negative is Late", true, false);
 		submenuOffsetText2.screenCenter();
 		submenuOffsetText2.y -= 80;
+		submenuOffsetText2.scrollFactor.x = 0;
+		submenuOffsetText2.scrollFactor.y = 0;
 		submenuoffsetGroup.add(submenuOffsetText2);
 
 		var submenuOffsetText3 = new Alphabet(0, 0, "Escape to Cancel", true, false);
 		submenuOffsetText3.screenCenter();
 		submenuOffsetText3.y += 102;
+		submenuOffsetText3.scrollFactor.x = 0;
+		submenuOffsetText3.scrollFactor.y = 0;
 		submenuoffsetGroup.add(submenuOffsetText3);
 
 		var submenuOffsetText4 = new Alphabet(0, 0, "Enter to Save", true, false);
 		submenuOffsetText4.screenCenter();
 		submenuOffsetText4.y += 164;
+		submenuOffsetText4.scrollFactor.x = 0;
+		submenuOffsetText4.scrollFactor.y = 0;
 		submenuoffsetGroup.add(submenuOffsetText4);
 
 		var submenuOffsetValue:FlxText = new FlxText(0, 0, 0, "< 0ms >", 50, false);
 		submenuOffsetValue.screenCenter();
 		submenuOffsetValue.borderColor = FlxColor.BLACK;
 		submenuOffsetValue.borderSize = 5;
+		submenuOffsetValue.scrollFactor.x = 0;
+		submenuOffsetValue.scrollFactor.y = 0;
 		submenuOffsetValue.borderStyle = FlxTextBorderStyle.OUTLINE;
 		submenuoffsetGroup.add(submenuOffsetValue);
 
@@ -122,6 +142,8 @@ class OptionsSubstate extends MusicBeatSubState
 			optionsText.screenCenter();
 			optionsText.y += (90 * (i - (arrayTemp.length / 2)));
 			optionsText.targetY = i;
+			optionsText.scrollFactor.x = 0;
+			optionsText.scrollFactor.y = 0;
 			optionsText.disableX = true;
 			optionsText.isMenuItem = true;
 			optionsText.alpha = 0.6;
@@ -154,6 +176,8 @@ class OptionsSubstate extends MusicBeatSubState
 				secondaryText.y += (90 * (i - (arrayTemp.length / 2)));
 				secondaryText.targetY = i;
 				secondaryText.disableX = true;
+				secondaryText.scrollFactor.x = 0;
+				secondaryText.scrollFactor.y = 0;
 				secondaryText.xTo += ((j + 1) * 420);
 				secondaryText.isMenuItem = true;
 				secondaryText.alpha = 0.6;
@@ -278,7 +302,7 @@ class OptionsSubstate extends MusicBeatSubState
 					//
 				}
 			}
-
+			camFollow.setPosition(curSelection,curSelection);
 			//
 			updateHorizontalSelection();
 

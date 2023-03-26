@@ -2,6 +2,7 @@ package meta.state.menus;
 
 import flixel.FlxBasic;
 import flixel.FlxG;
+import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.effects.FlxFlicker;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -24,8 +25,9 @@ class OptionsMenuState extends MusicBeatState
 	private var categoryMap:Map<String, Dynamic>;
 	private var activeSubgroup:FlxTypedGroup<Alphabet>;
 	private var attachments:FlxTypedGroup<FlxBasic>;
-
+	var camFollow:FlxObject;
 	var curSelection = 0;
+	var curSelected:Int = 0;
 	var curSelectedScript:Void->Void;
 	var curCategory:String;
 
@@ -64,7 +66,7 @@ class OptionsMenuState extends MusicBeatState
 					['', null],
 					['Controller Mode', getFromOption],
 					['Downscroll', getFromOption],
-					['Centered Notefield', getFromOption],
+				//	['Centered Notefield', getFromOption],
 					['Ghost Tapping', getFromOption],
 					['Late Damage', getFromOption],
 					['Anti Mash', getFromOption],
@@ -78,10 +80,10 @@ class OptionsMenuState extends MusicBeatState
 					['', null],
 					['Hitsounds', getFromOption],
 					['Auto Pause', getFromOption],
-					#if !neko ["Framerate Cap", getFromOption], #end
+				//	#if !neko ["Framerate Cap", getFromOption], #end
 					['FPS Counter', getFromOption],
 					['Memory Counter', getFromOption],
-					#if !neko ['Debug Info', getFromOption], #end
+					#if debug ['Debug Info', getFromOption], #end
 				]
 			],
 			'appearance' => [
@@ -95,7 +97,7 @@ class OptionsMenuState extends MusicBeatState
 					['', null],
 					['Notes', null],
 					['', null],
-					["Note Skin", getFromOption],
+				//	["Note Skin", getFromOption],
 					["Clip Style", getFromOption],
 					['No Camera Note Movement', getFromOption],
 					['Disable Note Splashes', getFromOption],
@@ -123,19 +125,29 @@ class OptionsMenuState extends MusicBeatState
 		var bg = new FlxSprite(-85);
 		bg.loadGraphic(Paths.image('menus/base/menuDesat'));
 		bg.scrollFactor.x = 0;
-		bg.scrollFactor.y = 0.18;
-		bg.setGraphicSize(Std.int(bg.width * 1.1));
+		bg.scrollFactor.y = 0.35;
+		bg.setGraphicSize(Std.int(bg.width * 1.2));
 		bg.updateHitbox();
 		bg.screenCenter();
-		bg.color = 0xCE64DF;
+		bg.y -= 50;
+		bg.color = 0x5C56FF;
 		bg.antialiasing = true;
 		add(bg);
+
+		// this is the 5th attempt (pain)
+		camFollow = new FlxObject(0, 0, 1, 1);
+		add(camFollow);
 
 		infoText = new FlxText(5, FlxG.height - 24, 0, "", 32);
 		infoText.setFormat("VCR OSD Mono", 20, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		infoText.textField.background = true;
 		infoText.textField.backgroundColor = FlxColor.BLACK;
+		infoText.scrollFactor.x = 0;
+		infoText.scrollFactor.y = 0;
 		add(infoText);
+
+		var camLerp = Main.framerateAdjust(0.10);
+		FlxG.camera.follow(camFollow, null, camLerp);
 
 		loadSubgroup('main');
 	}
@@ -262,6 +274,8 @@ class OptionsMenuState extends MusicBeatState
 			updateSelections();
 		}
 
+		camFollow.setPosition(curSelection,curSelection);
+
 		if (Init.gameSettings.get(activeSubgroup.members[curSelection].text) != null)
 		{
 			// lol had to set this or else itd tell me expected }
@@ -306,6 +320,7 @@ class OptionsMenuState extends MusicBeatState
 		if (controls.BACK)
 		{
 			FlxG.sound.play(Paths.sound('cancelMenu'));
+			curSelected = 0;
 			if (curCategory != 'main')
 				loadSubgroup('main');
 			else
@@ -352,7 +367,7 @@ class OptionsMenuState extends MusicBeatState
 		}
 	}
 
-	private function returnSubgroup(groupName:String):FlxTypedGroup<Alphabet>
+	private function returnSubgroup(groupName:String, isMenuMove:Bool = false):FlxTypedGroup<Alphabet>
 	{
 		//
 		var newGroup:FlxTypedGroup<Alphabet> = new FlxTypedGroup<Alphabet>();
@@ -367,9 +382,11 @@ class OptionsMenuState extends MusicBeatState
 				thisOption.y += (90 * (i - Math.floor(categoryMap.get(groupName)[0].length / 2)));
 				thisOption.targetY = i;
 				thisOption.disableX = true;
+				thisOption.scrollFactor.x = 0;
+				thisOption.scrollFactor.y = 0;
 				// hardcoded main so it doesnt have scroll
 				if (groupName != 'main')
-					thisOption.isMenuItem = true;
+					thisOption.isMenuItem2 = true;
 				thisOption.alpha = 0.6;
 				newGroup.add(thisOption);
 			}
@@ -391,13 +408,15 @@ class OptionsMenuState extends MusicBeatState
 						// checkmark
 						var checkmark = ForeverAssets.generateCheckmark(10, letter.y, 'checkboxThingie', 'base', 'default', 'UI');
 						checkmark.playAnim(Std.string(Init.trueSettings.get(letter.text)) + ' finished');
-
+						checkmark.scrollFactor.x = 0;
+						checkmark.scrollFactor.y = 0;
 						extrasMap.set(letter, checkmark);
 					case Init.SettingTypes.Selector:
 						// selector
 						var selector:Selector = new Selector(10, letter.y, letter.text, Init.gameSettings.get(letter.text)[4],
 							(letter.text == 'Framerate Cap') ? true : false, (letter.text == 'Stage Opacity') ? true : false);
-
+							selector.scrollFactor.x = 0;
+							selector.scrollFactor.y = 0;
 						extrasMap.set(letter, selector);
 					default:
 						// dont do ANYTHING

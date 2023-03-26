@@ -109,6 +109,8 @@ class PlayState extends MusicBeatState
 
 	public static var misses:Int = 0;
 
+	public static var messups:Int = 0; // now this would seem like combo breaks but failing mechanics will also remove your P rank
+
 	public static var deaths:Int = 0;
 
 	public var generatedMusic:Bool = false;
@@ -186,6 +188,7 @@ class PlayState extends MusicBeatState
 		combo = 0;
 		health = 1;
 		misses = 0;
+		messups = 0;
 		// sets up the combo object array
 		lastCombo = [];
 
@@ -1062,6 +1065,11 @@ class PlayState extends MusicBeatState
 			if (characterStrums.receptors.members[coolNote.noteData] != null)
 				characterStrums.receptors.members[coolNote.noteData].playAnim('confirm', true);
 
+			switch (dadOpponent.curCharacter) {
+				case 'monster','monster-christmas':
+					if (health > 0.5) health -= 0.01;
+			}
+
 			// special thanks to sam, they gave me the original system which kinda inspired my idea for this new one
 			if (canDisplayJudgement)
 			{
@@ -1332,10 +1340,12 @@ class PlayState extends MusicBeatState
 		if (baseRating == "sick")
 			// create the note splash if you hit a sick
 			createSplash(coolNote, strumline);
-		else
+		else {
 			// if it isn't a sick, and you had a sick combo, then it becomes not sick :(
 			if (allSicks)
 				allSicks = false;
+			messups++;
+		}
 
 		if (baseRating == 'miss' && goodNotePressed) // just so hitting a note extremely early/late won't give a miss
 		displayRating("shit", timing);	
@@ -1441,6 +1451,7 @@ class PlayState extends MusicBeatState
 		// misses
 		songScore -= 10;
 		misses++;
+		messups++;
 
 		// display negative combo
 		if (popMiss)
