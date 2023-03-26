@@ -64,24 +64,15 @@ class OptionsPREState extends MusicBeatState
 			],
 			'preferences' => [
 				[
-					['Gameplay Settings', null],
-					['', null],
 					['Controller Mode', getFromOption],
 					['Downscroll', getFromOption],
-					['', null],
-					['Meta Settings', null],
-					['', null],
+					#if !neko ["Framerate Cap", getFromOption], #end
 					['Auto Pause', getFromOption],
 				]
 			],
 			'appearance' => [
 				[
-					['Judgements', null],
-					['', null],
 					["UI Skin", getFromOption],
-					['', null],
-					['Accessibility Settings', null],
-					['', null],
 					['Filter', getFromOption],
 					['Disable Antialiasing', getFromOption],
 				]
@@ -467,8 +458,9 @@ class OptionsPREState extends MusicBeatState
 			// bro I dont even know if the engine works in html5 why am I even doing this
 			// lazily hardcoded fps cap
 			var originalFPS = Init.trueSettings.get(activeSubgroup.members[curSelection].text);
-			var increase = 15 * updateBy;
-			if (originalFPS + increase < 30)
+			var increase = 1 * updateBy;
+			if (FlxG.keys.pressed.SHIFT) increase = 10 * updateBy;
+			if (originalFPS + increase < 60)
 				increase = 0;
 			// high fps cap
 			if (originalFPS + increase > 360)

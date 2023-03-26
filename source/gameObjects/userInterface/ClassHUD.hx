@@ -44,7 +44,7 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 	private var timingsMap:Map<String, FlxText> = [];
 
 	var infoDisplay:String = CoolUtil.dashToSpace(PlayState.SONG.song);
-	var diffDisplay:String = CoolUtil.difficultyFromNumber(PlayState.storyDifficulty);
+//	var diffDisplay:String = CoolUtil.difficultyFromNumber(PlayState.storyDifficulty);
 	var engineDisplay:String = "FOREVER ENGINE v" + Main.gameVersion;
 
 	var textcolor:FlxColor;
@@ -155,6 +155,7 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 		//	scoreBar.text += divider + 'HP: ${PlayState.healthBar.percent}%';
 			scoreBar.text += divider + 'Accuracy: ' + Std.string(Math.floor(Timings.getAccuracy() * 100) / 100) + '%' + Timings.comboDisplay;
 			scoreBar.text += divider + 'Combo Breaks: ' + Std.string(PlayState.misses);
+			// messups are just mechanic fails, nothing else, as well with note misses, and you only get a P rank if you also have a MFC
 			if (PlayState.misses == 0 && PlayState.messups == 0) scoreBar.text += divider + 'Rank: P';
 			else scoreBar.text += divider + 'Rank: ' + Std.string(Timings.returnScoreRating());
 		}

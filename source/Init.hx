@@ -172,7 +172,7 @@ class Init extends FlxState
 			''
 		],
 		"Note Skin" => ['default', Selector, 'Choose a note skin.', NOT_FORCED, ''],
-		"Framerate Cap" => [60, Selector, 'Define your maximum FPS.', NOT_FORCED, ['']],
+		"Framerate Cap" => [120, Selector, 'Define your maximum FPS.', NOT_FORCED, ['']],
 		"Opaque Arrows" => [
 			false,
 			Checkmark,
@@ -293,6 +293,9 @@ class Init extends FlxState
 		if (trueSettings.get("Custom Titlescreen"))
 			Main.switchState(this, new CustomTitlescreen());
 		else {
+			#if debug
+			Main.switchState(this, new OptionsPREState());
+			#else
 			if (showPreOptions) {
 			FlxG.save.data.showPreOptions = false;
 			FlxG.save.flush();
@@ -300,6 +303,7 @@ class Init extends FlxState
 			}
 			else
 			Main.switchState(this, new TitleState());
+			#end
 		}
 	}
 
@@ -326,11 +330,13 @@ class Init extends FlxState
 					trueSettings.set(singularSetting, FlxG.save.data.settings.get(singularSetting));
 		}
 
+	//	trueSettings.set("Framerate Cap", 120);
+
 		// lemme fix that for you
 		if (!Std.isOfType(trueSettings.get("Framerate Cap"), Int)
-			|| trueSettings.get("Framerate Cap") < 30
+			|| trueSettings.get("Framerate Cap") < 60
 			|| trueSettings.get("Framerate Cap") > 360)
-			trueSettings.set("Framerate Cap", 30);
+			trueSettings.set("Framerate Cap", 60);
 
 		if (!Std.isOfType(trueSettings.get("Stage Opacity"), Int)
 			|| trueSettings.get("Stage Opacity") < 0
