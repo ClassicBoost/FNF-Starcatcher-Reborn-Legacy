@@ -64,6 +64,7 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 
 		scoreBar = new FlxText(0,0, 0, scoreDisplay);
 		scoreBar.setFormat(Paths.font(PlayState.choosenfont), 18, FlxColor.WHITE);
+	//	if (PlayState.choosenfont == 'pixel.otf') scoreBar.setFormat(Paths.font('pixel.otf'), 12, FlxColor.WHITE);
 		scoreBar.setBorderStyle(OUTLINE, FlxColor.BLACK, 1.5);
 		updateScoreText();
 		// scoreBar.scrollFactor.set();
@@ -74,7 +75,10 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 			scoreBar.y = (FlxG.height - centerMark.height / 2) - 30;
 		else {
 			scoreBar.y = (FlxG.height / 24) - 10;
+			if (PlayState.choosenfont == 'pixel.otf') scoreBar.y -= 15;
 		}
+
+		if (PlayState.choosenfont == 'pixel.otf') engineDisplay = '${Main.gameVersion}';
 
 		cornerMark = new FlxText(0, 0, 0, engineDisplay);
 		cornerMark.setFormat(Paths.font(PlayState.choosenfont), 18, FlxColor.WHITE);
@@ -138,26 +142,37 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 
 		centerMark.text = '- ${infoDisplay + botplayText} -';
 		centerMark.screenCenter(X);
+
+		updateScoreText();
 	}
 
 	private final divider:String = " • ";
 
 	public function updateScoreText()
 	{
-		var importSongScore = PlayState.songScore;
+		var importSongScore = PlayState.lerpScore;
 		var importPlayStateCombo = PlayState.combo;
 		var importMisses = PlayState.misses;
-		scoreBar.text = 'Score: $importSongScore';
+		var scoretext:String = 'Score: ';
+		var accuracytext:String = 'Accuracy: ';
+		var missestext:String = 'Combo Breaks: ';
+		var ranktext:String = 'Rank: ';
+
+		if (PlayState.choosenfont == 'pixel.otf') {
+			scoretext = 'SCR: '; accuracytext = ''; missestext = 'MISS: '; ranktext = '';
+		}
+
+		scoreBar.text = '$scoretext$importSongScore';
 		// testing purposes
 		var displayAccuracy:Bool = Init.trueSettings.get('Display Accuracy');
 		if (displayAccuracy)
 		{
 		//	scoreBar.text += divider + 'HP: ${PlayState.healthBar.percent}%';
-			scoreBar.text += divider + 'Accuracy: ' + Std.string(Math.floor(Timings.getAccuracy() * 100) / 100) + '%' + Timings.comboDisplay;
-			scoreBar.text += divider + 'Combo Breaks: ' + Std.string(PlayState.misses);
+			scoreBar.text += divider + accuracytext + Std.string(Math.floor(Timings.getAccuracy() * 100) / 100) + '%' + Timings.comboDisplay;
+			scoreBar.text += divider + missestext + Std.string(PlayState.misses);
 			// messups are just mechanic fails, nothing else, as well with note misses, and you only get a P rank if you also have a MFC
-			if (PlayState.misses == 0 && PlayState.messups == 0 && PlayState.songScore != 0 && !PlayState.cpuControlled && !PlayState.practiceMode) scoreBar.text += divider + 'Rank: P';
-			else scoreBar.text += divider + 'Rank: ' + Std.string(Timings.returnScoreRating());
+			if (PlayState.misses == 0 && PlayState.messups == 0 && PlayState.songScore != 0 && !PlayState.cpuControlled && !PlayState.practiceMode) scoreBar.text += divider + '${ranktext}P';
+			else scoreBar.text += divider + ranktext + Std.string(Timings.returnScoreRating());
 			if (PlayState.practiceMode) scoreBar.text += divider + 'Practice Mode';
 		}
 		scoreBar.text += '\n';

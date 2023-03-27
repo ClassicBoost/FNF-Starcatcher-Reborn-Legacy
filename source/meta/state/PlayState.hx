@@ -114,6 +114,9 @@ class PlayState extends MusicBeatState
 
 	public static var deaths:Int = 0;
 
+	public static var lerpScore:Float = 0.0;
+	public var lerpHealth:Float = 1;
+
 	public var generatedMusic:Bool = false;
 
 	private var startingSong:Bool = false;
@@ -550,7 +553,7 @@ class PlayState extends MusicBeatState
 		remove(iconP1);
 		remove(iconP2);
 
-		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8));
+		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this, 'lerpHealth', 0, 2);
 		healthBar.scrollFactor.set();
 		healthBar.createFilledBar(dadOpponent.barColor, boyfriend.barColor);
 		// healthBar
@@ -608,7 +611,15 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 
-		healthBar.percent = (health * 50);
+		lerpScore = Math.floor(FlxMath.lerp(lerpScore, songScore, CoolUtil.boundTo(elapsed * 24, 0, 1)));
+		lerpHealth = FlxMath.lerp(lerpHealth, health, CoolUtil.boundTo(elapsed * 9, 0, 1));
+
+		if (Math.abs(lerpScore - songScore) <= 10)
+			lerpScore = songScore;
+		if (Math.abs(lerpHealth - health) <= 0.01)
+			lerpHealth = health;
+
+		healthBar.percent = (lerpHealth * 50);
 
 		var iconLerp = 0.85;
 	//	iconP1.setGraphicSize(Std.int(FlxMath.lerp(iconP1.initialWidth, iconP1.width, iconLerp)));
@@ -1066,11 +1077,6 @@ class PlayState extends MusicBeatState
 			if (characterStrums.receptors.members[coolNote.noteData] != null)
 				characterStrums.receptors.members[coolNote.noteData].playAnim('confirm', true);
 
-			switch (dadOpponent.curCharacter) {
-				case 'monster','monster-christmas':
-					if (health > 0.5) health -= 0.01;
-			}
-
 			// special thanks to sam, they gave me the original system which kinda inspired my idea for this new one
 			if (canDisplayJudgement)
 			{
@@ -1117,6 +1123,13 @@ class PlayState extends MusicBeatState
 						Timings.updateAccuracy(100, true, coolNote.parentNote.childrenNotes.length);
 						healthCall(100 / coolNote.parentNote.childrenNotes.length);
 					}
+				}
+			} else {
+				switch (dadOpponent.curCharacter) {
+					case 'monster','monster-christmas':
+						if (health > 0.5) health -= 0.007;
+					case 'bf','bf-pixel','bf-car','bf-christmas':
+						if (health > 0.1 && !coolNote.isSustainNote) health -= 0.025;
 				}
 			}
 
@@ -1661,7 +1674,7 @@ class PlayState extends MusicBeatState
 
 		antimashshit = false;
 
-		if (!Init.trueSettings.get('Reduced Movements'))
+		if (!Init.trueSettings.get('Reduced Movements') && (!curStage.startsWith("school")))
 			{
 				iconP1.setGraphicSize(Std.int(iconP1.width + 30));
 				iconP2.setGraphicSize(Std.int(iconP2.width + 30));

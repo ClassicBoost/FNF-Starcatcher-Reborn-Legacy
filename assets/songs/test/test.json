@@ -5,7 +5,7 @@
         "needsVoices": true,
         "player1": "bf",
         "player2": "bf-pixel",
-        "speed": 1.6,
+        "speed": 3,
         "notes": [
             {
                 "lengthInSteps": 16,
