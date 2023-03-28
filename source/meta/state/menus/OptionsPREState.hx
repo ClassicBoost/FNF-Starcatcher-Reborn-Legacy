@@ -66,7 +66,6 @@ class OptionsPREState extends MusicBeatState
 				[
 					['Controller Mode', getFromOption],
 					['Downscroll', getFromOption],
-				//	#if !neko ["Framerate Cap", getFromOption], #end
 					['Auto Pause', getFromOption],
 				]
 			],
@@ -75,6 +74,7 @@ class OptionsPREState extends MusicBeatState
 					["UI Skin", getFromOption],
 					['Filter', getFromOption],
 					['Disable Antialiasing', getFromOption],
+					['Reduced Movements', getFromOption],
 				]
 			]
 		];

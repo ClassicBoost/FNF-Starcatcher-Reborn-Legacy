@@ -91,6 +91,12 @@ class Init extends FlxState
 			'Whether to reduce movements, like icons bouncing or beat zooms in gameplay.',
 			NOT_FORCED
 		],
+		'Icon Bop' => [
+			true,
+			Checkmark,
+			'Turn this off if the icon bop is distracting.',
+			NOT_FORCED
+		],
 		'Stage Opacity' => [
 			Checkmark,
 			Selector,

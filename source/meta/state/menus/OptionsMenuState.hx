@@ -110,6 +110,7 @@ class OptionsMenuState extends MusicBeatState
 					['Disable Antialiasing', getFromOption],
 					["Stage Opacity", getFromOption],
 					["Opacity Type", getFromOption],
+					["Icon Bop", getFromOption],
 					['Reduced Movements', getFromOption],
 				]
 			]
