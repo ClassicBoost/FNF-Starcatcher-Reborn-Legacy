@@ -64,7 +64,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 			// custom stage stuffs will come with forever charts
 			switch (CoolUtil.spaceToDash(PlayState.SONG.song.toLowerCase()))
 			{
-				case 'spookeez' | 'south' | 'monster':
+				case 'spookeez' | 'mirage' | 'monster':
 					curStage = 'spooky';
 				case 'pico' | 'blammed' | 'philly-nice':
 					curStage = 'philly';
@@ -97,13 +97,22 @@ class Stage extends FlxTypedGroup<FlxBasic>
 
 				var hallowTex = Paths.getSparrowAtlas('backgrounds/' + curStage + '/halloween_bg');
 
-				halloweenBG = new FNFSprite(-200, -100);
+				var bg:FNFSprite = new FNFSprite(-100).loadGraphic(Paths.image('backgrounds/philly/sky'));
+				bg.scrollFactor.set(0.1, 0.1);
+				add(bg);
+
+				var concept:FNFSprite = new FNFSprite(-250,-200).loadGraphic(Paths.image('backgrounds/' + curStage + '/concept'));
+				concept.antialiasing = true;
+				concept.updateHitbox();
+				add(concept);
+
+			/*	halloweenBG = new FNFSprite(-200, -100);
 				halloweenBG.frames = hallowTex;
 				halloweenBG.animation.addByPrefix('idle', 'halloweem bg0');
 				halloweenBG.animation.addByPrefix('lightning', 'halloweem bg lightning strike', 24, false);
 				halloweenBG.animation.play('idle');
 				halloweenBG.antialiasing = true;
-				add(halloweenBG);
+				add(halloweenBG);*/
 
 			// isHalloween = true;
 			case 'philly':

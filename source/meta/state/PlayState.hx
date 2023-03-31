@@ -102,6 +102,8 @@ class PlayState extends MusicBeatState
 
 	private static var prevCamFollow:FlxObject;
 
+	private var blackBG:FlxSprite;
+
 	private var curSong:String = "";
 	private var gfSpeed:Int = 1;
 
@@ -166,6 +168,8 @@ class PlayState extends MusicBeatState
 	public static var daPixelZoom:Float = 6;
 	public static var determinedChartType:String = "";
 
+	public var allowHUDbop:Bool = false;
+
 	// strumlines
 	private var dadStrums:Strumline;
 	private var boyfriendStrums:Strumline;
@@ -221,6 +225,8 @@ class PlayState extends MusicBeatState
 			latedamage = 3;
 		else
 			latedamage = 1;
+
+		allowHUDbop = false;
 
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD);
@@ -311,6 +317,11 @@ class PlayState extends MusicBeatState
 		darknessBG.scrollFactor.set(0, 0);
 		add(darknessBG);
 
+		blackBG = new FlxSprite(FlxG.width * -0.5, FlxG.height * -0.5).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
+		blackBG.alpha = 0;
+		blackBG.scrollFactor.set(0, 0);
+		add(blackBG);
+
 		// strum setup
 		strumLines = new FlxTypedGroup<Strumline>();
 
@@ -368,9 +379,8 @@ class PlayState extends MusicBeatState
 			allUIs.push(strumHUD[i]);
 			FlxG.cameras.add(strumHUD[i]);
 			// set this strumline's camera to the designated camera
-			strumLines.members[i].cameras = [strumHUD[i]];
+			strumLines.members[i].cameras = [camHUD];
 		}
-		add(strumLines);
 
 		bfIcon = boyfriend.curCharacter;
 		dadIcon = dadOpponent.curCharacter;
@@ -392,6 +402,9 @@ class PlayState extends MusicBeatState
 		//
 
 		add(uiHUD);
+		add(strumLines);
+
+		camHUD.zoom = 3;
 
 		// create a hud over the hud camera for dialogue
 		dialogueHUD = new FlxCamera();
@@ -798,8 +811,10 @@ class PlayState extends MusicBeatState
 			var easeLerp = 0.95;
 			// camera stuffs
 			FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom + forceZoom[0], FlxG.camera.zoom, easeLerp);
+			if (allowHUDbop) {
 			for (hud in allUIs)
 				hud.zoom = FlxMath.lerp(1 + forceZoom[1], hud.zoom, easeLerp);
+			}
 
 			// not even forcezoom anymore but still
 			FlxG.camera.angle = FlxMath.lerp(0 + forceZoom[2], FlxG.camera.angle, easeLerp);
@@ -1074,6 +1089,8 @@ class PlayState extends MusicBeatState
 		{
 			coolNote.wasGoodHit = true;
 			vocals.volume = 1;
+
+			forceLose = false;
 
 			characterPlayAnimation(coolNote, character);
 			if (characterStrums.receptors.members[coolNote.noteData] != null)
@@ -1650,6 +1667,30 @@ class PlayState extends MusicBeatState
 	override function stepHit()
 	{
 		super.stepHit();
+
+		if (curStep == 1) {
+			FlxTween.tween(camHUD, {zoom: 1}, 2, {ease: FlxEase.expoOut,
+			onComplete: function(twn:FlxTween)
+			{
+					allowHUDbop = true;
+			}});
+		}
+
+		switch (curSong.toLowerCase()) {
+			case 'mirage':
+				switch (curStep) {
+					case 896:
+						FlxTween.tween(blackBG, {alpha: 1}, 1, {ease: FlxEase.linear});
+						FlxTween.tween(camHUD, {alpha: 0}, 1, {ease: FlxEase.linear});
+					case 906:
+						eventTrigger('changeScroll','slow','');
+					case 924:
+						FlxTween.tween(blackBG, {alpha: 0}, 0.01, {ease: FlxEase.linear});
+						FlxTween.tween(camHUD, {alpha: 1}, 0.01, {ease: FlxEase.linear});
+					case 928:
+						// space transition
+				}
+		}
 		///*
 		if (songMusic.time >= Conductor.songPosition + 20 || songMusic.time <= Conductor.songPosition - 20)
 			resyncVocals();
@@ -1663,8 +1704,8 @@ class PlayState extends MusicBeatState
 
 		if ((boyfriend.animation.curAnim.name.startsWith("idle") || boyfriend.animation.curAnim.name.startsWith("dance"))
 			&& (curBeat % 2 == 0 || boyfriend.characterData.quickDancer)) {
-			boyfriend.dance();
 			forceLose = false;
+			boyfriend.dance();
 			}
 
 		// added this for opponent cus it wasn't here before and skater would just freeze
@@ -1700,9 +1741,11 @@ class PlayState extends MusicBeatState
 		if ((FlxG.camera.zoom < 1.35 && curBeat % 4 == 0) && (!Init.trueSettings.get('Reduced Movements')))
 		{
 			FlxG.camera.zoom += 0.015;
+			if (allowHUDbop) {
 			camHUD.zoom += 0.05;
 			for (hud in strumHUD)
 				hud.zoom += 0.05;
+			}
 		}
 
 		if (SONG.notes[Math.floor(curStep / 16)] != null)
@@ -1866,6 +1909,19 @@ class PlayState extends MusicBeatState
 				songEndSpecificActions();
 		}
 		//
+	}
+
+	public function eventTrigger(?type:String = '', ?var1:String = '', ?var2:String = '') { // events demo
+		if (type == 'changeScroll') {
+			if(var1 == 'fast')
+				SONG.speed = SONG.speed += 1;
+			if (var1 == 'slow')
+				SONG.speed = SONG.speed -= 1;
+			if (var1 == 'vslow')
+				SONG.speed = SONG.speed -= 2;
+			if (var1 == 'vfast')
+				SONG.speed = SONG.speed += 2;
+		}
 	}
 
 	private function songEndSpecificActions()

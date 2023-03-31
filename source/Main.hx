@@ -62,7 +62,7 @@ class Main extends Sprite
 			'vs. DADDY DEAREST'
 		],
 		[
-			['Haunted', 'South', 'Chocolate', 'Monster'],
+			['Haunted', 'Mirage', 'Chocolate', 'Monster'],
 			['spooky', 'spooky', 'spooky', 'monster'],
 			[FlxColor.fromRGB(30, 45, 60)],
 			'Spooky Month'
