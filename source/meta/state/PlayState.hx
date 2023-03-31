@@ -1090,8 +1090,6 @@ class PlayState extends MusicBeatState
 			coolNote.wasGoodHit = true;
 			vocals.volume = 1;
 
-			forceLose = false;
-
 			characterPlayAnimation(coolNote, character);
 			if (characterStrums.receptors.members[coolNote.noteData] != null)
 				characterStrums.receptors.members[coolNote.noteData].playAnim('confirm', true);
@@ -1119,6 +1117,8 @@ class PlayState extends MusicBeatState
 						lowestThreshold = myThreshold;
 					}
 				}
+
+				forceLose = false;
 
 				if (!coolNote.isSustainNote)
 				{
@@ -1674,6 +1674,11 @@ class PlayState extends MusicBeatState
 			{
 					allowHUDbop = true;
 			}});
+		}
+
+		switch (dadOpponent.curCharacter) {
+			case 'monster','monster-christmas':
+				health -= 0.007;
 		}
 
 		switch (curSong.toLowerCase()) {
