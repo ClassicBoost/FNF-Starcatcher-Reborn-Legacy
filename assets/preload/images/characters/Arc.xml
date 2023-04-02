@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="Arc.png">
+<SubTexture name="idle0000" x="0" y="0" width="226" height="451" frameX="-72" frameY="-25" frameWidth="350" frameHeight="488" />
+<SubTexture name="idle0001" x="0" y="0" width="226" height="451" frameX="-72" frameY="-25" frameWidth="350" frameHeight="488" />
+<SubTexture name="idle0002" x="226" y="0" width="233" height="447" frameX="-65" frameY="-29" frameWidth="350" frameHeight="488" />
+<SubTexture name="idle0003" x="226" y="0" width="233" height="447" frameX="-65" frameY="-29" frameWidth="350" frameHeight="488" />
+<SubTexture name="idle0004" x="0" y="451" width="233" height="451" frameX="-65" frameY="-25" frameWidth="350" frameHeight="488" />
+<SubTexture name="idle0005" x="0" y="451" width="233" height="451" frameX="-65" frameY="-25" frameWidth="350" frameHeight="488" />
+<SubTexture name="idle0006" x="233" y="451" width="233" height="451" frameX="-65" frameY="-25" frameWidth="350" frameHeight="488" />
+<SubTexture name="idle0007" x="233" y="451" width="233" height="451" frameX="-65" frameY="-25" frameWidth="350" frameHeight="488" />
+</TextureAtlas>
