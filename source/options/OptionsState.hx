@@ -29,7 +29,7 @@ using StringTools;
 
 class OptionsState extends MusicBeatState
 {
-	var options:Array<String> = ['Preferences', 'Appearance', 'Controls', 'Exit'];
+	var options:Array<String> = ['Preferences', 'Appearance', 'Modded Specific', 'Controls', 'Exit'];
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 	private static var curSelected:Int = 0;
 	public static var menuBG:FlxSprite;
@@ -46,7 +46,7 @@ class OptionsState extends MusicBeatState
 				openSubState(new options.AppearanceSubState());
 			case 'Preferences':
 				openSubState(new options.PreferencesSettingsSubState());
-			case 'Psych Forever Settings':
+			case 'Modded Specific':
 				openSubState(new options.PsychForeverSettingsSubState());
 			case 'Exit':
 				MusicBeatState.switchState(new MainMenuState());

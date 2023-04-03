@@ -31,10 +31,15 @@ class PsychForeverSettingsSubState extends BaseOptionsMenu
 {
 	public function new()
 	{
-		title = 'Psych Forever Settings';
-		rpcTitle = 'Psych Forever Settings Menu'; //for Discord Rich Presence
+		title = 'Modded Specific';
+		rpcTitle = 'Modded Specific Settings Menu'; //for Discord Rich Presence
 
-		// USELESS LMAO
+		var option:Option = new Option('Pixel lowers FPS',
+			'Check this if pixel songs lowers the FPS cap to 30.',
+			'pixelFPS',
+			'bool',
+			true);
+		addOption(option);
 
 		super();
 	}

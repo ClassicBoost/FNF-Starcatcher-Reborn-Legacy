@@ -38,6 +38,7 @@ class ClientPrefs {
 	public static var mechanicsSystem:Bool = true;
 	public static var lateDamage:Bool = true;
 	public static var showAccuracy:Bool = true;
+	public static var pixelFPS:Bool = true;
 	public static var psychIconBop:Bool = false;
 	public static var autoPlayFreeplaySongs:Bool = false;
 
@@ -146,6 +147,7 @@ class ClientPrefs {
 		FlxG.save.data.showAccuracy = showAccuracy;
 		FlxG.save.data.psychIconBop = psychIconBop;
 		FlxG.save.data.autoPlayFreeplaySongs = autoPlayFreeplaySongs;
+		FlxG.save.data.pixelFPS = pixelFPS;
 	
 		FlxG.save.flush();
 
@@ -285,6 +287,9 @@ class ClientPrefs {
 		}
 		if(FlxG.save.data.psychIconBop != null) {
 			psychIconBop = FlxG.save.data.psychIconBop;
+		}
+		if(FlxG.save.data.pixelFPS != null) {
+			pixelFPS = FlxG.save.data.pixelFPS;
 		}
 		
 		// flixel automatically saves your volume!

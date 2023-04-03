@@ -83,14 +83,12 @@ class PlayState extends MusicBeatState
 	public static var STRUM_X_MIDDLESCROLL = -278;
 
 	public static var ratingStuff:Array<Dynamic> = [
-		['F', 0.7],
-		['E', 0.75],
-		['D', 0.8],
-		['C', 0.85],
-		['B', 0.9],
+		['D', 0.6],
+		['C', 0.77],
+		['B', 0.84],
 		['A', 0.95],
 		['S', 1],
-		['S+', 1]
+		['P', 1]
 	];
 
 	//event variables
@@ -126,6 +124,8 @@ class PlayState extends MusicBeatState
 	public var DAD_Y:Float = 100;
 	public var GF_X:Float = 400;
 	public var GF_Y:Float = 130;
+
+	public var stupidPixelshit:Bool = false;
 
 	public var songSpeedTween:FlxTween;
 	public var songSpeed(default, set):Float = 1;
@@ -230,6 +230,9 @@ class PlayState extends MusicBeatState
 	var dadbattleBlack:BGSprite;
 	var dadbattleLight:BGSprite;
 	var dadbattleSmokes:FlxSpriteGroup;
+
+	public var lerpScore:Float = 0.0;
+	public var lerpHealth:Float = 1;
 
 	var halloweenBG:BGSprite;
 	var halloweenWhite:BGSprite;
@@ -1081,6 +1084,15 @@ class PlayState extends MusicBeatState
 		add(timeTxt);
 		timeBarBG.sprTracker = timeBar;
 
+		stupidPixelshit = false;
+		if (isPixelStage) { // lol
+			if (ClientPrefs.pixelFPS) {
+			FlxG.updateFramerate = 30;
+			FlxG.drawFramerate = 30;
+			}
+			stupidPixelshit = true;
+		}
+
 		
 		// hard reset
 		allSicks = true;
@@ -1096,7 +1108,7 @@ class PlayState extends MusicBeatState
 		if(ClientPrefs.downScroll) healthBarBG.y = 0.11 * FlxG.height;
 
 		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this,
-			'health', 0, 2);
+			'lerpHealth', 0, 2);
 		healthBar.scrollFactor.set();
 		// healthBar
 		healthBar.visible = !ClientPrefs.hideHud;
@@ -3097,6 +3109,18 @@ class PlayState extends MusicBeatState
 		// FlxG.watch.addQuick('VOL', vocals.amplitudeLeft);
 		// FlxG.watch.addQuick('VOLRight', vocals.amplitudeRight);
 
+		if (isPixelStage) { // lol
+			stupidPixelshit = true;
+		}
+
+		lerpScore = Math.floor(FlxMath.lerp(lerpScore, songScore, CoolUtil.boundTo(elapsed * 24, 0, 1)));
+		lerpHealth = FlxMath.lerp(lerpHealth, health, CoolUtil.boundTo(elapsed * 9, 0, 1));
+
+		if (Math.abs(lerpScore - songScore) <= 10)
+			lerpScore = songScore;
+		if (Math.abs(lerpHealth - health) <= 0.01)
+			lerpHealth = health;
+
 		var iconOffset:Int = 26;
 
 		var mult:Float = FlxMath.lerp(1, iconP1.scale.x, CoolUtil.boundTo(1 - (elapsed * 9 * playbackRate), 0, 1));
@@ -3109,7 +3133,7 @@ class PlayState extends MusicBeatState
 		iconP1.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) + (150 * iconP1.scale.x - 150) / 2 - iconOffset;
 		iconP2.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) - (150 * iconP2.scale.x) / 2 - iconOffset * 2;
 
-		scoreTxt.text = 'Score: ' + songScore;
+		scoreTxt.text = 'Score: ' + Math.floor(lerpScore);
 		if (ClientPrefs.showAccuracy) {
 		scoreTxt.text += '${divider}Accuracy: ${Highscore.floorDecimal(ratingPercent * 100, 2)}%$ratingFC';
 		scoreTxt.text += '${divider}Combo Breaks: $songMisses (${songMisses + shits})';
@@ -3131,6 +3155,8 @@ class PlayState extends MusicBeatState
 			persistentUpdate = false;
 			paused = true;
 			cancelMusicFadeTween();
+			FlxG.updateFramerate = ClientPrefs.framerate;
+			FlxG.drawFramerate = ClientPrefs.framerate;
 			MusicBeatState.switchState(new CharacterEditorState(SONG.player2));
 		}
 		
@@ -3410,6 +3436,8 @@ class PlayState extends MusicBeatState
 		persistentUpdate = false;
 		paused = true;
 		cancelMusicFadeTween();
+		FlxG.updateFramerate = ClientPrefs.framerate;
+		FlxG.drawFramerate = ClientPrefs.framerate;
 		MusicBeatState.switchState(new ChartingState());
 		chartingMode = true;
 
@@ -3431,6 +3459,9 @@ class PlayState extends MusicBeatState
 
 				vocals.stop();
 				FlxG.sound.music.stop();
+
+				FlxG.updateFramerate = ClientPrefs.framerate;
+				FlxG.drawFramerate = ClientPrefs.framerate;
 
 				persistentUpdate = false;
 				persistentDraw = false;
@@ -4086,6 +4117,8 @@ class PlayState extends MusicBeatState
 				if(FlxTransitionableState.skipNextTransIn) {
 					CustomFadeTransition.nextCamera = null;
 				}
+				FlxG.updateFramerate = ClientPrefs.framerate;
+				FlxG.drawFramerate = ClientPrefs.framerate;
 				MusicBeatState.switchState(new FreeplayState());
 				FlxG.sound.playMusic(Paths.music('freakyMenu'));
 				changedDifficulty = false;
@@ -5129,7 +5162,7 @@ class PlayState extends MusicBeatState
 			notes.sort(FlxSort.byY, ClientPrefs.downScroll ? FlxSort.ASCENDING : FlxSort.DESCENDING);
 		}
 
-		iconBop();
+		if (!isPixelStage) iconBop();
 
 		if (gf != null && curBeat % Math.round(gfSpeed * gf.danceEveryNumBeats) == 0 && gf.animation.curAnim != null && !gf.animation.curAnim.name.startsWith("sing") && !gf.stunned)
 		{
@@ -5215,7 +5248,7 @@ class PlayState extends MusicBeatState
 				moveCameraSection();
 			}
 
-			if (camZooming && FlxG.camera.zoom < 1.35 && ClientPrefs.camZooms)
+			if (!isPixelStage && camZooming && FlxG.camera.zoom < 1.35 && ClientPrefs.camZooms)
 			{
 				FlxG.camera.zoom += 0.015 * camZoomingMult;
 				camHUD.zoom += 0.03 * camZoomingMult;
@@ -5319,6 +5352,9 @@ class PlayState extends MusicBeatState
 				}
 			}
 
+			if (songMisses > 65 && ratingPercent < 0.2)
+				ratingName = 'F';
+
 			// Rating FC
 			ratingFC = "";
 			if (sicks > 0) ratingFC = " [MFC]";
@@ -5326,7 +5362,8 @@ class PlayState extends MusicBeatState
 			if (bads > 0) ratingFC = " [FC]";
 			if (shits > 0) ratingFC = " [FC-]";
 			if (songMisses > 0 && songMisses < 10) ratingFC = " [SDCB]";
-			else if (songMisses >= 10) ratingFC = " [Clear]";
+			if (songMisses >= 10 && songMisses > 65) ratingFC = " [Clear]";
+			else if (songMisses >= 65) ratingFC = " [Skill Issue]";
 		}
 		updateScore(badHit); // score will only update after rating is calculated, if it's a badHit, it shouldn't bounce -Ghost
 		setOnLuas('rating', ratingPercent);

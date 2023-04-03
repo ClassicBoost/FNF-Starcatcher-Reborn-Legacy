@@ -1,7 +1,7 @@
 -- MOD SETTINGS
 local lateDamage = false --Should hitting notes late/early hurt you?
 local newIconBop = true --Use the new icon bop?
-local showJudgements = false --Should it show the judgement counter?
+local showJudgements = true --Should it show the judgement counter?
 local oldInput = false --heheheha (NOT RECCOMENDED)
 
 
@@ -21,6 +21,13 @@ function onCreate()
     setTextSize('watermark', 16);
 	addLuaText('watermark');
 
+    makeLuaText('judgementCounter','', 0, 5, 300);
+    setTextSize('judgementCounter', 24);
+    setTextAlignment('judgementCounter','left')
+    if showJudgements == true then
+	addLuaText('judgementCounter');
+    end
+
     makeLuaText('judge','SICK x000', 150, 565, 150);
     setTextSize('judge', 50);
 	addLuaText('judge');
@@ -28,18 +35,35 @@ function onCreate()
     makeLuaText('daRankShit', '?', 2050, 5, 630);
     setTextSize('daRankShit', 70);
 	addLuaText('daRankShit');
-    triggerEvent('Add Camera Zoom',0,3)
 
     getSick = 0
     getGood = 0
     getBad = 0
     getShit = 0
 end
+function onCreatePost()
+    if getProperty('stupidPixelshit') == false then
+        triggerEvent('Add Camera Zoom',0,3)
+    end
+    setProperty('healthBar.alpha',0)
+    setProperty('healthBarBG.alpha',0)
+    setProperty('iconP1.alpha',0)
+    setProperty('iconP2.alpha',0)
+end
 function onSongStart()
+    if getProperty('stupidPixelshit') == true then
+    setProperty('camZooming',false)
+    else
     setProperty('camZooming',true)
+    end
+
+    doTweenAlpha('hpbaralpha','healthBar',1,1,'ease')
+    doTweenAlpha('hpbarbgalpha','healthBarBG',1,1,'ease')
+    doTweenAlpha('i1alpha','iconP1',1,1,'ease')
+    doTweenAlpha('i2alpha','iconP2',1,1,'ease')
 end
 function onBeatHit()
-    if newIconBop == true then
+    if newIconBop == true and getProperty('stupidPixelshit') == false then
     if getProperty('curBeat') % 1 == 0 then
         setProperty('timeTxt.angle',1*-5)
         doTweenAngle('ho','timeTxt', 0, 0.5, 'sineInOut')
@@ -57,7 +81,6 @@ function onBeatHit()
         doTweenAngle('re', 'iconP1', 0, 0.5, 'sineInOut')
         doTweenAngle('ree', 'iconP2', 0, 0.5, 'sineInOut')
     end
-end
 end
 
     if getProperty('curBeat') % 2 == 0 then
@@ -78,6 +101,7 @@ end
         doTweenAngle('ree', 'iconP2', 0, 0.5, 'linear')
     end
 end
+end
 
 
     bopZoom = 1.0
@@ -85,7 +109,7 @@ end
         bopZoom = 1.1
     elseif ratingName == 'A' then
         bopZoom = 1.2
-    elseif ratingName == 'S+' or ratingName == 'S' then
+    elseif ratingName == 'P' or ratingName == 'S' then
         bopZoom = 1.3
     end
 
@@ -120,6 +144,7 @@ function onUpdatePost()
     end
 
     setTextString('judge',thejudge..'\nx'..(getProperty('combo') + missrow))
+    setTextString('judgementCounter','SICKS: '..getProperty('sicks')..'\nGOODS: '..getProperty('goods')..'\nBADS: '..getProperty('bads')..'\nSHITS: '..getProperty('shits'))
 
     setProperty('timeBar.visible',false)
     setProperty('timeBarBG.visible',false)
@@ -133,7 +158,11 @@ function onUpdatePost()
         setTextColor('daRankShit','FFFFFF')
     else
     setTextString('daRankShit',daRank)
-    if ratingName == 'D' or ratingName == 'E' or ratingName == 'F' then
+    if ratingName == 'F' then
+        daRank = 'F'
+        setTextColor('daRankShit','FF0000')
+    end
+    if ratingName == 'D' or ratingName == 'E' then
         daRank = 'D'
         setTextColor('daRankShit','FFFFFF')
     elseif ratingName == 'C' then
@@ -148,7 +177,7 @@ function onUpdatePost()
     elseif ratingName == 'S' then
         daRank = 'S'
         setTextColor('daRankShit','FFF189')
-    elseif ratingName == 'S+' then
+    elseif ratingName == 'P' then
         daRank = 'P'
         setTextColor('daRankShit','C55BFF')
     end

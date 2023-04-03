@@ -34,22 +34,6 @@ class AppearanceSubState extends BaseOptionsMenu
 		title = 'Appearances';
 		rpcTitle = 'Appearances Settings Menu'; //for Discord Rich Presence
 
-		var option:Option = new Option('Adjust Delay and Combo',
-			'Change the combo offsets.',
-			'none',
-			'none',
-			false);
-			option.onChange = switchToAdjust;
-		addOption(option);
-
-		var option:Option = new Option('Note Colors',
-			'Change your note colors.',
-			'none',
-			'none',
-			false);
-			option.onChange = switchToNoteColor;
-		addOption(option);
-
 		var option:Option = new Option('Low Quality',
 			'If checked, disables some background details,\ndecreases loading times and improves performance.',
 			'lowQuality',
