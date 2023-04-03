@@ -2,47 +2,47 @@
 	"animations": [
 		{
 			"offsets": [
-				59,
-				-20
+				0,
+				0
 			],
 			"loop": false,
 			"fps": 24,
 			"anim": "hey",
 			"indices": [],
-			"name": "spooky kids YEAH!!"
+			"name": "hey"
 		},
 		{
 			"offsets": [
-				130,
-				-10
+				0,
+				0
 			],
 			"loop": false,
 			"fps": 24,
 			"anim": "singLEFT",
 			"indices": [],
-			"name": "note sing left"
+			"name": "left0"
 		},
 		{
 			"offsets": [
-				-130,
-				-14
+				0,
+				0
 			],
 			"loop": false,
 			"fps": 24,
 			"anim": "singRIGHT",
 			"indices": [],
-			"name": "spooky sing right"
+			"name": "right0"
 		},
 		{
 			"offsets": [
-				-50,
-				-130
+				0,
+				0
 			],
 			"loop": false,
 			"fps": 24,
 			"anim": "singDOWN",
 			"indices": [],
-			"name": "spooky DOWN note"
+			"name": "down0"
 		},
 		{
 			"offsets": [
@@ -50,48 +50,28 @@
 				0
 			],
 			"loop": false,
-			"anim": "danceLeft",
-			"fps": 12,
-			"name": "spooky dance idle",
-			"indices": [
-				0,
-				2,
-				6
-			]
+			"anim": "idle",
+			"fps": 24,
+			"indices": [],
+			"name": "idle"
 		},
 		{
 			"offsets": [
 				0,
 				0
-			],
-			"loop": false,
-			"anim": "danceRight",
-			"fps": 12,
-			"name": "spooky dance idle",
-			"indices": [
-				8,
-				10,
-				12,
-				14
-			]
-		},
-		{
-			"offsets": [
-				-20,
-				26
 			],
 			"loop": false,
 			"anim": "singUP",
 			"fps": 24,
-			"name": "spooky UP NOTE",
+			"name": "up0",
 			"indices": []
 		}
 	],
 	"no_antialiasing": false,
-	"image": "characters/spooky_kids_assets",
+	"image": "characters/Jeri-Gara",
 	"position": [
 		0,
-		200
+		150
 	],
 	"healthicon": "jeri-gara",
 	"flip_x": false,
@@ -105,5 +85,5 @@
 		0
 	],
 	"sing_duration": 4,
-	"scale": 1
+	"scale": 1.3
 }

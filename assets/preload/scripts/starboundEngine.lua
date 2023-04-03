@@ -81,11 +81,11 @@ end
 
 
     bopZoom = 1.0
-    if ratingName == 'Good' then
+    if ratingName == 'B' then
         bopZoom = 1.1
-    elseif ratingName == 'Great' then
+    elseif ratingName == 'A' then
         bopZoom = 1.2
-    elseif ratingName == 'Perfect!!' or ratingName == 'Sick!' then
+    elseif ratingName == 'S+' or ratingName == 'S' then
         bopZoom = 1.3
     end
 

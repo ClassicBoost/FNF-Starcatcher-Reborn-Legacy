@@ -2365,7 +2365,7 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	var divider:String = ' • ';
+	var divider:String = ' - ';
 	public function updateScore(miss:Bool = false)
 	{
 		callOnLuas('onUpdateScore', [miss]);
