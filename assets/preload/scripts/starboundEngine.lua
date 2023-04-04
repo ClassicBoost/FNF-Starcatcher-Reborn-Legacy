@@ -17,7 +17,6 @@ getShit = 0
 missrow = 0
 
 function onCreate()
-    if getProperty('classicMode') == false then
     makeLuaText('watermark', '', 0, 5, 0);
     setTextSize('watermark', 16);
 	addLuaText('watermark');
@@ -42,9 +41,7 @@ function onCreate()
     getBad = 0
     getShit = 0
 end
-end
 function onCreatePost()
-    if getProperty('classicMode') == false then
     if getProperty('stupidPixelshit') == false then
         triggerEvent('Add Camera Zoom',0,3)
     end
@@ -53,9 +50,7 @@ function onCreatePost()
     setProperty('iconP1.alpha',0)
     setProperty('iconP2.alpha',0)
 end
-end
 function onSongStart()
-    if getProperty('classicMode') == false then
     if getProperty('stupidPixelshit') == true then
     setProperty('camZooming',false)
     else
@@ -67,10 +62,8 @@ function onSongStart()
     doTweenAlpha('i1alpha','iconP1',1,1,'ease')
     doTweenAlpha('i2alpha','iconP2',1,1,'ease')
 end
-end
 function onBeatHit()
-    if getProperty('classicMode') == false then
-    if newIconBop == true and getProperty('stupidPixelshit') == false then
+    if newIconBop == true then
     if getProperty('curBeat') % 1 == 0 then
         setProperty('timeTxt.angle',1*-5)
         doTweenAngle('ho','timeTxt', 0, 0.5, 'sineInOut')
@@ -125,7 +118,6 @@ end
 	doTweenX('stuffx','daRankShit.scale', 1, 0.25, 'cubeOut')
 	doTweenY('stuffy','daRankShit.scale', 1, 0.25, 'cubeOut')
 end
-end
 function onUpdate()
     if oldInput == true then
     if inputLag then
@@ -137,7 +129,6 @@ function onUpdate()
 end
 end
 function onUpdatePost()
-    if getProperty('classicMode') == false then
     if getProperty('iconP1.angle') > 0 then
         setProperty('iconP1.angle',getProperty('iconP1.angle')-1)
     end
@@ -192,9 +183,7 @@ function onUpdatePost()
     end
 end
 end
-end
 function goodNoteHit(id, direction, noteType, isSustainNote)
-    if getProperty('classicMode') == false then
     math.randomseed(os.time());
     missSound = string.format('missnote%i', math.random(1, 3));
 
@@ -223,7 +212,7 @@ function goodNoteHit(id, direction, noteType, isSustainNote)
     getGood = getProperty('goods')
     getBad = getProperty('bads')
     getShit = getProperty('shits')
-end
+
     if oldInput == true then
         inputLag = true
         if isSustainNote == false then
@@ -235,7 +224,6 @@ end
 end
 --why can't there just be only one note miss?
 function noteMiss()
-    if getProperty('classicMode') == false then
     setProperty('songScore',getProperty('songScore')-15)
     if songName ~= 'WTF' then
     playSound('avalihurt')
@@ -245,10 +233,8 @@ function noteMiss()
     setProperty('health',getProperty('health')-0.06)
     thejudge = 'MISS'
     missrow = missrow - 1
-end
 end
 function noteMissPress()
-    if getProperty('classicMode') == false then
     setProperty('songScore',getProperty('songScore')-15)
     if songName ~= 'WTF' then
     playSound('avalihurt')
@@ -259,9 +245,7 @@ function noteMissPress()
     thejudge = 'MISS'
     missrow = missrow - 1
 end
-end
 function onUpdateScore(notemiss)
-    if getProperty('classicMode') == false then
     if notemiss == true then
     setTextColor('judge','FF322B')
     else
@@ -277,7 +261,6 @@ function onUpdateScore(notemiss)
 	doTweenX('ratingx','judge.scale', 1, 0.25, 'cubeOut')
 	doTweenY('ratingy','judge.scale', 1, 0.25, 'cubeOut')
     doTweenAlpha('ratingalpha','judge',0,1,'ease')
-end
 end
 function onTimerCompleted(tag, loops, loopsLeft)
 if tag == 'Lag' then

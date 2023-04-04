@@ -894,6 +894,7 @@ class PlayState extends MusicBeatState
 
 		// "GLOBAL" SCRIPTS
 		#if LUA_ALLOWED
+		if (!classicMode) {
 		var filesPushed:Array<String> = [];
 		var foldersToCheck:Array<String> = [Paths.getPreloadPath('scripts/')];
 
@@ -919,6 +920,7 @@ class PlayState extends MusicBeatState
 					}
 				}
 			}
+		}
 		}
 		#end
 
