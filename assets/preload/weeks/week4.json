@@ -1,9 +1,9 @@
 {
 	"songs": [
-		["Startup", "mom", [252, 150, 215]],
-		["Flying High", "mom", [252, 150, 215]],
-		["Meteorites", "mom", [252, 150, 215]],
-		["MIL", "mom", [252, 150, 215]]
+		["Startup", "shara", [252, 150, 215]],
+		["Flying High", "shara", [252, 150, 215]],
+		["Meteorites", "shara", [252, 150, 215]],
+		["MIL", "shara", [252, 150, 215]]
 	],
 	
 	"weekCharacters": [
@@ -19,5 +19,5 @@
 	"startUnlocked": false,
 
 	"hideStoryMode": false,
-	"hideFreeplay": false
+	"hideFreeplay": true
 }

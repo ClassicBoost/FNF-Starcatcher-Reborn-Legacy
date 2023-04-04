@@ -57,7 +57,7 @@
 		}
 	],
 	"no_antialiasing": true,
-	"image": "characters/senpai",
+	"image": "characters/main/senpai",
 	"position": [
 		150,
 		360

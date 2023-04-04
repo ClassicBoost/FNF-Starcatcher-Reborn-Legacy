@@ -172,9 +172,10 @@ class Paths
 		return getPath('$key.xml', TEXT, library);
 	}
 
-	inline static public function json(key:String, ?library:String)
+	inline static public function json(key:String, ?library:String, ?og:Bool = false)
 	{
-		return getPath('songs/$key.json', TEXT, library);
+		if (og) return getPath('songs/classic/$key.json', TEXT, library);
+		else return getPath('songs/$key.json', TEXT, library);
 	}
 
 	inline static public function shaderFragment(key:String, ?library:String)
@@ -218,18 +219,30 @@ class Paths
 		return file;
 	}
 
-	inline static public function voices(song:String):Any
+	inline static public function voices(song:String, ?og:Bool = false):Any
 	{
+		if (og) {
+		var songKey:String = '${formatToSongPath(song)}/Voices';
+		var voices = returnSound('songs/classic', songKey);
+		return voices;
+		} else {
 		var songKey:String = '${formatToSongPath(song)}/Voices';
 		var voices = returnSound('songs', songKey);
 		return voices;
+		}
 	}
 
-	inline static public function inst(song:String):Any
+	inline static public function inst(song:String, ?og:Bool = false):Any
 	{
+		if (og) {
+		var songKey:String = '${formatToSongPath(song)}/Inst';
+		var inst = returnSound('songs/classic', songKey);
+		return inst;
+		} else {
 		var songKey:String = '${formatToSongPath(song)}/Inst';
 		var inst = returnSound('songs', songKey);
 		return inst;
+		}
 	}
 
 	inline static public function image(key:String, ?library:String):FlxGraphic
@@ -403,8 +416,9 @@ class Paths
 		return modFolders('fonts/' + key);
 	}
 
-	inline static public function modsJson(key:String) {
-		return modFolders('songs/' + key + '.json');
+	inline static public function modsJson(key:String, ?og:Bool = false) {
+		if (og) return modFolders('songs/classic/' + key + '.json');
+		else return modFolders('songs/' + key + '.json');
 	}
 
 	inline static public function modsVideo(key:String) {

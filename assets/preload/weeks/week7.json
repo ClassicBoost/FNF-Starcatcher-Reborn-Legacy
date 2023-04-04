@@ -28,7 +28,7 @@
 			]
 		]
 	],
-	"hideFreeplay": false,
+	"hideFreeplay": true,
 	"weekBackground": "tank",
 	"weekCharacters": [
 		"tankman",

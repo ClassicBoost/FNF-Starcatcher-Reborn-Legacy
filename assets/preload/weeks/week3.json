@@ -1,9 +1,9 @@
 {
 	"songs": [
-		["Ian", "pico", [148, 22, 83]],
-		["Blam", "pico", [148, 22, 83]],
-		["Laser", "pico", [148, 22, 83]],
-		["Override", "pico", [148, 22, 83]]
+		["Ian", "ian", [148, 22, 83]],
+		["Blam", "ian", [148, 22, 83]],
+		["Laser", "ian", [148, 22, 83]],
+		["Override", "ian", [148, 22, 83]]
 	],
 
 	"weekCharacters": [
@@ -19,5 +19,5 @@
 	"startUnlocked": false,
 
 	"hideStoryMode": false,
-	"hideFreeplay": false
+	"hideFreeplay": true
 }

@@ -1,9 +1,9 @@
 {
 	"songs": [
-		["Interruption", "dad", [113,12,255]],
+		["Interruption", "jake", [113,12,255]],
 		["Raptor Love", "emma", [178,49,209]],
-		["Dad Battle", "dad", [113,12,255]],
-		["Retired", "dad", [113,12,255]]
+		["Dad Battle", "jake", [113,12,255]],
+		["Retired", "jake", [113,12,255]]
 	],
 
 	"weekCharacters": [
@@ -19,5 +19,5 @@
 	"startUnlocked": true,
 
 	"hideStoryMode": false,
-	"hideFreeplay": false
+	"hideFreeplay": true
 }

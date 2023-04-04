@@ -530,25 +530,25 @@ class PlayState extends MusicBeatState
 		switch (curStage)
 		{
 			case 'stage': //Week 1
-				var bg:BGSprite = new BGSprite('backgrounds/stage/stageback', -600, -200, 0.9, 0.9);
+				var bg:BGSprite = new BGSprite('backgrounds/classic/stage/stageback', -600, -200, 0.9, 0.9);
 				add(bg);
 
-				var stageFront:BGSprite = new BGSprite('backgrounds/stage/stagefront', -650, 600, 0.9, 0.9);
+				var stageFront:BGSprite = new BGSprite('backgrounds/classic/stage/stagefront', -650, 600, 0.9, 0.9);
 				stageFront.setGraphicSize(Std.int(stageFront.width * 1.1));
 				stageFront.updateHitbox();
 				add(stageFront);
 				if(!ClientPrefs.lowQuality) {
-					var stageLight:BGSprite = new BGSprite('backgrounds/stage/stage_light', -125, -100, 0.9, 0.9);
+					var stageLight:BGSprite = new BGSprite('backgrounds/classic/stage/stage_light', -125, -100, 0.9, 0.9);
 					stageLight.setGraphicSize(Std.int(stageLight.width * 1.1));
 					stageLight.updateHitbox();
 					add(stageLight);
-					var stageLight:BGSprite = new BGSprite('backgrounds/stage/stage_light', 1225, -100, 0.9, 0.9);
+					var stageLight:BGSprite = new BGSprite('backgrounds/classic/stage/stage_light', 1225, -100, 0.9, 0.9);
 					stageLight.setGraphicSize(Std.int(stageLight.width * 1.1));
 					stageLight.updateHitbox();
 					stageLight.flipX = true;
 					add(stageLight);
 
-					var stageCurtains:BGSprite = new BGSprite('backgrounds/stage/stagecurtains', -500, -300, 1.3, 1.3);
+					var stageCurtains:BGSprite = new BGSprite('backgrounds/classic/stage/stagecurtains', -500, -300, 1.3, 1.3);
 					stageCurtains.setGraphicSize(Std.int(stageCurtains.width * 0.9));
 					stageCurtains.updateHitbox();
 					add(stageCurtains);
@@ -557,9 +557,9 @@ class PlayState extends MusicBeatState
 
 			case 'spooky': //Week 2
 				if(!ClientPrefs.lowQuality) {
-					halloweenBG = new BGSprite('backgrounds/spooky/halloween_bg', -200, -100, ['halloweem bg0', 'halloweem bg lightning strike']);
+					halloweenBG = new BGSprite('backgrounds/classic/spooky/halloween_bg', -200, -100, ['halloweem bg0', 'halloweem bg lightning strike']);
 				} else {
-					halloweenBG = new BGSprite('backgrounds/spooky/halloween_bg_low', -200, -100);
+					halloweenBG = new BGSprite('backgrounds/classic/spooky/halloween_bg_low', -200, -100);
 				}
 				add(halloweenBG);
 
@@ -574,45 +574,45 @@ class PlayState extends MusicBeatState
 
 			case 'philly': //Week 3
 				if(!ClientPrefs.lowQuality) {
-					var bg:BGSprite = new BGSprite('backgrounds/philly/sky', -100, 0, 0.1, 0.1);
+					var bg:BGSprite = new BGSprite('backgrounds/classic/philly/sky', -100, 0, 0.1, 0.1);
 					add(bg);
 				}
 
-				var city:BGSprite = new BGSprite('backgrounds/philly/city', -10, 0, 0.3, 0.3);
+				var city:BGSprite = new BGSprite('backgrounds/classic/philly/city', -10, 0, 0.3, 0.3);
 				city.setGraphicSize(Std.int(city.width * 0.85));
 				city.updateHitbox();
 				add(city);
 
 				phillyLightsColors = [0xFF31A2FD, 0xFF31FD8C, 0xFFFB33F5, 0xFFFD4531, 0xFFFBA633];
-				phillyWindow = new BGSprite('backgrounds/philly/window', city.x, city.y, 0.3, 0.3);
+				phillyWindow = new BGSprite('backgrounds/classic/philly/window', city.x, city.y, 0.3, 0.3);
 				phillyWindow.setGraphicSize(Std.int(phillyWindow.width * 0.85));
 				phillyWindow.updateHitbox();
 				add(phillyWindow);
 				phillyWindow.alpha = 0;
 
 				if(!ClientPrefs.lowQuality) {
-					var streetBehind:BGSprite = new BGSprite('backgrounds/philly/behindTrain', -40, 50);
+					var streetBehind:BGSprite = new BGSprite('backgrounds/classic/philly/behindTrain', -40, 50);
 					add(streetBehind);
 				}
 
-				phillyTrain = new BGSprite('backgrounds/philly/train', 2000, 360);
+				phillyTrain = new BGSprite('backgrounds/classic/philly/train', 2000, 360);
 				add(phillyTrain);
 
 				trainSound = new FlxSound().loadEmbedded(Paths.sound('stage-specific/train_passes'));
 				FlxG.sound.list.add(trainSound);
 
-				phillyStreet = new BGSprite('backgrounds/philly/street', -40, 50);
+				phillyStreet = new BGSprite('backgrounds/classic/philly/street', -40, 50);
 				add(phillyStreet);
 
 			case 'limo': //Week 4
-				var skyBG:BGSprite = new BGSprite('backgrounds/limo/limoSunset', -120, -50, 0.1, 0.1);
+				var skyBG:BGSprite = new BGSprite('backgrounds/classic/limo/limoSunset', -120, -50, 0.1, 0.1);
 				add(skyBG);
 
 				if(!ClientPrefs.lowQuality) {
-					limoMetalPole = new BGSprite('backgrounds/limo/gore/metalPole', -500, 220, 0.4, 0.4);
+					limoMetalPole = new BGSprite('backgrounds/classic/limo/gore/metalPole', -500, 220, 0.4, 0.4);
 					add(limoMetalPole);
 
-					bgLimo = new BGSprite('backgrounds/limo/bgLimo', -150, 480, 0.4, 0.4, ['background limo pink'], true);
+					bgLimo = new BGSprite('backgrounds/classic/limo/bgLimo', -150, 480, 0.4, 0.4, ['background limo pink'], true);
 					add(bgLimo);
 
 					limoCorpse = new BGSprite('backgrounds/limo/gore/noooooo', -500, limoMetalPole.y - 130, 0.4, 0.4, ['Henchmen on rail'], true);
@@ -647,9 +647,9 @@ class PlayState extends MusicBeatState
 					precacheList.set('stage-specific/dancerdeath', 'sound');
 				}
 
-				limo = new BGSprite('backgrounds/limo/limoDrive', -120, 550, 1, 1, ['Limo stage'], true);
+				limo = new BGSprite('backgrounds/classic/limo/limoDrive', -120, 550, 1, 1, ['Limo stage'], true);
 
-				fastCar = new BGSprite('backgrounds/limo/fastCarLol', -300, 160);
+				fastCar = new BGSprite('backgrounds/classic/limo/fastCarLol', -300, 160);
 				fastCar.active = true;
 				limoKillingState = 0;
 
@@ -4119,7 +4119,7 @@ class PlayState extends MusicBeatState
 				}
 				FlxG.updateFramerate = ClientPrefs.framerate;
 				FlxG.drawFramerate = ClientPrefs.framerate;
-				MusicBeatState.switchState(new FreeplayState());
+				MusicBeatState.switchState(new freeplay.FreeplayPREState());
 				FlxG.sound.playMusic(Paths.music('freakyMenu'));
 				changedDifficulty = false;
 			}
