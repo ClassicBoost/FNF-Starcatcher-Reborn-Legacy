@@ -54,6 +54,8 @@ class FreeplayPREState extends MusicBeatState
 
 		curSelected = 0;
 
+		PlayState.classicMode = false;
+
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('backgrounds/shared/sky-night'));
 	//	bg.color = 0xFFB428FF;
 		bg.updateHitbox();
@@ -74,7 +76,7 @@ class FreeplayPREState extends MusicBeatState
 		extras.antialiasing = ClientPrefs.globalAntialiasing;
 		add(extras);
 
-		oglol = new FlxSprite().loadGraphic(Paths.image('menus/freeplay/old'));
+		oglol = new FlxSprite().loadGraphic(Paths.image('menus/freeplay/classic'));
 		oglol.updateHitbox();
 		oglol.screenCenter();
 		oglol.antialiasing = ClientPrefs.globalAntialiasing;
@@ -146,6 +148,8 @@ class FreeplayPREState extends MusicBeatState
 			switch (daSelected) {
 				case 'Main':
 					MusicBeatState.switchState(new freeplay.FreeplayState());
+				case 'Classic':
+					MusicBeatState.switchState(new freeplay.FreeplayClassicState());
 				case 'Mods':
 					MusicBeatState.switchState(new freeplay.NormalFreeplayState());
 				case '???':

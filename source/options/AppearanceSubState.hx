@@ -86,6 +86,15 @@ class AppearanceSubState extends BaseOptionsMenu
 			['Time Left', 'Time Elapsed', 'Song Name', 'Disabled']);
 		addOption(option);
 
+		var option:Option = new Option('Pause Music:',
+			"What music should it play when you are in the options menu or pause menu?",
+			'pauseMusic',
+			'string',
+			'Momentia',
+			['Momentia', 'Starcatcher', 'Disabled']);
+		addOption(option);
+		option.onChange = onChangePauseMusic;
+
 		var option:Option = new Option('Flashing Lights',
 			"Uncheck this if you're sensitive to flashing lights!",
 			'flashing',

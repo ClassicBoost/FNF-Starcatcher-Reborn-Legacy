@@ -90,7 +90,7 @@ class FPS extends TextField
 			#end
 
 			textColor = 0xFFFFFFFF;
-			if (memoryMegas > 3000 || (PlayState.isPixelStage ? currentFPS <= 15 : currentFPS <= ClientPrefs.framerate / 2))
+			if (memoryMegas > 3000 || (PlayState.isPixelStage ? currentFPS <= 15 : PlayState.classicMode ? currentFPS <= 30 : currentFPS <= ClientPrefs.framerate / 2))
 			{
 				textColor = 0xFFFF0000;
 			}
