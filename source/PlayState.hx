@@ -300,6 +300,10 @@ class PlayState extends MusicBeatState
 
 	private var choosenFont:String = 'vcr.ttf';
 
+	private var missLose:Bool = false; // missing a note will force the player to switch to their losing icon
+	public var forceLose:Int = 0; // some opponents forces the player to switch to their losing icon
+
+
 	// how big to stretch the pixel art assets
 	public static var daPixelZoom:Float = 6;
 	private var singAnimations:Array<String> = ['singLEFT', 'singDOWN', 'singUP', 'singRIGHT'];
@@ -3201,14 +3205,16 @@ class PlayState extends MusicBeatState
 			health = 2;
 
 		// icons varients
-		if (health <= 0.4) iconP1.animation.curAnim.curFrame = 1;
-		else if (health >= 1.6) iconP1.animation.curAnim.curFrame = 2;
-		else iconP1.animation.curAnim.curFrame = 0;
-
-		if (health >= 1.6) iconP2.animation.curAnim.curFrame = 1;
-		else if (health <= 0.4) iconP2.animation.curAnim.curFrame = 2;
-		else iconP2.animation.curAnim.curFrame = 0;
-
+		if (health <= 0.4 || forceLose > 0 || missLose) {
+			iconP1.animation.curAnim.curFrame = 1;
+			iconP2.animation.curAnim.curFrame = 2;
+		} else if (health >= 1.6) {
+			iconP2.animation.curAnim.curFrame = 1;
+			iconP1.animation.curAnim.curFrame = 2;
+		} else {
+			iconP1.animation.curAnim.curFrame = 0;
+			iconP2.animation.curAnim.curFrame = 0;
+		}
 
 		if (health <= 0.4) iconP1classic.animation.curAnim.curFrame = 1;
 		else if (health >= 1.6) iconP1classic.animation.curAnim.curFrame = 2;
@@ -4567,7 +4573,7 @@ class PlayState extends MusicBeatState
 			if(strumsBlocked[key] != true && spr != null && spr.animation.curAnim.name != 'confirm')
 			{
 				spr.playAnim('pressed');
-				spr.resetAnim = 0;
+				spr.resetAnim = 0.15;
 			}
 			callOnLuas('onKeyPress', [key]);
 		}
@@ -4590,12 +4596,12 @@ class PlayState extends MusicBeatState
 		var key:Int = getKeyFromEvent(eventKey);
 		if(!cpuControlled && startedCountdown && !paused && key > -1)
 		{
-			var spr:StrumNote = playerStrums.members[key];
+		/*	var spr:StrumNote = playerStrums.members[key];
 			if(spr != null)
 			{
 				spr.playAnim('static');
 				spr.resetAnim = 0;
-			}
+			}*/
 			callOnLuas('onKeyRelease', [key]);
 		}
 		//trace('released: ' + controlArray);
@@ -4770,6 +4776,8 @@ class PlayState extends MusicBeatState
 		totalPlayed++;
 		RecalculateRating(true);
 
+		missLose = true;
+
 		allSicks = false;
 
 		FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
@@ -4812,9 +4820,9 @@ class PlayState extends MusicBeatState
 		if (SONG.needsVoices)
 			vocals.volume = 1;
 
-		var time:Float = 0.1;
+		var time:Float = 0.15;
 		if(note.isSustainNote) {
-			time = 0.35;
+			time = 0.275;
 		}
 		StrumPlayAnim(true, Std.int(Math.abs(note.noteData)), time);
 		note.hitByOpponent = true;
@@ -4822,6 +4830,12 @@ class PlayState extends MusicBeatState
 		callOnLuas('opponentNoteHit', [notes.members.indexOf(note), Math.abs(note.noteData), note.noteType, note.isSustainNote]);
 
 		if (health >= requiredHPig) health -= damagelevel;
+
+		switch (dad.curCharacter) {
+			case 'monster','monster-christmas':
+				forceLose = 4;
+				health -= 0.005;
+		}
 
 		if (!note.isSustainNote)
 		{
@@ -4876,8 +4890,16 @@ class PlayState extends MusicBeatState
 				combo += 1;
 				if(combo > 9999) combo = 9999;
 				popUpScore(note);
+
+				health += note.hitHealth * healthGain;
 			}
-			health += note.hitHealth * healthGain;
+
+			if (note.isSustainNote) {
+			switch (dad.curCharacter) {
+				case 'monster','monster-christmas':
+					health += 0.015;
+			}
+			}
 
 			if(!note.noAnimation) {
 				var animToPlay:String = singAnimations[Std.int(Math.abs(note.noteData))];
@@ -4911,19 +4933,19 @@ class PlayState extends MusicBeatState
 				}
 			}
 
-			if(cpuControlled) {
+		//	if(cpuControlled) {
 				var time:Float = 0.15;
 				if(note.isSustainNote && !note.animation.curAnim.name.endsWith('end')) {
 					time += 0.15;
 				}
 				StrumPlayAnim(false, Std.int(Math.abs(note.noteData)), time);
-			} else {
+		/*	} else {
 				var spr = playerStrums.members[note.noteData];
 				if(spr != null)
 				{
 					spr.playAnim('confirm', true);
 				}
-			}
+			}*/
 			note.wasGoodHit = true;
 			vocals.volume = 1;
 
@@ -4931,6 +4953,8 @@ class PlayState extends MusicBeatState
 			var leData:Int = Math.round(Math.abs(note.noteData));
 			var leType:String = note.noteType;
 			callOnLuas('goodNoteHit', [notes.members.indexOf(note), leData, leType, isSus]);
+
+			missLose = false;
 
 			if (!note.isSustainNote)
 			{
@@ -5202,6 +5226,9 @@ class PlayState extends MusicBeatState
 			return;
 		}
 
+		if (forceLose > 0)
+			forceLose--;
+
 		lastStepHit = curStep;
 		setOnLuas('curStep', curStep);
 		callOnLuas('onStepHit', []);
@@ -5251,6 +5278,7 @@ class PlayState extends MusicBeatState
 		if (curBeat % boyfriend.danceEveryNumBeats == 0 && boyfriend.animation.curAnim != null && !boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.stunned)
 		{
 			boyfriend.dance();
+			missLose = false;
 		}
 		if (curBeat % dad.danceEveryNumBeats == 0 && dad.animation.curAnim != null && !dad.animation.curAnim.name.startsWith('sing') && !dad.stunned)
 		{

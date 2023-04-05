@@ -67,11 +67,11 @@ function onBeatHit()
     if getProperty('curBeat') % 1 == 0 then
         setProperty('timeTxt.angle',1*-5)
         doTweenAngle('ho','timeTxt', 0, 0.5, 'sineInOut')
-    if getProperty('health') > 1.6 then
+    if getProperty('health') > 1.6 and getProperty('forceLose') == 0 then
         setProperty('iconP1.angle',1*10)
         setProperty('iconP2.angle',1*0)
         doTweenAngle('re', 'iconP1', 0, 0.5, 'sineInOut')
-    elseif getProperty('health') < 0.4 then
+    elseif getProperty('health') < 0.4 or getProperty('forceLose') > 0 then
         setProperty('iconP1.angle',1*0)
         setProperty('iconP2.angle',1*10)
         doTweenAngle('ree', 'iconP2', 0, 0.5, 'sineInOut')
@@ -86,11 +86,11 @@ end
     if getProperty('curBeat') % 2 == 0 then
         setProperty('timeTxt.angle',1*5)
         doTweenAngle('ho','timeTxt', 0, 0.5, 'linear')
-    if getProperty('health') > 1.6 then
+    if getProperty('health') > 1.6 and getProperty('forceLose') == 0 then
         setProperty('iconP1.angle',1*-15)
         setProperty('iconP2.angle',1*0)
         doTweenAngle('re', 'iconP1', 0, 0.5, 'linear')
-    elseif getProperty('health') < 0.4 then
+    elseif getProperty('health') < 0.4 or getProperty('forceLose') > 0 then
         setProperty('iconP1.angle',1*0)
         setProperty('iconP2.angle',1*-15)
         doTweenAngle('ree', 'iconP2', 0, 0.5, 'linear')
