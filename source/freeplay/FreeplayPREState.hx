@@ -134,6 +134,10 @@ class FreeplayPREState extends MusicBeatState
 			changeSelection(1);
 		}
 
+		if (FlxG.keys.pressed.ALT) {
+		//	changeSelection(-1);
+		}
+
 		if (controls.BACK) {
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			MusicBeatState.switchState(new MainMenuState());

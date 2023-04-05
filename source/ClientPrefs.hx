@@ -13,7 +13,7 @@ class ClientPrefs {
 	public static var showFPS:Bool = true;
 	public static var flashing:Bool = true;
 	public static var globalAntialiasing:Bool = true;
-	public static var noteSplashes:Bool = false;
+	public static var noteSplashes:Bool = true;
 	public static var lowQuality:Bool = false;
 	public static var shaders:Bool = true;
 	public static var framerate:Int = 120;
@@ -42,6 +42,9 @@ class ClientPrefs {
 	public static var psychIconBop:Bool = false;
 	public static var autoPlayFreeplaySongs:Bool = false;
 
+	// MODIFIERS
+	public static var loreAccuratelmfao:Bool = false;
+
 	public static var gameplaySettings:Map<String, Dynamic> = [
 		'scrollspeed' => 1.0,
 		'scrolltype' => 'multiplicative', 
@@ -54,6 +57,7 @@ class ClientPrefs {
 		// oh yeah and you'd have to actually convert the difference to seconds which I already do, because this is based on beats and stuff. but it should work
 		// just fine. but I wont implement it because I don't know how you handle sustains and other stuff like that.
 		// oh yeah when you calculate the bps divide it by the songSpeed or rate because it wont scroll correctly when speeds exist.
+		// :nerd:
 		'songspeed' => 1.0,
 		'healthgain' => 1.0,
 		'healthloss' => 1.0,
@@ -148,6 +152,9 @@ class ClientPrefs {
 		FlxG.save.data.psychIconBop = psychIconBop;
 		FlxG.save.data.autoPlayFreeplaySongs = autoPlayFreeplaySongs;
 		FlxG.save.data.pixelFPS = pixelFPS;
+
+		// MODIFIERS
+		FlxG.save.data.loreAccuratelmfao = loreAccuratelmfao;
 	
 		FlxG.save.flush();
 
@@ -290,6 +297,9 @@ class ClientPrefs {
 		}
 		if(FlxG.save.data.pixelFPS != null) {
 			pixelFPS = FlxG.save.data.pixelFPS;
+		}
+		if(FlxG.save.data.loreAccuratelmfao != null) {
+			loreAccuratelmfao = FlxG.save.data.loreAccuratelmfao;
 		}
 		
 		// flixel automatically saves your volume!

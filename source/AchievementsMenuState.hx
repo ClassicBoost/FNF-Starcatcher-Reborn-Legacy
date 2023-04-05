@@ -32,6 +32,8 @@ class AchievementsMenuState extends MusicBeatState
 		DiscordClient.changePresence("Achievements Menu", null);
 		#end
 
+		curSelected = 0;
+
 		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menus/menuDesat'));
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
 		menuBG.updateHitbox();
@@ -66,7 +68,7 @@ class AchievementsMenuState extends MusicBeatState
 		}
 
 		descText = new FlxText(150, 600, 980, "", 32);
-		descText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		descText.setFormat(Paths.font("vcr.ttf"), 26, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		descText.scrollFactor.set();
 		descText.borderSize = 2.4;
 		add(descText);
@@ -117,6 +119,19 @@ class AchievementsMenuState extends MusicBeatState
 			}
 		}
 		descText.text = Achievements.achievementsStuff[achievementIndex[curSelected]][1];
+		if (curSelected == 9 && !Achievements.isAchievementUnlocked('wellthen')) {
+			descText.text = 'Unlock this to see info';
+		} else {
+		if (curSelected == 9)  {
+			descText.y = 0;
+			FlxG.sound.music.fadeIn(0.01, 0.7, 0);
+		}
+		else {
+			descText.y = 600;
+			FlxG.sound.music.fadeIn(0.01, 0, 0.7);
+		}
+		}
+
 		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 	}
 	#end

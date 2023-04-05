@@ -4,7 +4,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
 
-class NoteSplash extends FlxSprite
+class NoteSplashOpponent extends FlxSprite
 {
 	public var colorSwap:ColorSwap = null;
 	private var idleAnim:String;
@@ -14,7 +14,7 @@ class NoteSplash extends FlxSprite
 		super(x, y);
 
 		var skin:String = 'notes/noteSplashes';
-		if(PlayState.SONG.splashSkin != null && PlayState.SONG.splashSkin.length > 0) skin = PlayState.SONG.splashSkin;
+		if(PlayState.SONG.opponentsplashSkin != null && PlayState.SONG.opponentsplashSkin.length > 0) skin = PlayState.SONG.opponentsplashSkin;
 
 		loadAnims(skin);
 		
@@ -32,7 +32,7 @@ class NoteSplash extends FlxSprite
 
 		if(texture == null) {
 			texture = 'notes/noteSplashes';
-			if(PlayState.SONG.splashSkin != null && PlayState.SONG.splashSkin.length > 0) texture = PlayState.SONG.splashSkin;
+			if(PlayState.SONG.opponentsplashSkin != null && PlayState.SONG.opponentsplashSkin.length > 0) texture = PlayState.SONG.opponentsplashSkin;
 		}
 
 		if(textureLoaded != texture) {

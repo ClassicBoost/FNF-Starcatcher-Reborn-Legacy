@@ -83,12 +83,13 @@ class PlayState extends MusicBeatState
 	public static var STRUM_X_MIDDLESCROLL = -278;
 
 	public static var ratingStuff:Array<Dynamic> = [
-		['D', 0.6],
-		['C', 0.77],
-		['B', 0.84],
-		['A', 0.95],
-		['S', 1],
-		['P', 1]
+		['F', 0.00001], // Okay how the fuck-
+		['D', 0.6], // L
+		['C', 0.77], // Skill issue
+		['B', 0.84], // You're shit
+		['A', 0.95], // Not an S
+		['S', 1], // you suck if you get below this rank
+		['P', 1] // W
 	];
 
 	//event variables
@@ -1248,20 +1249,30 @@ class PlayState extends MusicBeatState
 		if(ClientPrefs.downScroll) {
 			botplayTxt.y = timeBarBG.y - 78;
 		}
-
+		var randomThingy:Int = FlxG.random.int(0, 10);
+		var engineName:String = 'stupid';
+		switch(randomThingy)
+	    {
+			case 0:
+				engineName = 'EOREVER';
+			case 1:
+				engineName = 'POOSAY';
+			case 2:
+				engineName = 'SPADES';
+			default:
+				engineName = 'PSYCH FOREVER';
+		}
 		switch (Paths.formatToSongPath(SONG.song))
 		{
+			case 'wtf':
+				credits = 'Context: The band that ArcAngela put on a poptop which plays this music on release.';
 			default:
 				credits = '';
 		}
 		var creditsText:Bool = credits != '';
-		var textYPos:Float = healthBarBG.y + 50;
-		if (creditsText)
-		{
-			textYPos = healthBarBG.y + 30;
-		}
+		var textYPos:Float = 0;
 		// totally didnt took this from KE (sorry)
-		songWatermark = new FlxText(4, textYPos, 0, "PSYCH FOREVER ENGINE v" + Main.psychForeverVersion, 12);
+		songWatermark = new FlxText(4, textYPos, 0, engineName + " ENGINE v" + Main.psychForeverVersion + " (FE 0.3.1 | PE 0.6.3)", 12);
 		songWatermark.setFormat(Paths.font(choosenFont), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		songWatermark.scrollFactor.set();
 		songWatermark.visible = !ClientPrefs.hideHud;
@@ -1269,7 +1280,7 @@ class PlayState extends MusicBeatState
 		add(songWatermark);
 		if (creditsText)
 		{
-			creditsWatermark = new FlxText(4, healthBarBG.y + 50, 0, credits, 16);
+			creditsWatermark = new FlxText(4, songWatermark.y + 20, 0, credits, 16);
 			creditsWatermark.setFormat(Paths.font(choosenFont), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			creditsWatermark.scrollFactor.set();
 			creditsWatermark.visible = !ClientPrefs.hideHud;
@@ -3197,7 +3208,7 @@ class PlayState extends MusicBeatState
 		scoreTxt.text = 'Score: ' + Math.floor(lerpScore);
 		if (ClientPrefs.showAccuracy) {
 		scoreTxt.text += '${divider}Accuracy: ${Highscore.floorDecimal(ratingPercent * 100, 2)}%$ratingFC';
-		scoreTxt.text += '${divider}Combo Breaks: $songMisses (${songMisses + shits})';
+		scoreTxt.text += '${divider}Combo Breaks: $songMisses ${ClientPrefs.lateDamage == false ? '(${songMisses + shits})' : ''}';
 		}
 		} else scoreTxt.text = "Score:" + songScore;
 
@@ -4086,7 +4097,7 @@ class PlayState extends MusicBeatState
 		} else {
 			var achieve:String = checkForAchievement(['week1_nomiss', 'week2_nomiss', 'week3_nomiss', 'week4_nomiss',
 				'week5_nomiss', 'week6_nomiss', 'week7_nomiss', 'ur_bad',
-				'ur_good', 'hype', 'two_keys', 'toastie', 'debugger']);
+				'ur_good', 'ur_toogood', 'hype', 'two_keys', 'toastie', 'debugger', 'wellthen', 'bruh']);
 
 			if(achieve != null) {
 				startAchievement(achieve);
@@ -4573,7 +4584,7 @@ class PlayState extends MusicBeatState
 			if(strumsBlocked[key] != true && spr != null && spr.animation.curAnim.name != 'confirm')
 			{
 				spr.playAnim('pressed');
-				spr.resetAnim = 0.15;
+				spr.resetAnim = 0;
 			}
 			callOnLuas('onKeyPress', [key]);
 		}
@@ -4596,12 +4607,12 @@ class PlayState extends MusicBeatState
 		var key:Int = getKeyFromEvent(eventKey);
 		if(!cpuControlled && startedCountdown && !paused && key > -1)
 		{
-		/*	var spr:StrumNote = playerStrums.members[key];
+			var spr:StrumNote = playerStrums.members[key];
 			if(spr != null)
 			{
 				spr.playAnim('static');
 				spr.resetAnim = 0;
-			}*/
+			}
 			callOnLuas('onKeyRelease', [key]);
 		}
 		//trace('released: ' + controlArray);
@@ -4843,7 +4854,8 @@ class PlayState extends MusicBeatState
 			notes.remove(note, true);
 			note.destroy();
 
-			if (!note.noteSplashDisabled && ClientPrefs.opponentStrums && ClientPrefs.opponentSplashes && opponentStrums.visible == true) spawnNoteSplashOnNote2(note);
+			if ((boyfriend.curCharacter == 'bf' || boyfriend.curCharacter == 'ryan' || boyfriend.curCharacter == 'bf-no-helmet') && !note.noteSplashDisabled && ClientPrefs.opponentStrums
+				&& opponentStrums.visible == true) spawnNoteSplashOnNote2(note);
 		}
 	}
 
@@ -4933,19 +4945,19 @@ class PlayState extends MusicBeatState
 				}
 			}
 
-		//	if(cpuControlled) {
+			if(cpuControlled) {
 				var time:Float = 0.15;
 				if(note.isSustainNote && !note.animation.curAnim.name.endsWith('end')) {
 					time += 0.15;
 				}
 				StrumPlayAnim(false, Std.int(Math.abs(note.noteData)), time);
-		/*	} else {
+			} else {
 				var spr = playerStrums.members[note.noteData];
 				if(spr != null)
 				{
 					spr.playAnim('confirm', true);
 				}
-			}*/
+			}
 			note.wasGoodHit = true;
 			vocals.volume = 1;
 
@@ -5492,22 +5504,21 @@ class PlayState extends MusicBeatState
 				
 				if (achievementName.contains(WeekData.getWeekFileName()) && achievementName.endsWith('nomiss')) // any FC achievements, name should be "weekFileName_nomiss", e.g: "weekd_nomiss";
 				{
-					if(isStoryMode && campaignMisses + songMisses < 1 && CoolUtil.difficultyString() == 'HARD'
-						&& storyPlaylist.length <= 1 && !changedDifficulty && !usedPractice)
+					if(isStoryMode && campaignMisses + songMisses < 1 && storyPlaylist.length <= 1 && !changedDifficulty && !usedPractice)
 						unlock = true;
 				}
 				switch(achievementName)
 				{
 					case 'ur_bad':
-						if(ratingPercent < 0.2 && !practiceMode) {
+						if(ratingPercent < 0.6 && !practiceMode) {
 							unlock = true;
 						}
 					case 'ur_good':
-						if(ratingPercent >= 1 && !usedPractice) {
+						if(ratingPercent >= 0.95 && !usedPractice) {
 							unlock = true;
 						}
-					case 'roadkill_enthusiast':
-						if(Achievements.henchmenDeath >= 100) {
+					case 'ur_toogood':
+						if(ratingPercent >= 1 && !usedPractice) {
 							unlock = true;
 						}
 					case 'oversinging':
@@ -5529,6 +5540,12 @@ class PlayState extends MusicBeatState
 								unlock = true;
 							}
 						}
+					case 'wellthen':
+						if (ClientPrefs.loreAccuratelmfao && songMisses == 0 && !usedPractice)
+							unlock = true;
+					case 'bruh':
+						if (ratingPercent <= 0)
+							unlock = true;
 					case 'toastie':
 						if(/*ClientPrefs.framerate <= 60 &&*/ !ClientPrefs.shaders && ClientPrefs.lowQuality && !ClientPrefs.globalAntialiasing) {
 							unlock = true;
