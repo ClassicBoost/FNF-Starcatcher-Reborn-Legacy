@@ -1,109 +1,83 @@
-# Friday Night Funkin' - Psych Forever Engine: Definitive Edition
-Based on Psych Engine
+<p align="center">
+  <img src="https://media.discordapp.net/attachments/916918345255751690/930068118938730526/legacy.png" width="750"/></a>
+  <h1 align="center">Forever Engine Legacy</h1>
+  <h2 align="center">An open-source, quality of life and performance driven Friday Night Funkin' mod engine!</h2>
+</p>
 
-Psych Forever is a long project started when Psych Engine blew up (or 0.4.2) and had gone through many changes as time went on. Now with a Definitive Edition of v5 containing new content.
-THIS ENGINE WILL NOT SUPPORT REGULAR PSYCH ENGINE BECAUSE OF THE NUMBER OF CHANGES!
-# Friday Night Funkin' - Psych Engine
-Engine originally used on [Mind Games Mod](https://gamebanana.com/mods/301107), intended to be a fix for the vanilla version's many issues while keeping the casual play aspect of it. Also aiming to be an easier alternative to newbie coders.
+----------------------------------------------
+## Please redirect all future and current enhancements to the [new repository](https://github.com/BeastlyGabi/Forever-Engine-Rewrite).
+----------------------------------------------
+Forever Engine is currently in *legacy* state as it is being rewritten. 
 
-## Installation:
-You must have [the most up-to-date version of Haxe](https://haxe.org/download/), seriously, stop using 4.1.5, it misses some stuff.
+The legacy version of Forever Engine lacks accessibility and cohesion, something we are currently working to fix with the more newer and updated rewrite.
 
-Follow a Friday Night Funkin' source code compilation tutorial, after this you will need to install LuaJIT.
+**FOREVER ENGINE LEGACY IS ONLY MEANT TO BE USED ON DESKTOP! I AM NOT RESPONSIBLE FOR CRASHES/PROBLEMS WITH HTML5, NOR AM I RESPONSIBLE FOR MAINTAINING HTML5.**
 
-To install LuaJIT do this: `haxelib git linc_luajit https://github.com/nebulazorua/linc_luajit` on a Command prompt/PowerShell
+----------------------------------------------
+# Features:
+* Noteskins;
+* Custom UIs;
+* Options Menu with FPS Capping and Adjustments;
+* A lot of modularity and freedom with options
+    * (Hopefully in the future *everything* will be toggleable);
+* A restructure/partial remake of the base game's codebase;
+* ``source/`` folder abstraction;
+* More streamlined code
+    * (only having to set things in one place).
 
-...Or if you don't want your mod to be able to run .lua scripts, delete the "LUA_ALLOWED" line on Project.xml
+AND MORE!
 
+----------------------------------------------
+# Credits:
+* [Yoshubs](https://github.com/Yoshubs) (me!):
+    * made the engine,
+    * happens to be very fucking stupid for accidentally pushing the martian mixtape source code into legacy's base github page;
+* [Pixloen](https://github.com/PixlJacket):
+    * made a lot of custom assets that legacy uses,
+    * gave me a lot of advice on how to improve the engine as well as his input on how to improve upon the base game and how the input system felt and such,
+    * programmed simply judgements and background darken
+    * basically co-owns the engine lmao;
+* [Gedehari](https://github.com/gedehari):
+    * BANGER ASS PROGRAMER,
+    * made the freeplay loading thread to avoid lag issues in freeplay,
+    * waveform render code (which will be used soon),
+    * EXTERNAL SHADER SUPPORT for modcharts when they're a thing,
+    * so many other things (like the crash logger);
 
-If you get an error about StatePointer when using Lua, run `haxelib remove linc_luajit` into Command Prompt/PowerShell, then re-install linc_luajit.
+I urge you to check out his project, [Izzy Engine](https://github.com/gedehari/IzzyEngine), which he let me borrow a lot of aspects from which I still owe him for lmao. AWESOME dude I can't stress this enough.
 
-If you want video support on your mod, simply do `haxelib install hxCodec` on a Command prompt/PowerShell
+* [ImCodist](https://github.com/ImCodist):
+    * helped with a couple of pull requests and issue fixes,
+    * MADE THE WHOLE ASS FREAKING DIALOGUE SYSTEMbut, I'm not gonna give him any credit at all, because he stole my obsidian soul in minecraft and I will never forgive him for that!!!!
+* [Scralett](https://github.com/SomeKitten):
+    * Overall cool friend of mine who knows a lot about programming and math that has helped me out countless times,
+    * still going here helping me with pushes, commits, etc.,
+    * she wrote the finalized math formula for the note quants and fixed the song name issue;
+* [Oneilr](https://oneilr.newgrounds.com/):
+    * Cool Guy Oneilr,
+    * made some of the custom assets, mostly the animated ones like the custom note splashes to avoid the week 7 embargo as well as some other things like the checkmarks in the options menu;
+* [HelloSammu](https://github.com/hellosammu):
+    * weird catfgirl programmer, they scare me,
+    * CREDIT MAINTENANCE AND SOME MISC FIXES,
+    * also scaleable text for dialogue functions;
+* the entire Funkin' crew:
+    * THEY MADE THE BASE GAME EXIST SO LIKE WITHOUT THEM THIS WOULD NOT HAVE BEEN POSSIBLE GO CHECK THEM OUT RIGHT NOW;
+* rest of the rise n' skate team:
+    * that mod is the reason im even making an engine right now so like I kind of owe you guys this whole engine and more for that honestly and I will actually do more so stay tuned.
+----------------------------------------------
+# Shoutouts:
+* [HThagomizer](https://github.com/HThagomizer):
+    * not MURDERING ME for accidentally pushing the martian mixtape source code;
+* [Tsuraran](https://twitter.com/_Tsuraran):
+    * DOPE ASS CUSTOM MENU MUSIC INCOMING,
+    * also made vs skipper with clockwerk which is fucking hilarious ALSO YEAH I'LL BUMP AS WELL AFTER ITS IN THE ENGINE (YES IM WORKING ON IT TOO LMAO);
+* [Clockwerk](https://twitter.com/ClockwerkSmurf):
+    * also made vs skipper,
+    *  ***oh my god what were you guys thinking.***
 
-otherwise, you can delete the "VIDEOS_ALLOWED" Line on Project.xml
-
-## Credits:
-* Shadow Mario - Programmer
-* RiverOaken - Artist
-* Yoshubs - Assistant Programmer
-
-### Special Thanks
-* bbpanzu - Ex-Programmer
-* shubs - New Input System
-* SqirraRNG - Crash Handler and Base code for Chart Editor's Waveform
-* KadeDev - Fixed some cool stuff on Chart Editor and other PRs
-* iFlicky - Composer of Psync and Tea Time, also made the Dialogue Sounds
-* PolybiusProxy - .MP4 Video Loader Library (hxCodec)
-* Keoiki - Note Splash Animations
-* Smokey - Sprite Atlas Support
-* Nebula the Zorua - LUA JIT Fork and some Lua reworks
-_____________________________________
-
-# Features
-
-## Attractive animated dialogue boxes:
-
-![](https://user-images.githubusercontent.com/44785097/127706669-71cd5cdb-5c2a-4ecc-871b-98a276ae8070.gif)
-
-
-## Mod Support
-* Probably one of the main points of this engine, you can code in .lua files outside of the source code, making your own weeks without even messing with the source!
-* Comes with a Mod Organizing/Disabling Menu.
-
-
-## Atleast one change to every week:
-### Week 1:
-  * New Dad Left sing sprite
-  * Unused stage lights are now used
-### Week 2:
-  * Both BF and Skid & Pump does "Hey!" animations
-  * Thunders does a quick light flash and zooms the camera in slightly
-  * Added a quick transition/cutscene to Monster
-### Week 3:
-  * BF does "Hey!" during Philly Nice
-  * Blammed has a cool new colors flash during that sick part of the song
-### Week 4:
-  * Better hair physics for Mom/Boyfriend (Maybe even slightly better than Week 7's :eyes:)
-  * Henchmen die during all songs. Yeah :(
-### Week 5:
-  * Bottom Boppers and GF does "Hey!" animations during Cocoa and Eggnog
-  * On Winter Horrorland, GF bops her head slower in some parts of the song.
-### Week 6:
-  * On Thorns, the HUD is hidden during the cutscene
-  * Also there's the Background girls being spooky during the "Hey!" parts of the Instrumental
-
-## Cool new Chart Editor changes and countless bug fixes
-![](https://github.com/ShadowMario/FNF-PsychEngine/blob/main/docs/img/chart.png?raw=true)
-* You can now chart "Event" notes, which are bookmarks that trigger specific actions that usually were hardcoded on the vanilla version of the game.
-* Your song's BPM can now have decimal values
-* You can manually adjust a Note's strum time if you're really going for milisecond precision
-* You can change a note's type on the Editor, it comes with two example types:
-  * Alt Animation: Forces an alt animation to play, useful for songs like Ugh/Stress
-  * Hey: Forces a "Hey" animation instead of the base Sing animation, if Boyfriend hits this note, Girlfriend will do a "Hey!" too.
-
-## Multiple editors to assist you in making your own Mod
-![Screenshot_3](https://user-images.githubusercontent.com/44785097/144629914-1fe55999-2f18-4cc1-bc70-afe616d74ae5.png)
-* Working both for Source code modding and Downloaded builds!
-
-## Story mode menu rework:
-![](https://i.imgur.com/UB2EKpV.png)
-* Added a different BG to every song (less Tutorial)
-* All menu characters are now in individual spritesheets, makes modding it easier.
-
-## Credits menu
-![Screenshot_1](https://user-images.githubusercontent.com/44785097/144632635-f263fb22-b879-4d6b-96d6-865e9562b907.png)
-* You can add a head icon, name, description and a Redirect link for when the player presses Enter while the item is currently selected.
-
-## Awards/Achievements
-* The engine comes with 16 example achievements that you can mess with and learn how it works (Check Achievements.hx and search for "checkForAchievement" on PlayState.hx)
-
-## Options menu:
-* You can change Note colors, Delay and Combo Offset, Controls and Preferences there.
- * On Preferences you can toggle Downscroll, Middlescroll, Anti-Aliasing, Framerate, Low Quality, Note Splashes, Flashing Lights, etc.
-
-## Other gameplay features:
-* When the enemy hits a note, their strum note also glows.
-* Lag doesn't impact the camera movement and player icon scaling anymore.
-* Some stuff based on Week 7's changes has been put in (Background colors on Freeplay, Note splashes)
-* You can reset your Score on Freeplay/Story Mode by pressing Reset button.
-* You can listen to a song or adjust Scroll Speed/Damage taken/etc. on Freeplay by pressing Space.
+----------------------------------------------
+## For compiling help, check out this little guide [here](/docs/COMPILE-HELP.md).
+## To see changes made to the engine, check out the changelog [here](/CHANGELOG.md).
+----------------------------------------------
+<h1 align="center">Thank you for checking out my engine!</h1>
+<h2 align="center">Got any questions? DM me at Yoshubs#0404 on Discord!</h2>
