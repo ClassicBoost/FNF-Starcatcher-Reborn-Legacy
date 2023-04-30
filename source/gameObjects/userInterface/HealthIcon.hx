@@ -43,7 +43,7 @@ class HealthIcon extends FlxSprite
 		initialWidth = width;
 		initialHeight = height;
 
-		animation.add('icon', [0, 1, 2], 0, false, isPlayer);
+		animation.add('icon', [1,2,0], 0, false, isPlayer);
 		animation.play('icon');
 		scrollFactor.set();
 	}

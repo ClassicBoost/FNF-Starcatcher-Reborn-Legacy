@@ -38,7 +38,7 @@ class Main extends Sprite
 		initialState: Init, // initial game state
 		zoom: -1.0, // game state bounds
 		framerate: 120, // default framerate
-		skipSplash: true, // if the default flixel splash screen should be skipped
+		skipSplash: false, // if the default flixel splash screen should be skipped
 		startFullscreen: false // if the game should start at fullscreen mode
 	};
 	public static var mainClassState:Class<FlxState> = Init;
@@ -55,7 +55,7 @@ class Main extends Sprite
 		[ [songs to use], [characters in songs], [color of week], name of week ]
 	**/
 	public static var gameWeeks:Array<Dynamic> = [
-		[['Tutorial'], ['gf'], [FlxColor.fromRGB(129, 100, 223)], 'Funky Beginnings'],
+	//	[['Tutorial'], ['gf'], [FlxColor.fromRGB(129, 100, 223)], 'Funky Beginnings'],
 		[
 			['Interruption', 'Raptor-Love', 'Showdown', 'Retired'],
 			['jake', 'gf', 'jake', 'jake'],

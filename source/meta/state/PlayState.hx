@@ -70,7 +70,7 @@ class PlayState extends MusicBeatState
 	public static var cpuControlled:Bool = false;
 	public static var practiceMode:Bool = false;
 
-	public static var choosenfont:String = 'vcr.ttf';
+	public static var choosenfont:String = 'hobo.ttf';
 
 	public static var campaignScore:Int = 0;
 
@@ -88,6 +88,8 @@ class PlayState extends MusicBeatState
 	// if you ever wanna add more keys
 	private var numberOfKeys:Int = 4;
 
+	public static var composerStuff:String;
+
 	// get it cus release
 	// I'm funny just trust me
 	private var curSection:Int = 0;
@@ -103,6 +105,8 @@ class PlayState extends MusicBeatState
 
 	private static var prevCamFollow:FlxObject;
 
+	public var fuckingRank:FlxSprite;
+
 	private var blackBG:FlxSprite;
 
 	private var curSong:String = "";
@@ -114,6 +118,9 @@ class PlayState extends MusicBeatState
 	public static var misses:Int = 0;
 
 	public static var messups:Int = 0; // now this would seem like combo breaks but failing mechanics will also remove your P rank
+
+	public var songhasmechanics:Bool = false;
+	public static var displayRank:String = 'F';
 
 	public static var deaths:Int = 0;
 
@@ -161,6 +168,8 @@ class PlayState extends MusicBeatState
 	public static var songLength:Float = 0;
 
 	private var antimashshit:Bool = false;
+
+	public var scoreRequired:Int = 0; // basically how much score there is in that song.
 
 	// character icons
 	public static var bfIcon:String = 'bf';
@@ -291,7 +300,7 @@ class PlayState extends MusicBeatState
 			assetModifier = 'pixel';
 
 			choosenfont = 'pixel.otf';
-		} else choosenfont = 'vcr.ttf';
+		} else choosenfont = 'hobo.ttf';
 
 		gf.color = 0xFFFFFFFF;
 		dadOpponent.color = 0xFFFFFFFF;
@@ -365,11 +374,6 @@ class PlayState extends MusicBeatState
 		startedCountdown = true;
 		forceCenter = false;
 
-		if (SONG.song == 'WTF') {
-			forceCenter = true;
-			gf.visible = false;
-		}
-
 		//
 		var placement = (FlxG.width / 2);
 		dadStrums = new Strumline(placement - (FlxG.width / 4), this, dadOpponent, false, true, false, 4, Init.trueSettings.get('Downscroll'));
@@ -398,6 +402,38 @@ class PlayState extends MusicBeatState
 		bfIcon = boyfriend.curCharacter;
 		dadIcon = dadOpponent.curCharacter;
 
+		fuckingRank = new FlxSprite();
+		fuckingRank.frames = Paths.getSparrowAtlas('UI/default/base/RANKS');
+		fuckingRank.animation.addByPrefix('p', 'P', 24, true);
+		fuckingRank.animation.addByPrefix('s+', 'S+', 24, true);
+		fuckingRank.animation.addByPrefix('s', 'S0', 24, true);
+		fuckingRank.animation.addByPrefix('a', 'A', 24, true);
+		fuckingRank.animation.addByPrefix('b', 'B', 24, true);
+		fuckingRank.animation.addByPrefix('c', 'C', 24, true);
+		fuckingRank.animation.addByPrefix('d', 'D', 24, true);
+		fuckingRank.antialiasing = true;
+		fuckingRank.animation.play('d', true);
+		fuckingRank.setGraphicSize(Std.int(fuckingRank.width * 0.35));
+		fuckingRank.updateHitbox();
+		fuckingRank.cameras = [camHUD];
+		fuckingRank.x += 1000;
+		add(fuckingRank);
+
+		
+		switch (curSong.toLowerCase()) {
+			case 'mirage':
+			composerStuff = 'Spades';
+			scoreRequired = 407; //142,450
+			case 'wtf':
+			composerStuff = 'I can\'t find the original source who made this';
+			scoreRequired = 687;
+			choosenfont = 'vcr.ttf';
+			fuckingRank.visible = false;
+			forceCenter = true;
+			gf.visible = false;
+		}
+		scoreRequired = (scoreRequired * 350);
+
 		uiHUD = new ClassHUD();
 
 		var barY = FlxG.height * 0.875;
@@ -408,6 +444,8 @@ class PlayState extends MusicBeatState
 		healthBarBG.screenCenter(X);
 		healthBarBG.scrollFactor.set();
 		add(healthBarBG);
+
+		fuckingRank.y = healthBarBG.y - 30;
 
 		reloadCharacterIcons();
 		healthBarBG.cameras = [camHUD];
@@ -637,6 +675,8 @@ class PlayState extends MusicBeatState
 	var staticDisplace:Int = 0;
 
 	var lastSection:Int = 0;
+	var fuckingRankText:String = 'd';
+	var shitfart:String = 'd';
 
 	override public function update(elapsed:Float)
 	{
@@ -659,6 +699,9 @@ class PlayState extends MusicBeatState
 		var iconLerp = 0.85;
 	//	iconP1.setGraphicSize(Std.int(FlxMath.lerp(iconP1.initialWidth, iconP1.width, iconLerp)));
 	//	iconP2.setGraphicSize(Std.int(FlxMath.lerp(iconP2.initialWidth, iconP2.width, iconLerp)));
+
+		// messups are just mechanic fails, nothing else, as well with note misses, and you only get a P rank if you also have a MFC
+		if (misses == 0 && messups == 0 && songScore != 0 && !cpuControlled && !practiceMode) displayRank = 'P';
 
 		var mult:Float = FlxMath.lerp(1, iconP1.scale.x, CoolUtil.boundTo(1 - (elapsed * 9), 0, 1));
 		iconP1.scale.set(mult, mult);
@@ -685,6 +728,31 @@ class PlayState extends MusicBeatState
 			iconP1.animation.curAnim.curFrame = 0;
 			iconP2.animation.curAnim.curFrame = 0;
 		}
+
+		if (songScore >= (scoreRequired * 0.3) && songScore < (scoreRequired * 0.6)) {
+			fuckingRankText = 'c';
+		} else if (songScore >= (scoreRequired * 0.6) && songScore < (scoreRequired * 0.9)) {
+			fuckingRankText = 'b';
+		} else if (songScore >= (scoreRequired * 0.9) && songScore < (scoreRequired * 0.99)) {
+			fuckingRankText = 'a';
+		} else if (songScore >= (scoreRequired * 0.99) && songScore < scoreRequired) {
+			fuckingRankText = 's';
+		} else if (songScore >= scoreRequired) {
+			fuckingRankText = 's+';
+		} else if (songScore < (scoreRequired * 0.3)) {
+			fuckingRankText = 'd';
+		}
+		fuckingRank.animation.play('$fuckingRankText');
+
+		if (shitfart != fuckingRankText) {
+			FlxTween.cancelTweensOf(fuckingRank);
+			fuckingRank.scale.set(0.45, 0.45);
+			FlxTween.tween(fuckingRank, {"scale.x": 0.35, "scale.y": 0.35}, 0.5, {ease: FlxEase.cubeOut});
+			shitfart = fuckingRankText;
+		}
+
+		if (songScore < 0)
+			songScore = 0;
 
 		if (health > 2)
 			health = 2;
@@ -1520,7 +1588,7 @@ class PlayState extends MusicBeatState
 		forceLose = true;
 
 		// misses
-		songScore -= 10;
+		songScore -= 100;
 		misses++;
 		messups++;
 

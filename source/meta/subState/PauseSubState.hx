@@ -20,7 +20,7 @@ class PauseSubState extends MusicBeatSubState
 {
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
-	var menuItems:Array<String> = ['Resume', 'Restart Song', 'Botplay', 'Practice Mode', 'Exit to menu'];
+	var menuItems:Array<String> = ['Resume', 'Restart Song', 'Botplay', 'Practice Mode', 'Change Difficulty', 'Exit to menu'];
 	var curSelected:Int = 0;
 
 	var pauseMusic:FlxSound;
@@ -50,7 +50,7 @@ class PauseSubState extends MusicBeatSubState
 		var levelInfo:FlxText = new FlxText(20, 15, 0, "", 32);
 		levelInfo.text += CoolUtil.dashToSpace(PlayState.SONG.song);
 		levelInfo.scrollFactor.set();
-		levelInfo.setFormat(Paths.font("vcr.ttf"), 32);
+		levelInfo.setFormat(Paths.font("hobo.ttf"), 32);
 		levelInfo.updateHitbox();
 		add(levelInfo);
 
@@ -63,12 +63,13 @@ class PauseSubState extends MusicBeatSubState
 		levelDifficulty.scrollFactor.set();
 		levelDifficulty.setFormat(Paths.font('vcr.ttf'), 32);
 		levelDifficulty.updateHitbox();
-		add(levelDifficulty);
+	//	add(levelDifficulty);
+	//	the fact that this mod only has normal difficulty
 
-		var levelDeaths:FlxText = new FlxText(20, 15 + 64, 0, "", 32);
-		levelDeaths.text += "Blue balled: " + PlayState.deaths;
+		var levelDeaths:FlxText = new FlxText(20, 15 + 32, 0, "", 32);
+		levelDeaths.text += "Faints: " + PlayState.deaths;
 		levelDeaths.scrollFactor.set();
-		levelDeaths.setFormat(Paths.font('vcr.ttf'), 32);
+		levelDeaths.setFormat(Paths.font('hobo.ttf'), 32);
 		levelDeaths.updateHitbox();
 		add(levelDeaths);
 
@@ -82,7 +83,7 @@ class PauseSubState extends MusicBeatSubState
 
 		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
 		FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
-		FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
+	//	FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
 		FlxTween.tween(levelDeaths, {alpha: 1, y: levelDeaths.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.7});
 
 		grpMenuShit = new FlxTypedGroup<Alphabet>();
@@ -152,6 +153,8 @@ class PauseSubState extends MusicBeatSubState
 					PlayState.cpuControlled = !PlayState.cpuControlled;
 				case 'Practice Mode':
 					PlayState.practiceMode = !PlayState.practiceMode;
+				case 'Change Difficulty':
+					FlxG.sound.play(Paths.sound('what'));
 				case "Exit to menu":
 					PlayState.resetMusic();
 					PlayState.deaths = 0;

@@ -207,8 +207,14 @@ class MainMenuState extends MusicBeatState
 			counterControl = 0;
 		}
 
+		if (FlxG.keys.justPressed.SEVEN) {
+			FlxG.sound.music.fadeOut(0.3);
+			Main.switchState(this, new MasterEditorMenu());
+		}
+
 		if ((controls.ACCEPT) && (!selectedSomethin))
 		{
+			var daChoice:String = optionShit[Math.floor(curSelected)];
 			if (optionShit[Math.floor(curSelected)] == 'credits')
 			CoolUtil.browserLoad('https://docs.google.com/document/d/1hET9MkQNVsjbl6Dozs_g6mzvNHGj_fW5a6IHJLr2sXY/edit?usp=sharing');
 			else {
@@ -217,6 +223,14 @@ class MainMenuState extends MusicBeatState
 			FlxG.sound.play(Paths.sound('confirmMenu'));
 
 			FlxFlicker.flicker(magenta, 0.8, 0.1, false);
+
+			switch (daChoice)
+			{
+				case 'freeplay':
+					FlxG.sound.music.fadeOut(0.3);
+				case 'options':
+					FlxG.sound.music.fadeOut(0.3);
+			}
 
 			menuItems.forEach(function(spr:FlxSprite)
 			{
@@ -234,13 +248,13 @@ class MainMenuState extends MusicBeatState
 				{
 					FlxFlicker.flicker(spr, 1, 0.06, false, false, function(flick:FlxFlicker)
 					{
-						var daChoice:String = optionShit[Math.floor(curSelected)];
 
 						switch (daChoice)
 						{
 							case 'story mode':
 								Main.switchState(this, new StoryMenuState());
 							case 'freeplay':
+
 								Main.switchState(this, new FreeplayState());
 							case 'options':
 								transIn = FlxTransitionableState.defaultTransIn;

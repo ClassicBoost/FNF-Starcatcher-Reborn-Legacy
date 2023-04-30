@@ -29,8 +29,6 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 	public static var scoreBar:FlxText;
 	var scoreLast:Float = -1;
 
-	var botplayText:String = '';
-
 	// fnf mods
 	var scoreDisplay:String = 'beep bop bo skdkdkdbebedeoop brrapadop';
 
@@ -62,8 +60,8 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 		if (Init.trueSettings.get('Downscroll'))
 			barY = 64;
 
-		scoreBar = new FlxText(0,0, 0, scoreDisplay);
-		scoreBar.setFormat(Paths.font(PlayState.choosenfont), 18, FlxColor.WHITE);
+		scoreBar = new FlxText(FlxG.width / 2, Math.floor(barY + 40), 0, scoreDisplay);
+		scoreBar.setFormat(Paths.font(PlayState.choosenfont), (PlayState.choosenfont == 'vcr.ttf' ? 18 : 20), FlxColor.WHITE);
 	//	if (PlayState.choosenfont == 'pixel.otf') scoreBar.setFormat(Paths.font('pixel.otf'), 12, FlxColor.WHITE);
 		scoreBar.setBorderStyle(OUTLINE, FlxColor.BLACK, 1.5);
 		updateScoreText();
@@ -71,12 +69,6 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 		scoreBar.antialiasing = !PlayState.curStage.startsWith("school");
 		scoreBar.color = textcolor;
 		add(scoreBar);
-		if (Init.trueSettings.get('Downscroll'))
-			scoreBar.y = (FlxG.height - centerMark.height / 2) - 30;
-		else {
-			scoreBar.y = (FlxG.height / 24) - 10;
-			if (PlayState.choosenfont == 'pixel.otf') scoreBar.y -= 15;
-		}
 
 		if (PlayState.choosenfont == 'pixel.otf') engineDisplay = '${Main.gameVersion}';
 
@@ -88,10 +80,14 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 		cornerMark.color = textcolor;
 		cornerMark.antialiasing = !PlayState.curStage.startsWith("school");
 
-		centerMark = new FlxText(FlxG.width / 2, Math.floor(barY + 40), 0, '- ${infoDisplay + botplayText} -');
+		centerMark = new FlxText(0, 0, 0, '- ${infoDisplay + ' - ' + PlayState.composerStuff} -');
 		centerMark.setFormat(Paths.font(PlayState.choosenfont), 24, FlxColor.WHITE);
 		centerMark.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
 		add(centerMark);
+		if (Init.trueSettings.get('Downscroll'))
+			centerMark.y = (FlxG.height - centerMark.height / 2) - 30;
+		else
+			centerMark.y = (FlxG.height / 24) - 10;
 		centerMark.screenCenter(X);
 		centerMark.color = textcolor;
 		centerMark.antialiasing = !PlayState.curStage.startsWith("school");
@@ -131,22 +127,11 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 
 	override public function update(elapsed:Float)
 	{
-		if (PlayState.cpuControlled) { 
-			botplayText = ' [BOTPLAY]';
-			scoreBar.visible = false;
-		}
-		else {
-			botplayText = '';
-			scoreBar.visible = true;
-		}
-
-		centerMark.text = '- ${infoDisplay + botplayText} -';
-		centerMark.screenCenter(X);
+		if (PlayState.cpuControlled) 
+			scoreBar.text = '[BOTPLAY]';
 
 		updateScoreText();
 	}
-
-	private final divider:String = " • ";
 
 	public function updateScoreText()
 	{
@@ -157,23 +142,33 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 		var accuracytext:String = 'Accuracy: ';
 		var missestext:String = 'Combo Breaks: ';
 		var ranktext:String = 'Rank: ';
+		var divider:String = " - "; // apparently the centered bold dot isn't on the starbound font
 
 		if (PlayState.choosenfont == 'pixel.otf') {
+			divider = ' • ';
 			scoretext = 'SCR: '; accuracytext = ''; missestext = 'MISS: '; ranktext = '';
 		}
+		else if (PlayState.choosenfont == 'vcr.ttf')
+			divider = ' • ';
 
+		if (!PlayState.cpuControlled) {
 		scoreBar.text = '$scoretext$importSongScore';
 		// testing purposes
 		var displayAccuracy:Bool = Init.trueSettings.get('Display Accuracy');
 		if (displayAccuracy)
 		{
+			if (PlayState.choosenfont != 'vcr.ttf') {
 		//	scoreBar.text += divider + 'HP: ${PlayState.healthBar.percent}%';
-			scoreBar.text += divider + accuracytext + Std.string(Math.floor(Timings.getAccuracy() * 100) / 100) + '%' + Timings.comboDisplay;
+		//	scoreBar.text += divider + accuracytext + Std.string(Math.floor(Timings.getAccuracy() * 100) / 100) + '%';
 			scoreBar.text += divider + missestext + Std.string(PlayState.misses);
-			// messups are just mechanic fails, nothing else, as well with note misses, and you only get a P rank if you also have a MFC
-			if (PlayState.misses == 0 && PlayState.messups == 0 && PlayState.songScore != 0 && !PlayState.cpuControlled && !PlayState.practiceMode) scoreBar.text += divider + '${ranktext}P';
-			else scoreBar.text += divider + ranktext + Std.string(Timings.returnScoreRating());
+			scoreBar.text += divider + accuracytext + Std.string(Math.floor(Timings.getAccuracy() * 100) / 100) + '%${Timings.comboDisplay}';
+			} else { // base forever engine
+			scoreBar.text += divider + accuracytext + Std.string(Math.floor(Timings.getAccuracy() * 100) / 100) + '%${Timings.comboDisplay}';
+			scoreBar.text += divider + missestext + Std.string(PlayState.misses);
+			scoreBar.text += divider + ranktext + Std.string(Timings.returnScoreRating());
+			}
 			if (PlayState.practiceMode) scoreBar.text += divider + 'Practice Mode';
+		}
 		}
 		scoreBar.text += '\n';
 		scoreBar.x = Math.floor((FlxG.width / 2) - (scoreBar.width / 2));
@@ -195,12 +190,14 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 
 	public static function fadeOutSongText()
 	{
-		FlxTween.tween(centerMark, {alpha: 0.7}, 4, {ease: FlxEase.linear});
+		FlxTween.tween(centerMark, {alpha: 0}, 2, {ease: FlxEase.linear});
 	}
 
 	public static function bopScore() {
+		if (!PlayState.cpuControlled) {
 		FlxTween.cancelTweensOf(scoreBar);
 		scoreBar.scale.set(1.075, 1.075);
 		FlxTween.tween(scoreBar, {"scale.x": 1, "scale.y": 1}, 0.25, {ease: FlxEase.cubeOut});
+		}
 	}
 }

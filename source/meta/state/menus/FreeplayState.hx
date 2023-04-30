@@ -82,7 +82,7 @@ class FreeplayState extends MusicBeatState
 
 		// */
 
-		for (i in folderSongs)
+	/*	for (i in folderSongs)
 		{
 			if (!existingSongs.contains(i.toLowerCase()))
 			{
@@ -95,7 +95,7 @@ class FreeplayState extends MusicBeatState
 					addSong(CoolUtil.spaceToDash(castSong.song), 1, icon, FlxColor.WHITE);
 				}
 			}
-		}
+		}*/
 
 		// LOAD MUSIC
 		// ForeverTools.resetMenuMusic();
@@ -221,6 +221,7 @@ class FreeplayState extends MusicBeatState
 		if (controls.BACK)
 		{
 			threadActive = false;
+			FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);
 			Main.switchState(this, new MainMenuState());
 		}
 
