@@ -195,6 +195,8 @@ class PlayState extends MusicBeatState
 
 	private var allUIs:Array<FlxCamera> = [];
 
+	public static var forceDeath = false;
+
 	var goodNotePressed:Bool = true; // not to be confised with goodNoteHit
 
 	// stores the last judgement object
@@ -213,6 +215,7 @@ class PlayState extends MusicBeatState
 		health = 1;
 		misses = 0;
 		messups = 0;
+		forceDeath = false;
 		// sets up the combo object array
 		lastCombo = [];
 
@@ -419,7 +422,7 @@ class PlayState extends MusicBeatState
 		fuckingRank.x += 1000;
 		add(fuckingRank);
 
-		
+		camHUD.zoom = 3;
 		switch (curSong.toLowerCase()) {
 			case 'mirage':
 			composerStuff = 'Spades';
@@ -427,11 +430,24 @@ class PlayState extends MusicBeatState
 			case 'wtf':
 			composerStuff = 'I can\'t find the original source who made this';
 			scoreRequired = 687;
-			choosenfont = 'vcr.ttf';
-			fuckingRank.visible = false;
 			forceCenter = true;
 			gf.visible = false;
+			choosenfont = 'vcr.ttf';
+			fuckingRank.visible = false;
+			camHUD.zoom = 1;
+			case 'anomaly','cheating':
+			choosenfont = 'vcr.ttf';
+			fuckingRank.visible = false;
+			gf.visible = false;
+			camHUD.zoom = 1;
+			boyfriend.visible = false;
+			case 'error':
+			choosenfont = 'vcr.ttf';
+			camHUD.zoom = 1;
+			fuckingRank.visible = false;
+			camHUD.zoom = 1;
 		}
+
 		scoreRequired = (scoreRequired * 350);
 
 		uiHUD = new ClassHUD();
@@ -461,8 +477,6 @@ class PlayState extends MusicBeatState
 		theSongStuff.visible = showStats;
 		theSongStuff.cameras = [camHUD];
 		add(theSongStuff);
-
-		camHUD.zoom = 3;
 
 		// create a hud over the hud camera for dialogue
 		dialogueHUD = new FlxCamera();
@@ -703,6 +717,8 @@ class PlayState extends MusicBeatState
 		// messups are just mechanic fails, nothing else, as well with note misses, and you only get a P rank if you also have a MFC
 		if (misses == 0 && messups == 0 && songScore != 0 && !cpuControlled && !practiceMode) displayRank = 'P';
 
+		if (cpuControlled && (curSong.toLowerCase() == 'anomaly' || curSong.toLowerCase() == 'cheating')) forceDeath = true;
+
 		var mult:Float = FlxMath.lerp(1, iconP1.scale.x, CoolUtil.boundTo(1 - (elapsed * 9), 0, 1));
 		iconP1.scale.set(mult, mult);
 		var mult:Float = FlxMath.lerp(1, iconP2.scale.x, CoolUtil.boundTo(1 - (elapsed * 9), 0, 1));
@@ -923,10 +939,10 @@ class PlayState extends MusicBeatState
 			// RESET = Quick Game Over Screen
 			if (controls.RESET && !startingSong && !isStoryMode)
 			{
-				health = 0;
+				forceDeath = true;
 			}
 
-			if (health <= 0 && startedCountdown && !practiceMode)
+			if ((health <= 0 && startedCountdown && !practiceMode) || forceDeath)
 			{
 				paused = true;
 				// startTimer.active = false;
@@ -1246,6 +1262,10 @@ class PlayState extends MusicBeatState
 						if (health > 0.5) health -= 0.007;
 					case 'bf','bf-pixel','bf-car','bf-christmas':
 						if (health > 0.1 && !coolNote.isSustainNote) health -= 0.025;
+				}
+				if (curSong.toLowerCase() == 'anomaly' || curSong.toLowerCase() == 'cheating') {
+					if (!coolNote.isSustainNote) camHUD.angle = FlxG.random.int(-60, 60);
+					health -= 0.005;
 				}
 			}
 
@@ -1588,7 +1608,7 @@ class PlayState extends MusicBeatState
 		forceLose = true;
 
 		// misses
-		songScore -= 100;
+		songScore -= 500;
 		misses++;
 		messups++;
 

@@ -81,6 +81,8 @@ class Stage extends FlxTypedGroup<FlxBasic>
 					curStage = 'philly-og';
 				case 'mil-og' | 'satin-og' | 'high-og':
 					curStage = 'highway-og';
+				case 'anomaly','cheating':
+					curStage = 'nothing';
 				default:
 					curStage = 'stage';
 			}
@@ -112,6 +114,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 
 				treeeeees = new FNFSprite(-250,-200).loadGraphic(Paths.image('backgrounds/' + curStage + '/trees'));
 				treeeeees.antialiasing = true;
+				treeeeees.scrollFactor.set(0.7, 0.7);
 				treeeeees.setGraphicSize(Std.int(treeeeees.width * 2.5));
 				treeeeees.updateHitbox();
 				add(treeeeees);
@@ -381,6 +384,11 @@ class Stage extends FlxTypedGroup<FlxBasic>
 				bg.scrollFactor.set(0.8, 0.9);
 				bg.scale.set(6, 6);
 				add(bg);
+
+			case 'nothing':
+				PlayState.defaultCamZoom = 0.9;
+				curStage = 'nothing';
+				// yep, nothing. Other than name and zoom
 
 			default:
 				PlayState.defaultCamZoom = 0.9;

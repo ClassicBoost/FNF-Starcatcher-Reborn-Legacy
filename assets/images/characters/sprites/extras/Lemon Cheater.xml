@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="Lemon Cheater.png">
+	<!-- Created with Adobe Animate version 22.0.3.179 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="Down0000" x="0" y="0" width="2114" height="1951"/>
+	<SubTexture name="Down0001" x="2114" y="0" width="2114" height="1951"/>
+	<SubTexture name="Idle0000" x="4228" y="0" width="2114" height="1951"/>
+	<SubTexture name="Idle0001" x="0" y="1951" width="2114" height="1951"/>
+	<SubTexture name="Left0000" x="2114" y="1951" width="2114" height="1951"/>
+	<SubTexture name="Left0001" x="4228" y="1951" width="2114" height="1951"/>
+	<SubTexture name="Right0000" x="0" y="3902" width="2114" height="1951"/>
+	<SubTexture name="Right0001" x="2114" y="3902" width="2114" height="1951"/>
+	<SubTexture name="Up0000" x="4228" y="3902" width="2114" height="1951"/>
+	<SubTexture name="Up0001" x="0" y="5853" width="2114" height="1951"/>
+</TextureAtlas>

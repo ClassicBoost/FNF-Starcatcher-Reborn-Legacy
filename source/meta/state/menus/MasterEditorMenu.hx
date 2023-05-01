@@ -47,6 +47,8 @@ class MasterEditorMenu extends MusicBeatState
 	var codeText:FlxText;
 	var codeTypedIn:String = '';
 	var disableMainControls:Bool = false;
+	var changeMainText:String = 'Type in numbers to enter codes\nAll codes are 5 digits long\n\nENTER to access\nR to reset\nESC to exit';
+	var keysPressed:Int = 0;
 
 	// the create 'state'
 	override function create()
@@ -147,6 +149,7 @@ class MasterEditorMenu extends MusicBeatState
 		{
 			switch (curSelected) {
 				case 0:
+					Main.switchState(this, new TerminalState());
 				case 1:
 				case 2:
 					disableMainControls = true;
@@ -154,7 +157,7 @@ class MasterEditorMenu extends MusicBeatState
 			}
 		}
 		} else {
-			if (controls.BACK)
+			if (FlxG.keys.justPressed.ESCAPE)
 			{
 				FlxG.sound.play(Paths.sound('cancelMenu'), 0.4);
 				disableMainControls = false;
@@ -162,34 +165,57 @@ class MasterEditorMenu extends MusicBeatState
 			}
 			if (FlxG.keys.justPressed.R) {
 				codeTypedIn = '';
+				keysPressed = 0;
 				FlxG.sound.play(Paths.sound('terminal_bkspc'), 0.4);
 			}
 
 			// I know this is lazy but
-			if (FlxG.keys.justPressed.ONE) codeTypedIn += '1';
-			if (FlxG.keys.justPressed.TWO) codeTypedIn += '2';
-			if (FlxG.keys.justPressed.THREE) codeTypedIn += '3';
-			if (FlxG.keys.justPressed.FOUR) codeTypedIn += '4';
-			if (FlxG.keys.justPressed.FIVE) codeTypedIn += '5';
-			if (FlxG.keys.justPressed.SIX) codeTypedIn += '6';
-			if (FlxG.keys.justPressed.SEVEN) codeTypedIn += '7';
-			if (FlxG.keys.justPressed.EIGHT) codeTypedIn += '8';
-			if (FlxG.keys.justPressed.NINE) codeTypedIn += '9';
-			if (FlxG.keys.justPressed.ZERO) codeTypedIn += '0';
+			if (keysPressed < 5) {
+			if (FlxG.keys.justPressed.ONE) { codeTypedIn += '1'; keysPressed++; }
+			if (FlxG.keys.justPressed.TWO) { codeTypedIn += '2'; keysPressed++; }
+			if (FlxG.keys.justPressed.THREE) { codeTypedIn += '3'; keysPressed++; }
+			if (FlxG.keys.justPressed.FOUR) { codeTypedIn += '4'; keysPressed++; }
+			if (FlxG.keys.justPressed.FIVE) { codeTypedIn += '5'; keysPressed++; }
+			if (FlxG.keys.justPressed.SIX) { codeTypedIn += '6'; keysPressed++; }
+			if (FlxG.keys.justPressed.SEVEN) { codeTypedIn += '7'; keysPressed++; }
+			if (FlxG.keys.justPressed.EIGHT) { codeTypedIn += '8'; keysPressed++; }
+			if (FlxG.keys.justPressed.NINE) { codeTypedIn += '9'; keysPressed++; }
+			if (FlxG.keys.justPressed.ZERO) { codeTypedIn += '0'; keysPressed++; }
 
 			if (FlxG.keys.justPressed.ONE || FlxG.keys.justPressed.TWO || FlxG.keys.justPressed.THREE || FlxG.keys.justPressed.FOUR || FlxG.keys.justPressed.FIVE
-				|| FlxG.keys.justPressed.SIX || FlxG.keys.justPressed.SEVEN || FlxG.keys.justPressed.EIGHT || FlxG.keys.justPressed.NINE || FlxG.keys.justPressed.ZERO)
+				|| FlxG.keys.justPressed.SIX || FlxG.keys.justPressed.SEVEN || FlxG.keys.justPressed.EIGHT || FlxG.keys.justPressed.NINE || FlxG.keys.justPressed.ZERO) {
 				FlxG.sound.play(Paths.sound('terminal_key'), 0.4);
+				changeMainText = 'Type in numbers to enter codes\nAll codes are 5 digits long\n\nENTER to access\nR to reset\nESC to exit';
+				}
+			}
+			if (FlxG.keys.justPressed.BACKSPACE && keysPressed > 0) {
+			//	codeTypedIn--;
+				FlxG.sound.play(Paths.sound('terminal_bkspc'), 0.4);
+				codeTypedIn = codeTypedIn.substring(0, codeTypedIn.length - 1);
+				keysPressed--;
+			}
 			if (controls.ACCEPT)
 			{
+				changeMainText = 'Type in numbers to enter codes\nAll codes are 5 digits long\n\nENTER to access\nR to reset\nESC to exit';
 				switch (codeTypedIn) {
-				case '122018':
+				case '69420','42069','318008':
+					changeMainText = 'Haha, very funny';
+				case '99999':
+					changeMainText = 'Football';
+				case '052022':
+					FlxG.sound.play(Paths.sound('psych'), 0.6);
+				case '12018':
 					PlayState.SONG = Song.loadFromJson('wtf', 'wtf');
 					Main.switchState(this, new PlayState());
+				case '':
+					changeMainText = 'Put something down!';
+				case '123456789': // it's impossible to insert more than 5 digits
+					changeMainText = 'Okay like, even though you aren\'t suppose to insert more than 5 digits, but still fuck you.';
 				default:
 					FlxG.sound.play(Paths.sound('error'), 0.6);
-					codeTypedIn = '';
 				}
+				keysPressed = 0;
+				codeTypedIn = '';
 			}
 		}
 		var bullShit:Int = 0;
@@ -207,8 +233,7 @@ class MasterEditorMenu extends MusicBeatState
 				// item.setGraphicSize(Std.int(item.width));
 			}
 		}
-
-		codeText.text = 'Type in numbers to enter codes\nAll codes are 5 digits long\n\nENTER to access\nR to reset\nESC to exit\n\n>$codeTypedIn';
+		codeText.text = '$changeMainText\n\n>$codeTypedIn';
 		codeText.screenCenter();
 
 		super.update(elapsed);
@@ -228,6 +253,7 @@ class MasterEditorMenu extends MusicBeatState
 			curSelected = 0;
 	}
 	function openUpCodes() {
+		changeMainText = 'Type in numbers to enter codes\nAll codes are 5 digits long\n\nENTER to access\nR to reset\nESC to exit';
 		FlxTween.tween(codeOverlay, {alpha: 0.75}, 0.25, {ease: FlxEase.linear});
 		FlxTween.tween(codeText, {alpha: 1}, 0.25, {ease: FlxEase.linear});
 	}
@@ -237,107 +263,3 @@ class MasterEditorMenu extends MusicBeatState
 		codeTypedIn = '';
 	}
 }
-
-/*class MasterEditorMenu extends MusicBeatState
-{
-	var options:Array<String> = ['terminal','characters'];
-	private var grpTexts:FlxTypedGroup<Alphabet>;
-
-	private var curSelected = 0;
-	private var directoryTxt:FlxText;
-
-	override function create()
-	{
-		#if DISCORD_RPC
-		Discord.changePresence('EXTRAS MENU', 'Main Menu');
-		#end
-
-		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menus/base/menuDesat'));
-		bg.scrollFactor.set();
-		bg.color = 0xFF353535;
-		add(bg);
-
-		FlxG.sound.playMusic(Paths.music('terminal'), 0.5);
-
-		grpTexts = new FlxTypedGroup<Alphabet>();
-		add(grpTexts);
-
-		for (i in 0...options.length)
-		{
-			var leText:Alphabet = new Alphabet(90, 320, options[i], true, false);
-			leText.isMenuItem = true;
-			leText.targetY = i;
-			grpTexts.add(leText);
-		}
-		
-
-		var textBG:FlxSprite = new FlxSprite(0, FlxG.height - 42).makeGraphic(FlxG.width, 42, 0xFF000000);
-		textBG.alpha = 0.6;
-		add(textBG);
-
-		directoryTxt = new FlxText(textBG.x, textBG.y + 4, FlxG.width, 'EXTRAS MENU', 32);
-		directoryTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER);
-		directoryTxt.scrollFactor.set();
-		add(directoryTxt);
-
-		changeSelection();
-
-		super.create();
-	}
-
-	override function update(elapsed:Float)
-	{
-		if (controls.UI_UP_P)
-		{
-			changeSelection(-1);
-		}
-		if (controls.UI_DOWN_P)
-		{
-			changeSelection(1);
-		}
-
-		if (controls.BACK)
-		{
-			Main.switchState(this, new MainMenuState());
-		}
-
-		if (controls.ACCEPT)
-		{
-			switch(options[curSelected]) {
-				case 'terminal':
-
-				case 'characters':
-
-			}
-		}
-		
-		var bullShit:Int = 0;
-		for (item in grpTexts.members)
-		{
-			item.targetY = bullShit - curSelected;
-			bullShit++;
-
-			item.alpha = 0.6;
-			// item.setGraphicSize(Std.int(item.width * 0.8));
-
-			if (item.targetY == 0)
-			{
-				item.alpha = 1;
-				// item.setGraphicSize(Std.int(item.width));
-			}
-		}
-		super.update(elapsed);
-	}
-
-	function changeSelection(change:Int = 0)
-	{
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
-
-		curSelected += change;
-
-		if (curSelected < 0)
-			curSelected = options.length - 1;
-		if (curSelected >= options.length)
-			curSelected = 0;
-	}
-}*/

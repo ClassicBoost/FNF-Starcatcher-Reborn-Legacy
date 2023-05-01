@@ -510,6 +510,19 @@ class Character extends FNFSprite
 				characterData.camOffsetY = 50;
 
 				barColor = 0xFF795467;
+			case 'monster-og':
+				frames = Paths.getSparrowAtlas('characters/sprites/extras/Lemon Cheater');
+
+				animation.addByPrefix('idle', 'Idle', 24, true);
+				animation.addByPrefix('singUP', 'Up0', 24, false);
+				animation.addByPrefix('singLEFT', 'Left0', 24, false);
+				animation.addByPrefix('singRIGHT', 'Right0', 24, false);
+				animation.addByPrefix('singDOWN', 'Down0', 24, false);
+			//	setGraphicSize(Std.int(width * 1));
+			//	updateHitbox();
+				playAnim('idle');
+				characterData.offsetY = 100;
+				barColor = 0xFF000000;
 			default:
 				// set up animations if they aren't already
 
