@@ -43,7 +43,7 @@ class Main extends Sprite
 	};
 	public static var mainClassState:Class<FlxState> = Init;
 	public static var gameVersion:String = '0.3.1';
-	var infoCounter:Overlay;
+	public static var infoCounter:Overlay;
 
 	// heres gameweeks set up!
 
@@ -187,6 +187,7 @@ class Main extends Sprite
 			PlayerSettings.init();
 	
 			infoCounter = new Overlay(0, 0);
+			infoCounter.visible = true;
 			addChild(infoCounter);
 		}
 	
@@ -256,7 +257,7 @@ class Main extends Sprite
 				}
 			}
 	
-			errMsg += "\nUncaught Error: " + e.error + "\nPlease report this error to the GitHub page: https://github.com/Yoshubs/Forever-Engine";
+			errMsg += "\nUncaught Error: " + e.error + "\nPlease report this error to the GitHub page: https://github.com/ClassicBoost/FNF-Starcatcher-Reborn";
 	
 			if (!FileSystem.exists("crash/"))
 				FileSystem.createDirectory("crash/");

@@ -143,11 +143,15 @@ class RankingState extends MusicBeatState
 				PlayState.highestCombo = 0;
 				PlayState.totalCombo = 0;
 				PlayState.totalMisses = 0;
-				FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);
+				if (!MasterEditorMenu.inTerminal) {
+					FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);
 				if (PlayState.isStoryMode) {
 					Main.switchState(this, new StoryMenuState());
 				} else {
 					Main.switchState(this, new FreeplayState());
+				}} else {
+					FlxG.sound.playMusic(Paths.music('terminal'), 0.7);
+					Main.switchState(this, new MasterEditorMenu());
 				}
 			}
 		}

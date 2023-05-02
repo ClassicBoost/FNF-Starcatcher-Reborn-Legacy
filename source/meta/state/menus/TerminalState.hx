@@ -19,6 +19,8 @@ import haxe.CallStack;
 import haxe.io.Path;
 import sys.io.File;
 import lime.app.Application;
+import flixel.util.FlxTimer;
+import meta.*;
 import lime.utils.Assets;
 import meta.MusicBeat.MusicBeatState;
 import meta.data.*;
@@ -54,6 +56,8 @@ class TerminalState extends MusicBeatState
 	var currentType:String = '';
 	var previousLines:String = '';
 	var addLine:Int = 0;
+	var heheheha:String = '';
+	var disableThisShit:Bool = false;
 
 	// the create 'state'
 	override function create()
@@ -70,6 +74,8 @@ class TerminalState extends MusicBeatState
 		#if DISCORD_RPC
 		Discord.changePresence('EXTRAS MENU', 'Main Menu');
 		#end
+
+		Main.infoCounter.visible = false;
 
 		// uh
 		persistentUpdate = persistentDraw = true;
@@ -110,49 +116,50 @@ class TerminalState extends MusicBeatState
 
 		if (FlxG.keys.justPressed.ESCAPE)
 		{
-			FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);
+			Main.infoCounter.visible = true;
+		//	FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);
 			Main.switchState(this, new MasterEditorMenu());
 		}
 
 		// I know this is lazy but
-		if (FlxG.keys.justPressed.ONE) { codeTypedIn += '1'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.TWO) { codeTypedIn += '2'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.THREE) { codeTypedIn += '3'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.FOUR) { codeTypedIn += '4'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.FIVE) { codeTypedIn += '5'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.SIX) { codeTypedIn += '6'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.SEVEN) { codeTypedIn += '7'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.EIGHT) { codeTypedIn += '8'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.NINE) { codeTypedIn += '9'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.ZERO) { codeTypedIn += '0'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
+		if (FlxG.keys.justPressed.ONE) { codeTypedIn += '1'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.TWO) { codeTypedIn += '2'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.THREE) { codeTypedIn += '3'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.FOUR) { codeTypedIn += '4'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.FIVE) { codeTypedIn += '5'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.SIX) { codeTypedIn += '6'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.SEVEN) { codeTypedIn += '7'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.EIGHT) { codeTypedIn += '8'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.NINE) { codeTypedIn += '9'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.ZERO) { codeTypedIn += '0'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
 
-		if (FlxG.keys.justPressed.A) { codeTypedIn += 'a'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.B) { codeTypedIn += 'b'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.C) { codeTypedIn += 'c'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.D) { codeTypedIn += 'd'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.E) { codeTypedIn += 'e'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.F) { codeTypedIn += 'f'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.G) { codeTypedIn += 'g'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.H) { codeTypedIn += 'h'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.I) { codeTypedIn += 'i'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.J) { codeTypedIn += 'j'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.K) { codeTypedIn += 'k'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.L) { codeTypedIn += 'l'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.M) { codeTypedIn += 'm'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.N) { codeTypedIn += 'n'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.O) { codeTypedIn += 'o'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.P) { codeTypedIn += 'p'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.Q) { codeTypedIn += 'q'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.R) { codeTypedIn += 'r'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.S) { codeTypedIn += 's'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.T) { codeTypedIn += 't'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.U) { codeTypedIn += 'u'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.V) { codeTypedIn += 'v'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.W) { codeTypedIn += 'w'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.X) { codeTypedIn += 'x'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.Y) { codeTypedIn += 'y'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.Z) { codeTypedIn += 'z'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
-		if (FlxG.keys.justPressed.PERIOD) { codeTypedIn += '.'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); }
+		if (FlxG.keys.justPressed.A) { codeTypedIn += 'a'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.B) { codeTypedIn += 'b'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.C) { codeTypedIn += 'c'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.D) { codeTypedIn += 'd'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.E) { codeTypedIn += 'e'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.F) { codeTypedIn += 'f'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.G) { codeTypedIn += 'g'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.H) { codeTypedIn += 'h'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.I) { codeTypedIn += 'i'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.J) { codeTypedIn += 'j'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.K) { codeTypedIn += 'k'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.L) { codeTypedIn += 'l'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.M) { codeTypedIn += 'm'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.N) { codeTypedIn += 'n'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.O) { codeTypedIn += 'o'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.P) { codeTypedIn += 'p'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.Q) { codeTypedIn += 'q'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.R) { codeTypedIn += 'r'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.S) { codeTypedIn += 's'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.T) { codeTypedIn += 't'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.U) { codeTypedIn += 'u'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.V) { codeTypedIn += 'v'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.W) { codeTypedIn += 'w'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.X) { codeTypedIn += 'x'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.Y) { codeTypedIn += 'y'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.Z) { codeTypedIn += 'z'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.PERIOD) { codeTypedIn += '.'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
 
 		if (FlxG.keys.justPressed.BACKSPACE && keysPressed > 0) {
 			FlxG.sound.play(Paths.sound('terminal_bkspc'), 0.4);
@@ -161,6 +168,7 @@ class TerminalState extends MusicBeatState
 		if (controls.ACCEPT)
 		{
 			previousLines += ('>' + codeTypedIn);
+			disableThisShit = false;
 
 			addLine++;
 
@@ -178,6 +186,7 @@ class TerminalState extends MusicBeatState
 				addLine++;
 				}
 				else {
+				Main.infoCounter.visible = true;
 				FlxG.sound.playMusic(Paths.music('no'), 0);
 				previousLines += '\n>Accessing chart editor...';
 				PlayState.SONG = Song.loadFromJson(codeTypedIn, codeTypedIn);
@@ -186,12 +195,14 @@ class TerminalState extends MusicBeatState
 				}
 				}
 				else {
-					previousLines += '\n>Returning to main';
+					previousLines += '\n>Error or Blank\n>Returning to main';
 					addLine++;
 					currentType = '';
 				}
 				case 'run':
+					disableThisShit = true;
 				if (codeTypedIn == 'anticheat.exe') {
+					Main.infoCounter.visible = true;
 					FlxG.sound.playMusic(Paths.music('no'), 0);
 					previousLines += '\n>Running AntiCheat.exe';
 					PlayState.SONG = Song.loadFromJson('anomaly','anomaly');
@@ -204,11 +215,12 @@ class TerminalState extends MusicBeatState
 					addLine++;
 				}
 				else {
-					previousLines += '\n>Returning to main';
+					previousLines += '\n>Error or Blank\n>Returning to main';
 					addLine++;
 					currentType = '';
 				}
 				case 'open':
+					disableThisShit = true;
 					switch (codeTypedIn) {
 						case 'ryan':
 							previousLines += '\n>An Avali who doesn\'t know how to speak Portuguese or English like them.\n>He just speaks in beeps and bops\n>fucking idot';
@@ -246,15 +258,17 @@ class TerminalState extends MusicBeatState
 							CoolUtil.browserLoad('https://www.youtube.com/watch?v=S-SnfN8Gn3I');
 						case 'classic1926':
 							previousLines += '\n>You know what fuck you, I\'m going to make you watch my sugary spire video';
-							CoolUtil.browserLoad('https://www.youtube.com/watch?v=mvz8JEHIwBQ');
 							addLine++;
+							heheheha = codeTypedIn;
+							new FlxTimer().start(2, dumbShit);
 						case 'fatsnivy':
 							previousLines += '\n>I fucking hate you';
 							addLine++;
-							forceCrash();
+							heheheha = codeTypedIn;
+							new FlxTimer().start(2, dumbShit);
 						//	System.exit(0);
 						default:
-							previousLines += '\n>Returning to main';
+							previousLines += '\n>Error or Blank\n>Returning to main';
 							addLine++;
 							currentType = '';
 					}
@@ -284,7 +298,7 @@ class TerminalState extends MusicBeatState
 							PlayState.SONG = Song.loadFromJson('awaken','awaken');
 							Main.switchState(this, new PlayState());
 						default:
-							previousLines += '\n>Returning to main';
+							previousLines += '\n>Error or Blank\n>Returning to main';
 							addLine++;
 							currentType = '';
 					}
@@ -315,9 +329,13 @@ class TerminalState extends MusicBeatState
 			previousLines += '\n>Choose a character to give admin to.\n>WARNING: They may do harmful stuff!';
 			currentType = 'admin';
 			addLine++;
+			case 'what':
+			codeTypedIn = '';
+			FlxG.sound.play(Paths.sound('what'));
 			default:
 		//	if (currentType == '')
 		//	previousLines += '\n>Unknown command';
+			if (!disableThisShit)
 			currentType = '';
 			addLine++;
 			}
@@ -330,6 +348,15 @@ class TerminalState extends MusicBeatState
 		codeText.text = '$changeMainText\n\n$previousLines>$codeTypedIn';
 
 		super.update(elapsed);
+	}
+	function dumbShit(time:FlxTimer = null) {
+		switch (heheheha) {
+			case 'classic1926':
+				CoolUtil.browserLoad('https://www.youtube.com/watch?v=mvz8JEHIwBQ');
+				System.exit(0);
+			case 'fatsnivy':
+				forceCrash();
+		}
 	}
 	function forceCrash():Void
 		{
@@ -349,7 +376,7 @@ class TerminalState extends MusicBeatState
 			}
 			
 	
-			errMsg += "\nUncaught Error: FUCK YOU!!!!!!!" + "\nPlease report this error to the GitHub page: https://github.com/Yoshubs/Forever-Engine";
+			errMsg += "\nUncaught Error: FUCK YOU!!!!!!!" + "\nPlease report this error to the GitHub page: https://github.com/ClassicBoost/FNF-Starcatcher-Reborn";
 	
 			if (!FileSystem.exists("crash/"))
 				FileSystem.createDirectory("crash/");

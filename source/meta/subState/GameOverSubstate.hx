@@ -71,12 +71,16 @@ class GameOverSubstate extends MusicBeatSubState
 			PlayState.deaths = 0;
 			PlayState.daAdmin = 'ryan';
 
-			if (PlayState.isStoryMode)
-			{
-				Main.switchState(this, new StoryMenuState());
-			}
-			else
-				Main.switchState(this, new FreeplayState());
+			if (!MasterEditorMenu.inTerminal) {
+				FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);
+				if (PlayState.isStoryMode) {
+					Main.switchState(this, new StoryMenuState());
+				} else {
+					Main.switchState(this, new FreeplayState());
+				}} else {
+					FlxG.sound.playMusic(Paths.music('terminal'), 0.7);
+					Main.switchState(this, new MasterEditorMenu());
+				}
 		}
 
 		if (bf.animation.curAnim.name == 'firstDeath' && bf.animation.curAnim.curFrame == 12)

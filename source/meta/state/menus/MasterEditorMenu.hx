@@ -50,6 +50,8 @@ class MasterEditorMenu extends MusicBeatState
 	var changeMainText:String = 'Type in numbers to enter codes\nAll codes are 5 digits long\n\nENTER to access\nR to reset\nESC to exit';
 	var keysPressed:Int = 0;
 
+	public static var inTerminal:Bool = false;
+
 	// the create 'state'
 	override function create()
 	{
@@ -75,7 +77,10 @@ class MasterEditorMenu extends MusicBeatState
 		bg.color = 0xFF353535;
 		add(bg);
 
+		if (!inTerminal)
 		FlxG.sound.playMusic(Paths.music('terminal'), 0.7);
+
+		inTerminal = true;
 
 		// add the menu items
 		grpTexts = new FlxTypedGroup<Alphabet>();
@@ -142,6 +147,7 @@ class MasterEditorMenu extends MusicBeatState
 		if (controls.BACK)
 		{
 			FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);
+			inTerminal = false;
 			Main.switchState(this, new MainMenuState());
 		}
 
@@ -207,6 +213,7 @@ class MasterEditorMenu extends MusicBeatState
 				case '52022':
 					FlxG.sound.play(Paths.sound('psych'), 0.6);
 				case '12018':
+					inTerminal = false;
 					PlayState.SONG = Song.loadFromJson('wtf', 'wtf');
 					Main.switchState(this, new PlayState());
 				case '':
