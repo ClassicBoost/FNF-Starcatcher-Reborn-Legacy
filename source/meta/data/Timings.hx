@@ -18,9 +18,9 @@ class Timings
 	public static var judgementsMap:Map<String, Array<Dynamic>> = [
 		"sick" => [0, 45, 350, 100, ' [MFC]'],
 		"good" => [1, 90, 200, 75, ' [GFC]'],
-		"bad" => [2, 135, 100, 50, ' [FC]'],
-		"shit" => [3, 157.5, 50, 25, ' [FC-]'],
-		"miss" => [4, 180, -25, -100],
+		"bad" => [2, 135, 0, 50, ' [FC]'],
+		"shit" => [3, 157.5, -500, 25, ' [FC-]'],
+		"miss" => [4, 180, 0, -100],
 	];
 
 	public static var msThreshold:Float = 0;
@@ -99,6 +99,8 @@ class Timings
 		{
 			if (PlayState.misses < 10)
 				comboDisplay = ' [SDCB]';
+			if (PlayState.misses >= 65)
+				comboDisplay = ' [Skill Issue]';
 		}
 
 		// this updates the most so uh

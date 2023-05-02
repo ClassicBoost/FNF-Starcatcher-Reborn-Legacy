@@ -38,7 +38,7 @@ class MasterEditorMenu extends MusicBeatState
 
 	var bg:FlxSprite; // the background has been separated for more control
 
-	var options:Array<String> = ['terminal','characters','codes'];
+	var options:Array<String> = ['characters','codes','terminal'];
 	var canSnap:Array<Float> = [];
 	private var grpTexts:FlxTypedGroup<Alphabet>;
 
@@ -149,11 +149,12 @@ class MasterEditorMenu extends MusicBeatState
 		{
 			switch (curSelected) {
 				case 0:
-					Main.switchState(this, new TerminalState());
+					
 				case 1:
-				case 2:
 					disableMainControls = true;
 					openUpCodes();
+				case 2:
+					Main.switchState(this, new TerminalState());
 			}
 		}
 		} else {
@@ -198,11 +199,12 @@ class MasterEditorMenu extends MusicBeatState
 			{
 				changeMainText = 'Type in numbers to enter codes\nAll codes are 5 digits long\n\nENTER to access\nR to reset\nESC to exit';
 				switch (codeTypedIn) {
-				case '69420','42069','318008':
+				case '69420','42069','318008','69696':
 					changeMainText = 'Haha, very funny';
 				case '99999':
 					changeMainText = 'Football';
-				case '052022':
+					CoolUtil.browserLoad('https://www.youtube.com/watch?v=Hv6RbEOlqRo');
+				case '52022':
 					FlxG.sound.play(Paths.sound('psych'), 0.6);
 				case '12018':
 					PlayState.SONG = Song.loadFromJson('wtf', 'wtf');

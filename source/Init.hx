@@ -82,7 +82,7 @@ class Init extends FlxState
 		'Debug Info' => [
 			false,
 			Checkmark,
-			'Whether to display information like your game state.',
+			'Whether to display information like your game state.\nThis also allows many stuff to be used',
 			NOT_FORCED
 		],
 		'Reduced Movements' => [
@@ -299,17 +299,13 @@ class Init extends FlxState
 		if (trueSettings.get("Custom Titlescreen"))
 			Main.switchState(this, new CustomTitlescreen());
 		else {
-			#if debug
-			Main.switchState(this, new OptionsPREState());
-			#else
-			if (showPreOptions) {
+			if (showPreOptions || Init.trueSettings.get('Debug Info')) {
 			FlxG.save.data.showPreOptions = false;
 			FlxG.save.flush();
 			Main.switchState(this, new OptionsPREState());
 			}
 			else
 			Main.switchState(this, new TitleState());
-			#end
 		}
 	}
 

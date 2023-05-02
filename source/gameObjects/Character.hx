@@ -257,12 +257,12 @@ class Character extends FNFSprite
 
 				animation.addByPrefix('idle', 'idle', 24, false);
 				animation.addByPrefix('singUP', 'up0', 24, false);
-				animation.addByPrefix('singLEFT', 'left0', 24, false);
-				animation.addByPrefix('singRIGHT', 'right0', 24, false);
+				animation.addByPrefix('singLEFT', 'right0', 24, false);
+				animation.addByPrefix('singRIGHT', 'left0', 24, false);
 				animation.addByPrefix('singDOWN', 'down0', 24, false);
 				animation.addByPrefix('singUPmiss', 'up miss', 24, false);
-				animation.addByPrefix('singLEFTmiss', 'left miss', 24, false);
-				animation.addByPrefix('singRIGHTmiss', 'right miss', 24, false);
+				animation.addByPrefix('singLEFTmiss', 'right miss', 24, false);
+				animation.addByPrefix('singRIGHTmiss', 'left miss', 24, false);
 				animation.addByPrefix('singDOWNmiss', 'down miss', 24, false);
 				animation.addByPrefix('hey', 'hey', 24, false);
 				animation.addByPrefix('scared', 'scared', 24);

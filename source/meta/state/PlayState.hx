@@ -114,8 +114,11 @@ class PlayState extends MusicBeatState
 
 	public static var health:Float = 1; // mario
 	public static var combo:Int = 0;
+	public static var highestCombo:Int = 0;
+	public static var totalCombo:Int = 0;
 
 	public static var misses:Int = 0;
+	public static var totalMisses:Int = 0;
 
 	public static var messups:Int = 0; // now this would seem like combo breaks but failing mechanics will also remove your P rank
 
@@ -167,13 +170,20 @@ class PlayState extends MusicBeatState
 
 	public static var songLength:Float = 0;
 
+	public static var forceRank:Int = 0;
+	private var forceRankText:FlxText;
+
 	private var antimashshit:Bool = false;
+
+	public static var fuckingPlayer:String = 'ryan';
 
 	public var scoreRequired:Int = 0; // basically how much score there is in that song.
 
 	// character icons
 	public static var bfIcon:String = 'bf';
 	public static var dadIcon:String = 'dad';
+
+	public static var daAdmin:String = 'ryan'; // also as no one
 
 	private var stageBuild:Stage;
 
@@ -197,6 +207,8 @@ class PlayState extends MusicBeatState
 
 	public static var forceDeath = false;
 
+	public static var fuckingRankText:String = 'd';
+
 	var goodNotePressed:Bool = true; // not to be confised with goodNoteHit
 
 	// stores the last judgement object
@@ -210,12 +222,13 @@ class PlayState extends MusicBeatState
 		super.create();
 
 		// reset any values and variables that are static
-		songScore = 0;
+	//	songScore = 0;
 		combo = 0;
 		health = 1;
 		misses = 0;
 		messups = 0;
 		forceDeath = false;
+		forceRank = 0;
 		// sets up the combo object array
 		lastCombo = [];
 
@@ -293,6 +306,8 @@ class PlayState extends MusicBeatState
 
 		stageBuild.repositionPlayers(curStage, boyfriend, dadOpponent, gf);
 		stageBuild.dadPosition(curStage, boyfriend, dadOpponent, gf, camPos);
+
+		fuckingPlayer = boyfriend.curCharacter;
 
 		if (SONG.assetModifier != null && SONG.assetModifier.length > 1)
 			assetModifier = SONG.assetModifier;
@@ -477,6 +492,17 @@ class PlayState extends MusicBeatState
 		theSongStuff.visible = showStats;
 		theSongStuff.cameras = [camHUD];
 		add(theSongStuff);
+
+
+		forceRankText = new FlxText(200, 500, 0, '>D\nC\nB\nA\nS');
+		forceRankText.setFormat(24, FlxColor.WHITE, RIGHT);
+		forceRankText.screenCenter();
+		forceRankText.x = 200;
+		forceRankText.y = 500;
+		forceRankText.text = '';
+		forceRankText.setBorderStyle(OUTLINE, FlxColor.BLACK, 1.5);
+		forceRankText.cameras = [camHUD];
+		add(forceRankText);
 
 		// create a hud over the hud camera for dialogue
 		dialogueHUD = new FlxCamera();
@@ -689,7 +715,6 @@ class PlayState extends MusicBeatState
 	var staticDisplace:Int = 0;
 
 	var lastSection:Int = 0;
-	var fuckingRankText:String = 'd';
 	var shitfart:String = 'd';
 
 	override public function update(elapsed:Float)
@@ -710,19 +735,26 @@ class PlayState extends MusicBeatState
 
 		theSongStuff.visible = showStats;
 
-		var iconLerp = 0.85;
-	//	iconP1.setGraphicSize(Std.int(FlxMath.lerp(iconP1.initialWidth, iconP1.width, iconLerp)));
-	//	iconP2.setGraphicSize(Std.int(FlxMath.lerp(iconP2.initialWidth, iconP2.width, iconLerp)));
+		if (daAdmin == 'monster')
+			forceDeath = true;
 
-		// messups are just mechanic fails, nothing else, as well with note misses, and you only get a P rank if you also have a MFC
-		if (misses == 0 && messups == 0 && songScore != 0 && !cpuControlled && !practiceMode) displayRank = 'P';
-
-		if (cpuControlled && (curSong.toLowerCase() == 'anomaly' || curSong.toLowerCase() == 'cheating')) forceDeath = true;
-
+		if (choosenfont == 'vcr.ttf') {
+		var iconLerp = 0.5;
+		iconP1.setGraphicSize(Std.int(FlxMath.lerp(iconP1.initialWidth, iconP1.width, iconLerp)));
+		iconP2.setGraphicSize(Std.int(FlxMath.lerp(iconP2.initialWidth, iconP2.width, iconLerp)));
+		} else {
 		var mult:Float = FlxMath.lerp(1, iconP1.scale.x, CoolUtil.boundTo(1 - (elapsed * 9), 0, 1));
 		iconP1.scale.set(mult, mult);
 		var mult:Float = FlxMath.lerp(1, iconP2.scale.x, CoolUtil.boundTo(1 - (elapsed * 9), 0, 1));
 		iconP2.scale.set(mult, mult);
+		}
+
+		// messups are just mechanic fails, nothing else, as well with note misses, and you only get a P rank if you also have a MFC
+		if (misses == 0 && messups == 0 && songScore != 0 && !cpuControlled && !practiceMode) displayRank = 'P';
+
+		if (cpuControlled && (curSong.toLowerCase() == 'anomaly' || curSong.toLowerCase() == 'cheating') && !Init.trueSettings.get('Debug Info')) forceDeath = true;
+
+
 
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();
@@ -745,6 +777,8 @@ class PlayState extends MusicBeatState
 			iconP2.animation.curAnim.curFrame = 0;
 		}
 
+		if (forceRank == 0) {
+		if (choosenfont != 'vcr.ttf') {
 		if (songScore >= (scoreRequired * 0.3) && songScore < (scoreRequired * 0.6)) {
 			fuckingRankText = 'c';
 		} else if (songScore >= (scoreRequired * 0.6) && songScore < (scoreRequired * 0.9)) {
@@ -757,6 +791,9 @@ class PlayState extends MusicBeatState
 			fuckingRankText = 's+';
 		} else if (songScore < (scoreRequired * 0.3)) {
 			fuckingRankText = 'd';
+		}} else {
+			fuckingRankText = Std.string(Timings.returnScoreRating().toLowerCase());
+		}
 		}
 		fuckingRank.animation.play('$fuckingRankText');
 
@@ -766,6 +803,10 @@ class PlayState extends MusicBeatState
 			FlxTween.tween(fuckingRank, {"scale.x": 0.35, "scale.y": 0.35}, 0.5, {ease: FlxEase.cubeOut});
 			shitfart = fuckingRankText;
 		}
+		totalCombo = combo;
+
+		if (totalCombo > highestCombo)
+		highestCombo = totalCombo;
 
 		if (songScore < 0)
 			songScore = 0;
@@ -816,15 +857,45 @@ class PlayState extends MusicBeatState
 					else
 						Main.switchState(this, new OriginalChartingState());
 				}*/
-				if (FlxG.keys.justPressed.SEVEN) {
+				if (FlxG.keys.justPressed.SEVEN && Init.trueSettings.get('Debug Info')) {
 					showStats = !showStats;
 				}
 
-				if (FlxG.keys.justPressed.L) {
+				if (FlxG.keys.justPressed.EIGHT && Init.trueSettings.get('Debug Info')) {
+					forceRank++;
+					forceRankText.visible = true;
+					if (forceRank > 5)
+						forceRank = 1;
+					songScore = 0;
+				}
+				switch (forceRank) {
+					case 1:
+						forceRankText.text = '>D\nC\nB\nA\nS\n';
+						fuckingRankText = 'd';
+					case 2:
+						forceRankText.text = 'D\n>C\nB\nA\nS\n';
+						fuckingRankText = 'c';
+					case 3:
+						forceRankText.text = 'D\nC\n>B\nA\nS\n';
+						fuckingRankText = 'b';
+					case 4:
+						forceRankText.text = 'D\nC\nB\n>A\nS\n';
+						fuckingRankText = 'a';
+					case 5:
+						forceRankText.text = 'D\nC\nB\nA\n>S\n';
+						fuckingRankText = 's';
+				}
+
+				if (FlxG.keys.justPressed.ONE && Init.trueSettings.get('Debug Info')) {
+					songScore = 0;
+					endSong();
+				}
+
+				if (FlxG.keys.justPressed.L && Init.trueSettings.get('Debug Info')) {
 					defaultCamZoom -= 0.01;
 				}
 
-				if ((FlxG.keys.justPressed.SIX))
+				if (FlxG.keys.justPressed.SIX && Init.trueSettings.get('Debug Info'))
 					cpuControlled = !cpuControlled;
 			}
 
@@ -1264,7 +1335,7 @@ class PlayState extends MusicBeatState
 						if (health > 0.1 && !coolNote.isSustainNote) health -= 0.025;
 				}
 				if (curSong.toLowerCase() == 'anomaly' || curSong.toLowerCase() == 'cheating') {
-					if (!coolNote.isSustainNote) camHUD.angle = FlxG.random.int(-60, 60);
+					if (!coolNote.isSustainNote && !Init.trueSettings.get("Reduced Movements")) camHUD.angle = FlxG.random.int(-30, 30);
 					health -= 0.005;
 				}
 			}
@@ -1608,7 +1679,7 @@ class PlayState extends MusicBeatState
 		forceLose = true;
 
 		// misses
-		songScore -= 500;
+		songScore -= 1000;
 		misses++;
 		messups++;
 
@@ -2020,16 +2091,18 @@ class PlayState extends MusicBeatState
 			Highscore.saveScore(SONG.song, songScore, storyDifficulty);
 
 		deaths = 0;
+		daAdmin = 'ryan';
+
+		// set the campaign's score higher
+		campaignScore += songScore;
+		totalMisses += misses;
 
 		if (!isStoryMode)
 		{
-			Main.switchState(this, new FreeplayState());
+			Main.switchState(this, new RankingState());
 		}
 		else
 		{
-			// set the campaign's score higher
-			campaignScore += songScore;
-
 			// remove a song from the story playlist
 			storyPlaylist.remove(storyPlaylist[0]);
 
@@ -2044,7 +2117,7 @@ class PlayState extends MusicBeatState
 				transOut = FlxTransitionableState.defaultTransOut;
 
 				// change to the menu state
-				Main.switchState(this, new StoryMenuState());
+				Main.switchState(this, new RankingState());
 
 				// save the week's score if the score is valid
 				if (SONG.validScore)

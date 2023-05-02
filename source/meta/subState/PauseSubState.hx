@@ -158,6 +158,7 @@ class PauseSubState extends MusicBeatSubState
 				case "Exit to menu":
 					PlayState.resetMusic();
 					PlayState.deaths = 0;
+					PlayState.daAdmin = 'ryan';
 
 					if (PlayState.isStoryMode)
 						Main.switchState(this, new StoryMenuState());

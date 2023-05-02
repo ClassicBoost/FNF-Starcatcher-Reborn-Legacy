@@ -14,6 +14,11 @@ import flixel.tweens.misc.ColorTween;
 import flixel.util.FlxColor;
 import flixel.addons.transition.FlxTransitionableState;
 import gameObjects.userInterface.HealthIcon;
+import haxe.CallStack.StackItem;
+import haxe.CallStack;
+import haxe.io.Path;
+import sys.io.File;
+import lime.app.Application;
 import lime.utils.Assets;
 import meta.MusicBeat.MusicBeatState;
 import meta.data.*;
@@ -26,6 +31,7 @@ import flash.system.System;
 import sys.thread.Mutex;
 import sys.thread.Thread;
 import meta.state.charting.*;
+import sys.io.Process;
 
 using StringTools;
 
@@ -202,6 +208,86 @@ class TerminalState extends MusicBeatState
 					addLine++;
 					currentType = '';
 				}
+				case 'open':
+					switch (codeTypedIn) {
+						case 'ryan':
+							previousLines += '\n>An Avali who doesn\'t know how to speak Portuguese or English like them.\n>He just speaks in beeps and bops\n>fucking idot';
+							addLine++;
+						case 'connor':
+							previousLines += '\n>\"Why do humans ate avali so much?\"';
+							addLine++;
+						case 'carson':
+							previousLines += '\n>I have no idea what Carson you\'re talking about.';
+							addLine++;
+						case 'ian':
+							previousLines += '\n>Ian is that person who saved a school and got trama.\n>He also lost half his head and left arm incase if you didn\'t know.';
+							addLine++;
+						case 'emma':
+							previousLines += '\n>She isn\'t real.';
+							addLine++;
+						case 'jake':
+							previousLines += '\n>He adopted Emma because he wanted to sell her to KFC';
+							addLine++;
+						case 'shara':
+							previousLines += '\n>She works at McDonalds';
+							addLine++;
+						case 'jeri','gara':
+							previousLines += '\n>Are they human or robots?';
+							addLine++;
+						case 'monster':
+							previousLines += '\n>THAT\'S NOT MY REAL NAME!';
+							addLine++;
+						case 'mari':
+							previousLines += '\n>File deleted';
+							addLine++;
+						case 'ooklesnookzs':
+							CoolUtil.browserLoad('https://www.youtube.com/watch?v=Y7QEVuhzY-w');
+						case '87':
+							CoolUtil.browserLoad('https://www.youtube.com/watch?v=S-SnfN8Gn3I');
+						case 'classic1926':
+							previousLines += '\n>You know what fuck you, I\'m going to make you watch my sugary spire video';
+							CoolUtil.browserLoad('https://www.youtube.com/watch?v=mvz8JEHIwBQ');
+							addLine++;
+						case 'fatsnivy':
+							previousLines += '\n>I fucking hate you';
+							addLine++;
+							forceCrash();
+						//	System.exit(0);
+						default:
+							previousLines += '\n>Returning to main';
+							addLine++;
+							currentType = '';
+					}
+				case 'admin':
+					switch (codeTypedIn) {
+						case 'ryan','connor','carson':
+							previousLines += '\n>That\'s you, you fucking idiot';
+							addLine++;
+						case 'ian':
+							PlayState.daAdmin = 'ian'; // Shoot warnings spam
+							PlayState.SONG = Song.loadFromJson('blam','blam');
+							Main.switchState(this, new PlayState());
+						case 'jake':
+							PlayState.daAdmin = 'jake'; // Offplace notes
+							PlayState.SONG = Song.loadFromJson('showdown','showdown');
+							Main.switchState(this, new PlayState());
+						case 'shara':
+							PlayState.daAdmin = 'shara'; // scroll speed 10
+							PlayState.SONG = Song.loadFromJson('crash-landing','crash-landing');
+							Main.switchState(this, new PlayState());
+						case 'jeri','gara':
+							PlayState.daAdmin = 'jeri-gara'; // scroll speed 10
+							PlayState.SONG = Song.loadFromJson('chocolate','chocolate');
+							Main.switchState(this, new PlayState());
+						case 'monster':
+							PlayState.daAdmin = 'monster'; // instantly kill the player
+							PlayState.SONG = Song.loadFromJson('awaken','awaken');
+							Main.switchState(this, new PlayState());
+						default:
+							previousLines += '\n>Returning to main';
+							addLine++;
+							currentType = '';
+					}
 			}
 			switch (codeTypedIn) {
 			case 'chart':
@@ -214,12 +300,20 @@ class TerminalState extends MusicBeatState
 			previousLines += '\n>What do you want to run?\n>Be warned that some executables may be unstable.';
 			currentType = 'run';
 			addLine++;
-			case 'kill','exit':
+			case 'kill','exit','quit':
 			codeTypedIn = '';
 			previousLines += '\n>Ok lol';
-			System.exit(0);
-			case '':
-			previousLines += '\n>But like, actually put something here';
+			Main.switchState(this, new MasterEditorMenu());
+		//	System.exit(0);
+			case 'open': // LORE??!!!!?!?!?!?!?!!??!?!?!?!?!?!??
+			codeTypedIn = '';
+			previousLines += '\n>Choose a file to open.\n>Leave blank to return to main';
+			currentType = 'open';
+			addLine++;
+			case 'admin','root':
+			codeTypedIn = '';
+			previousLines += '\n>Choose a character to give admin to.\n>WARNING: They may do harmful stuff!';
+			currentType = 'admin';
 			addLine++;
 			default:
 		//	if (currentType == '')
@@ -237,4 +331,51 @@ class TerminalState extends MusicBeatState
 
 		super.update(elapsed);
 	}
+	function forceCrash():Void
+		{
+			var errMsg:String = "";
+			var path:String;
+			var callStack:Array<StackItem> = CallStack.exceptionStack(true);
+			var dateNow:String = Date.now().toString();
+	
+			dateNow = StringTools.replace(dateNow, " ", "_");
+			dateNow = StringTools.replace(dateNow, ":", "'");
+	
+			path = "crash/" + "FE_" + dateNow + ".txt";
+	
+			for (stackItem in callStack)
+			{
+				Sys.println(stackItem);
+			}
+			
+	
+			errMsg += "\nUncaught Error: FUCK YOU!!!!!!!" + "\nPlease report this error to the GitHub page: https://github.com/Yoshubs/Forever-Engine";
+	
+			if (!FileSystem.exists("crash/"))
+				FileSystem.createDirectory("crash/");
+	
+			File.saveContent(path, errMsg + "\n");
+	
+			Sys.println(errMsg);
+			Sys.println("Crash dump saved in no where, because it's not an actual crash bozo");
+	
+			var crashDialoguePath:String = "FE-CrashDialog";
+	
+			#if windows
+			crashDialoguePath += ".exe";
+			#end
+	
+		/*	if (FileSystem.exists(crashDialoguePath))
+			{*/
+				Sys.println("Found crash dialog: " + crashDialoguePath);
+				new Process(crashDialoguePath, [path]);
+		/*	}
+			else
+			{
+				Sys.println("No crash dialog found! Making a simple alert instead...");
+				Application.current.window.alert(errMsg, "Error!");
+			}*/
+	
+			Sys.exit(1);
+		}
 }

@@ -99,7 +99,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 			case 'forest':
 				curStage = 'forest';
 				PlayState.defaultCamZoom = 0.6;
-				var bg:FNFSprite = new FNFSprite(200,-300).loadGraphic(Paths.image('backgrounds/shared/sky-night'));
+				var bg:FNFSprite = new FNFSprite(100,-300).loadGraphic(Paths.image('backgrounds/shared/sky-night'));
 				bg.scrollFactor.set(0, 0);
 				bg.setGraphicSize(Std.int(bg.width * 3));
 				bg.updateHitbox();
@@ -386,7 +386,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 				add(bg);
 
 			case 'nothing':
-				PlayState.defaultCamZoom = 0.9;
+				PlayState.defaultCamZoom = 0.8;
 				curStage = 'nothing';
 				// yep, nothing. Other than name and zoom
 
