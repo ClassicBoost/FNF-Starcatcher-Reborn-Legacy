@@ -20,7 +20,7 @@ class PauseSubState extends MusicBeatSubState
 {
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
-	var menuItems:Array<String> = ['Resume', 'Restart Song', 'Botplay', 'Practice Mode', 'Change Difficulty', 'Exit to menu'];
+	var menuItems:Array<String> = ['Resume', 'Restart Song', 'Botplay', 'Practice Mode', 'Exit to menu'];
 	var curSelected:Int = 0;
 
 	var pauseMusic:FlxSound;
@@ -148,7 +148,9 @@ class PauseSubState extends MusicBeatSubState
 				case "Resume":
 					close();
 				case "Restart Song":
-					Main.switchState(this, new PlayState());
+				//	Main.switchState(this, new PlayState());
+					PlayState.health = -1;
+					close();
 				case 'Botplay':
 					PlayState.cpuControlled = !PlayState.cpuControlled;
 				case 'Practice Mode':
@@ -156,8 +158,14 @@ class PauseSubState extends MusicBeatSubState
 				case 'Change Difficulty':
 					FlxG.sound.play(Paths.sound('what'));
 				case "Exit to menu":
+					PlayState.campaignScore = 0;
+					PlayState.highestCombo = 0;
+					PlayState.totalCombo = 0;
+					PlayState.totalMisses = 0;
 					PlayState.resetMusic();
 					PlayState.deaths = 0;
+					PlayState.totalSongs = 0;
+					PlayState.campaignAccuracy = 0;
 					PlayState.daAdmin = 'ryan';
 
 				if (!MasterEditorMenu.inTerminal) {

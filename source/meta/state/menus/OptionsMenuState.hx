@@ -90,7 +90,7 @@ class OptionsMenuState extends MusicBeatState
 				[
 					['Judgements', null],
 					['', null],
-					["UI Skin", getFromOption],
+				//	["UI Skin", getFromOption],
 					['Fixed Judgements', getFromOption],
 					['Simply Judgements', getFromOption],
 					['Counter', getFromOption],
@@ -111,6 +111,7 @@ class OptionsMenuState extends MusicBeatState
 					["Stage Opacity", getFromOption],
 					["Opacity Type", getFromOption],
 					["Icon Bop", getFromOption],
+					["Show Song Progression", getFromOption],
 					['Reduced Movements', getFromOption],
 				]
 			]
@@ -121,7 +122,7 @@ class OptionsMenuState extends MusicBeatState
 			categoryMap.get(category)[1] = returnSubgroup(category);
 			categoryMap.get(category)[2] = returnExtrasMap(categoryMap.get(category)[1]);
 		}
-		FlxG.sound.playMusic(Paths.music('Momentia'), 0.5);
+		FlxG.sound.playMusic(Paths.music('voidBoutique'), 0.2);
 		// call the options menu
 		var bg = new FlxSprite(-85);
 		bg.loadGraphic(Paths.image('menus/base/menuDesat'));
@@ -610,6 +611,7 @@ class OptionsMenuState extends MusicBeatState
 			lockedMovement = true;
 			FlxFlicker.flicker(activeSubgroup.members[curSelection], 0.5, 0.06 * 2, true, false, function(flick:FlxFlicker)
 			{
+				FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);
 				Main.switchState(this, new MainMenuState());
 				lockedMovement = false;
 			});

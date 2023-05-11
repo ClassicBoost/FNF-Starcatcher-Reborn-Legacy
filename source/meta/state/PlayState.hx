@@ -67,6 +67,10 @@ class PlayState extends MusicBeatState
 	public var iconP1:HealthIcon;
 	public var iconP2:HealthIcon;
 
+	public static var songPosBG:FlxSprite;
+	public static var songPosBar:FlxBar;
+	private var songPositionBar:Float = 0;
+
 	public static var cpuControlled:Bool = false;
 	public static var practiceMode:Bool = false;
 
@@ -77,6 +81,8 @@ class PlayState extends MusicBeatState
 	public static var dadOpponent:Character;
 	public static var gf:Character;
 	public static var boyfriend:Boyfriend;
+
+	private var canDie:Bool = true;
 
 	public static var assetModifier:String = 'base';
 	public static var changeableSkin:String = 'default';
@@ -130,6 +136,8 @@ class PlayState extends MusicBeatState
 	public static var lerpScore:Float = 0.0;
 	public var lerpHealth:Float = 1;
 
+	private var updateTime:Bool = true;
+
 	public var generatedMusic:Bool = false;
 
 	private var startingSong:Bool = false;
@@ -170,6 +178,10 @@ class PlayState extends MusicBeatState
 
 	public static var songLength:Float = 0;
 
+	public static var campaignAccuracy:Float = 0.0;
+	public static var actualAccuracy:Float = 0.0;
+	public static var totalSongs:Int = 0;
+
 	public static var forceRank:Int = 0;
 	private var forceRankText:FlxText;
 
@@ -177,7 +189,9 @@ class PlayState extends MusicBeatState
 
 	public static var fuckingPlayer:String = 'ryan';
 
-	public var scoreRequired:Int = 0; // basically how much score there is in that song.
+	public var scoreRequired:Int = 1500; // basically how much notes there is in that song.
+
+	public var judgementText:FlxText;
 
 	// character icons
 	public static var bfIcon:String = 'bf';
@@ -222,12 +236,14 @@ class PlayState extends MusicBeatState
 		super.create();
 
 		// reset any values and variables that are static
-	//	songScore = 0;
+		if (totalSongs == 0)
+		songScore = 0;
 		combo = 0;
 		health = 1;
 		misses = 0;
 		messups = 0;
 		forceDeath = false;
+		canDie = true;
 		forceRank = 0;
 		// sets up the combo object array
 		lastCombo = [];
@@ -437,7 +453,6 @@ class PlayState extends MusicBeatState
 		fuckingRank.x += 1000;
 		add(fuckingRank);
 
-		camHUD.zoom = 3;
 		switch (curSong.toLowerCase()) {
 			case 'mirage':
 			composerStuff = 'Spades';
@@ -447,25 +462,52 @@ class PlayState extends MusicBeatState
 			scoreRequired = 687;
 			forceCenter = true;
 			gf.visible = false;
-			choosenfont = 'vcr.ttf';
+			choosenfont = 'Vividly-Regular.ttf';
 			fuckingRank.visible = false;
-			camHUD.zoom = 1;
+			case 'thearchy':
+			composerStuff = 'Original by Maevings | Cover by Classic1926';
+			choosenfont = 'Vividly-Regular.ttf';
+			fuckingRank.visible = false;
+			gf.visible = false;
+		//	boyfriend.visible = false;
+			case 'blam':
+			composerStuff = 'Spades';
+			scoreRequired = 472; // 165,200
 			case 'anomaly','cheating':
 			choosenfont = 'vcr.ttf';
 			fuckingRank.visible = false;
 			gf.visible = false;
-			camHUD.zoom = 1;
 			boyfriend.visible = false;
 			case 'error':
 			choosenfont = 'vcr.ttf';
-			camHUD.zoom = 1;
 			fuckingRank.visible = false;
-			camHUD.zoom = 1;
 		}
 
 		scoreRequired = (scoreRequired * 350);
 
 		uiHUD = new ClassHUD();
+
+		songPosBG = new FlxSprite(0, 10).loadGraphic(Paths.image(ForeverTools.returnSkinAsset('healthBar', PlayState.assetModifier, PlayState.changeableSkin, 'UI')));
+		if (!Init.trueSettings.get('Downscroll'))
+		songPosBG.y = 10;
+		else
+		songPosBG.y = FlxG.height * 0.875;
+		songPosBG.screenCenter(X);
+		songPosBG.scrollFactor.set();
+		songPosBG.alpha = 0;
+		songPosBG.cameras = [camHUD];
+		if (Init.trueSettings.get("Show Song Progression"))
+		add(songPosBG);
+		
+		songPosBar = new FlxBar(songPosBG.x + 4, songPosBG.y + 4, LEFT_TO_RIGHT, Std.int(songPosBG.width - 8), Std.int(songPosBG.height - 8), this,
+			'songPositionBar', 0, 1);
+		songPosBar.scrollFactor.set();
+		songPosBar.numDivisions = 400;
+		songPosBar.createFilledBar(FlxColor.BLACK, 0xFF447FFF);
+		songPosBar.alpha = 0;
+		songPosBar.cameras = [camHUD];
+		if (Init.trueSettings.get("Show Song Progression"))
+		add(songPosBar);
 
 		var barY = FlxG.height * 0.875;
 		if (Init.trueSettings.get('Downscroll'))
@@ -493,6 +535,14 @@ class PlayState extends MusicBeatState
 		theSongStuff.cameras = [camHUD];
 		add(theSongStuff);
 
+		judgementText = new FlxText(0, 200, 0, 'hi there');
+		judgementText.setFormat(Paths.font(choosenfont), 40, FlxColor.WHITE, CENTER);
+		judgementText.setBorderStyle(OUTLINE, FlxColor.BLACK, 1.5);
+		judgementText.visible = true;
+		judgementText.screenCenter(X);
+		judgementText.cameras = [camHUD];
+		judgementText.alpha = 0;
+		add(judgementText);
 
 		forceRankText = new FlxText(200, 500, 0, '>D\nC\nB\nA\nS');
 		forceRankText.setFormat(24, FlxColor.WHITE, RIGHT);
@@ -667,6 +717,7 @@ class PlayState extends MusicBeatState
 		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this, 'lerpHealth', 0, 2);
 		healthBar.scrollFactor.set();
 		healthBar.createFilledBar(dadOpponent.barColor, boyfriend.barColor);
+		healthBar.numDivisions = 1000; // how much lag does this cause?
 		// healthBar
 		add(healthBar);
 
@@ -738,14 +789,14 @@ class PlayState extends MusicBeatState
 		if (daAdmin == 'monster')
 			forceDeath = true;
 
-		if (choosenfont == 'vcr.ttf') {
+		if (choosenfont == 'vcr.ttf' || PlayState.choosenfont == 'Vividly-Regular.ttf') {
 		var iconLerp = 0.5;
 		iconP1.setGraphicSize(Std.int(FlxMath.lerp(iconP1.initialWidth, iconP1.width, iconLerp)));
 		iconP2.setGraphicSize(Std.int(FlxMath.lerp(iconP2.initialWidth, iconP2.width, iconLerp)));
 		} else {
-		var mult:Float = FlxMath.lerp(1, iconP1.scale.x, CoolUtil.boundTo(1 - (elapsed * 9), 0, 1));
+		var mult:Float = FlxMath.lerp(1, iconP1.scale.x, CoolUtil.boundTo(1 - (elapsed * 30), 0, 1));
 		iconP1.scale.set(mult, mult);
-		var mult:Float = FlxMath.lerp(1, iconP2.scale.x, CoolUtil.boundTo(1 - (elapsed * 9), 0, 1));
+		var mult:Float = FlxMath.lerp(1, iconP2.scale.x, CoolUtil.boundTo(1 - (elapsed * 30), 0, 1));
 		iconP2.scale.set(mult, mult);
 		}
 
@@ -778,21 +829,24 @@ class PlayState extends MusicBeatState
 		}
 
 		if (forceRank == 0) {
-		if (choosenfont != 'vcr.ttf') {
-		if (songScore >= (scoreRequired * 0.3) && songScore < (scoreRequired * 0.6)) {
+		if (choosenfont != 'vcr.ttf' && PlayState.choosenfont != 'Vividly-Regular.ttf') {
+		if (songScore >= (scoreRequired * 0.25) && songScore < (scoreRequired * 0.6)) {
 			fuckingRankText = 'c';
-		} else if (songScore >= (scoreRequired * 0.6) && songScore < (scoreRequired * 0.9)) {
+		} else if (songScore >= (scoreRequired * 0.5) && songScore < (scoreRequired * 0.9)) {
 			fuckingRankText = 'b';
-		} else if (songScore >= (scoreRequired * 0.9) && songScore < (scoreRequired * 0.99)) {
+		} else if (songScore >= (scoreRequired * 0.8) && songScore < (scoreRequired * 0.99)) {
 			fuckingRankText = 'a';
-		} else if (songScore >= (scoreRequired * 0.99) && songScore < scoreRequired) {
+		} else if (songScore >= (scoreRequired * 0.95) && songScore < scoreRequired) {
 			fuckingRankText = 's';
 		} else if (songScore >= scoreRequired) {
 			fuckingRankText = 's+';
 		} else if (songScore < (scoreRequired * 0.3)) {
 			fuckingRankText = 'd';
 		}} else {
+			if (Std.string(Timings.returnScoreRating().toLowerCase()) != 'e' && Std.string(Timings.returnScoreRating().toLowerCase()) != 'f')
 			fuckingRankText = Std.string(Timings.returnScoreRating().toLowerCase());
+			else
+			fuckingRankText = 'd';
 		}
 		}
 		fuckingRank.animation.play('$fuckingRankText');
@@ -914,6 +968,23 @@ class PlayState extends MusicBeatState
 				// Conductor.songPosition = FlxG.sound.music.time;
 				Conductor.songPosition += elapsed * 1000;
 
+			//	songPositionBar = Conductor.songPosition;
+
+				if(updateTime) {
+					var curTime:Float = Conductor.songPosition;
+					if(curTime < 0) curTime = 0;
+					songPositionBar = (curTime / songLength);
+
+					var songCalc:Float = (songLength - curTime);
+				//	if(ClientPrefs.timeBarType == 'Time Elapsed') songCalc = curTime;
+
+					var secondsTotal:Int = Math.floor(songCalc / 1000);
+					if(secondsTotal < 0) secondsTotal = 0;
+
+				//	if(ClientPrefs.timeBarType != 'Song Name')
+				//		timeTxt.text = FlxStringUtil.formatTime(secondsTotal, false);
+				}
+
 				if (!paused)
 				{
 					songTime += FlxG.game.ticks - previousFrameTime;
@@ -1013,7 +1084,7 @@ class PlayState extends MusicBeatState
 				forceDeath = true;
 			}
 
-			if ((health <= 0 && startedCountdown && !practiceMode) || forceDeath)
+			if (((health <= 0 && startedCountdown && !practiceMode) && canDie) || forceDeath)
 			{
 				paused = true;
 				// startTimer.active = false;
@@ -1302,6 +1373,8 @@ class PlayState extends MusicBeatState
 					}
 				}
 
+				bopJudgement();
+
 				forceLose = false;
 
 				if (!coolNote.isSustainNote)
@@ -1338,6 +1411,11 @@ class PlayState extends MusicBeatState
 					if (!coolNote.isSustainNote && !Init.trueSettings.get("Reduced Movements")) camHUD.angle = FlxG.random.int(-30, 30);
 					health -= 0.005;
 				}
+				if (curSong.toLowerCase() == 'thearchy') {
+					canDie = false;
+					if (health > 0.7)
+					health -= 0.005;
+				}
 			}
 
 			if (!coolNote.isSustainNote)
@@ -1364,6 +1442,8 @@ class PlayState extends MusicBeatState
 			character.playAnim('sing' + stringDirection.toUpperCase() + 'miss', lockMiss);
 			forceLose = true;
 		}
+		judgementText.text = 'Miss\nx$combo';
+		bopJudgement();
 		decreaseCombo(popMiss);
 
 		//
@@ -1603,6 +1683,7 @@ class PlayState extends MusicBeatState
 
 	function popUpCombo(?cache:Bool = false)
 	{
+		if (choosenfont == 'vcr.ttf' || PlayState.choosenfont == 'Vividly-Regular.ttf') {
 		var comboString:String = Std.string(combo);
 		var negative = false;
 		if ((comboString.startsWith('-')) || (combo == 0))
@@ -1661,7 +1742,7 @@ class PlayState extends MusicBeatState
 				numScore.y += 50;
 			}
 			numScore.x += 100;
-		}
+		}}
 	}
 
 	function decreaseCombo(?popMiss:Bool = false)
@@ -1718,11 +1799,14 @@ class PlayState extends MusicBeatState
 			"oh but if the rating isn't sick why not just reset it"
 			because miss judgements can pop, and they dont mess with your sick combo
 		 */
+
 		var rating = ForeverAssets.generateRating('$daRating', (daRating == 'sick' ? allSicks : false), timing, assetModifier, changeableSkin, 'UI');
+		if (choosenfont == 'vcr.ttf' || PlayState.choosenfont == 'Vividly-Regular.ttf')
 		add(rating);
 
 		if (!Init.trueSettings.get('Simply Judgements'))
 		{
+			if (choosenfont == 'vcr.ttf' || PlayState.choosenfont == 'Vividly-Regular.ttf')
 			add(rating);
 
 			FlxTween.tween(rating, {alpha: 0}, 0.2, {
@@ -1739,6 +1823,7 @@ class PlayState extends MusicBeatState
 			{
 				lastRating.kill();
 			}
+			if (choosenfont == 'vcr.ttf' || PlayState.choosenfont == 'Vividly-Regular.ttf')
 			add(rating);
 			lastRating = rating;
 			FlxTween.tween(rating, {y: rating.y + 20}, 0.2, {type: FlxTweenType.BACKWARD, ease: FlxEase.circOut});
@@ -1770,6 +1855,26 @@ class PlayState extends MusicBeatState
 				if (Timings.judgementsMap.get(Timings.smallestRating)[0] < Timings.judgementsMap.get(daRating)[0])
 					Timings.smallestRating = daRating;
 			}
+			if (choosenfont != 'vcr.ttf' && PlayState.choosenfont != 'Vividly-Regular.ttf') {
+			var stupidRating:String = '?';
+			judgementText.color = 0xFFFFFFFF;
+			switch (daRating) {
+				case 'sick','sick-early','sick-late':
+					stupidRating = 'Sick!!';
+					if (allSicks) judgementText.color = 0xFFFFEBBE;
+				case 'good','good-early','good-late':
+					stupidRating = 'Meh';
+				case 'bad','bad-early','bad-late':
+					stupidRating = 'Okay?';
+				case 'shit','shit-early','shit-late':
+					stupidRating = 'Trash';
+				case 'miss','miss-early','miss-late':
+					stupidRating = 'Miss';
+					judgementText.color = 0xFFFF3D3A;
+			}
+			judgementText.text = '$stupidRating\nx$combo\n';
+			bopJudgement();
+			} else judgementText.visible = false;
 		}
 	}
 
@@ -1872,6 +1977,9 @@ class PlayState extends MusicBeatState
 			{
 					allowHUDbop = true;
 			}});
+			ClassHUD.fadeInSongText();
+			FlxTween.tween(songPosBG, {alpha: 1}, 1, {ease: FlxEase.linear});
+			FlxTween.tween(songPosBar, {alpha: 1}, 1, {ease: FlxEase.linear});
 		}
 
 		theSongStuff.text = 'Song: ${SONG.song}\ncurBeat: $curBeat\ncurStep: $curStep\nBPM: ${SONG.bpm}\n';
@@ -1883,7 +1991,7 @@ class PlayState extends MusicBeatState
 						FlxTween.tween(blackBG, {alpha: 1}, 1, {ease: FlxEase.linear});
 						FlxTween.tween(camHUD, {alpha: 0}, 1, {ease: FlxEase.linear});
 					case 906:
-						eventTrigger('changeScroll','slow','');
+					//	eventTrigger('changeScroll','slow','');
 						stageBuild.stageShit('litspace');
 						boyfriend.color = 0xFF71104B;
 						dadOpponent.color = 0xFF71104B;
@@ -1894,6 +2002,8 @@ class PlayState extends MusicBeatState
 						FlxTween.tween(blackBG, {alpha: 0}, 1, {ease: FlxEase.linear});
 						// space transition
 				}
+			case 'thearchy':
+				camHUD.angle = FlxG.random.int(-5, 5);
 			case 'awaken':
 				health -= 0.007 + ((misses + messups) * 0.001);
 			case 'wtf':
@@ -1967,6 +2077,14 @@ class PlayState extends MusicBeatState
 			forceBop();
 		}
 
+		if (Stage.floatyDad) {
+			FlxTween.cancelTweensOf(dadOpponent);
+			if (curBeat % 2 == 0)
+			FlxTween.tween(dadOpponent, {y: 950}, 1, {ease: FlxEase.cubeOut});
+			if (curBeat % 4 == 0)
+			FlxTween.tween(dadOpponent, {y: 650}, 1, {ease: FlxEase.cubeOut});
+		}
+
 		if (SONG.notes[Math.floor(curStep / 16)] != null)
 		{
 			if (SONG.notes[Math.floor(curStep / 16)].changeBPM)
@@ -2001,7 +2119,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		if (curBeat == 8)
+		if (curBeat == 16)
 			ClassHUD.fadeOutSongText();
 
 		if (curSong.toLowerCase() == 'milf'
@@ -2055,6 +2173,15 @@ class PlayState extends MusicBeatState
 		// trace('open substate end ');
 	}
 
+	function bopJudgement() {
+		judgementText.alpha = 1;
+		judgementText.screenCenter(X);
+		judgementText.scale.set(1.075, 1.075);
+		FlxTween.cancelTweensOf(judgementText);
+		FlxTween.tween(judgementText, {"scale.x": 1, "scale.y": 1}, 0.25, {ease: FlxEase.cubeOut});
+		FlxTween.tween(judgementText, {alpha: 0}, 1, {ease: FlxEase.linear});
+	}
+
 	override function closeSubState()
 	{
 		if (paused)
@@ -2093,13 +2220,20 @@ class PlayState extends MusicBeatState
 		deaths = 0;
 		daAdmin = 'ryan';
 
+		totalSongs++;
+		campaignAccuracy += (Math.floor(Timings.getAccuracy() * 100) / 100);
+		actualAccuracy = ((Math.floor(Timings.getAccuracy() * 100) / 100) / totalSongs);
+
 		// set the campaign's score higher
 		campaignScore += songScore;
 		totalMisses += misses;
 
 		if (!isStoryMode)
 		{
-			Main.switchState(this, new RankingState());
+		//	if (Init.trueSettings.get("Debug Info"))
+			Main.switchState(this, new OLDRankingState());
+		//	else
+		//	Main.switchState(this, new FreeplayState());
 		}
 		else
 		{

@@ -27,9 +27,8 @@ class GameOverSubstate extends MusicBeatSubState
 		switch (daBoyfriendType)
 		{
 			case 'bf-og':
-				daBf = daBoyfriendType;
+				daBf = 'bf-ded-og';
 			case 'bf-pixel':
-				daBf = 'bf-pixel-dead';
 				stageSuffix = '-pixel';
 			default:
 				daBf = 'bf-dead';
@@ -41,11 +40,15 @@ class GameOverSubstate extends MusicBeatSubState
 
 		bf = new Boyfriend();
 		bf.setCharacter(x, y + PlayState.boyfriend.height, daBf);
+		if (daBf != 'bf-ded-og')
+		bf.screenCenter();
 		add(bf);
 
 		PlayState.boyfriend.destroy();
 
+		if (daBf == 'bf-ded-og')
 		camFollow = new FlxObject(bf.getGraphicMidpoint().x + 20, bf.getGraphicMidpoint().y - 40, 1, 1);
+		
 		add(camFollow);
 
 		Conductor.changeBPM(100);
@@ -70,6 +73,13 @@ class GameOverSubstate extends MusicBeatSubState
 			FlxG.sound.music.stop();
 			PlayState.deaths = 0;
 			PlayState.daAdmin = 'ryan';
+
+			PlayState.campaignScore = 0;
+			PlayState.highestCombo = 0;
+			PlayState.totalCombo = 0;
+			PlayState.totalMisses = 0;
+			PlayState.totalSongs = 0;
+			PlayState.campaignAccuracy = 0;
 
 			if (!MasterEditorMenu.inTerminal) {
 				FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);

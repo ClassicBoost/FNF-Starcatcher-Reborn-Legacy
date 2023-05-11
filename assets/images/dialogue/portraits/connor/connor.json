@@ -1,0 +1,14 @@
+{
+    "name": "bf",
+    "expressions": {
+        "normal": "Normal Talk",
+        "mad": "Angry Talk",
+        "smug": "Smug Talk"
+    },
+    "position": "right",
+    "sounds": [
+        "DS_1",
+        "DS_2",
+        "DS_3"
+    ]
+}

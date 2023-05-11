@@ -1,0 +1,9 @@
+stage
+house
+forest
+city
+limo
+mall
+school
+space
+nothing

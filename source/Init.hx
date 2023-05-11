@@ -45,6 +45,7 @@ class Init extends FlxState
 	public static var NOT_FORCED = 'not forced';
 
 	public static var showPreOptions:Bool = true;
+	public static var cocoNutMall:Bool = false;
 
 	public static var gameSettings:Map<String, Dynamic> = [
 		'Downscroll' => [
@@ -171,7 +172,7 @@ class Init extends FlxState
 			['StepMania', 'FNF']
 		],
 		"UI Skin" => [
-			'starbound',
+			'default',
 			Selector,
 			'Choose a UI Skin for judgements, combo, etc.',
 			NOT_FORCED,
@@ -216,6 +217,19 @@ class Init extends FlxState
 			true,
 			Checkmark,
 			"Simplifies the judgement animations, displaying only one judgement / rating sprite at a time.",
+			NOT_FORCED
+		],
+		'Show Song Progression' => [
+			true,
+			Checkmark,
+			"If checked, a progress bar wil show how much time there is left in the song.",
+			NOT_FORCED
+		],
+		// JOKES, IN GAME SHIT
+		'Coconut Malled' => [
+			false,
+			Checkmark,
+			"",
 			NOT_FORCED
 		],
 	];

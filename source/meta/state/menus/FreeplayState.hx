@@ -38,6 +38,7 @@ class FreeplayState extends MusicBeatState
 
 	var scoreText:FlxText;
 	var diffText:FlxText;
+	var ratingText:FlxText;
 	var lerpScore:Int = 0;
 	var intendedScore:Int = 0;
 
@@ -142,6 +143,11 @@ class FreeplayState extends MusicBeatState
 		diffText.font = scoreText.font;
 		diffText.x = scoreBG.getGraphicMidpoint().x;
 		add(diffText);
+
+		ratingText = new FlxText(FlxG.width * 0.7, scoreText.y + 70, 0, "", 32);
+		ratingText.setFormat(Paths.font("vcr.ttf"), 150, FlxColor.WHITE, RIGHT);
+		ratingText.x += 250;
+		add(ratingText);
 
 		add(scoreText);
 
@@ -288,6 +294,8 @@ class FreeplayState extends MusicBeatState
 		lastDifficulty = existingDifficulties[curSelected][curDifficulty];
 	}
 
+	var lastRating:Int = 0;
+
 	function changeSelection(change:Int = 0)
 	{
 		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
@@ -302,6 +310,33 @@ class FreeplayState extends MusicBeatState
 		// selector.y = (70 * curSelected) + 30;
 
 		intendedScore = Highscore.getScore(songs[curSelected].songName, curDifficulty);
+
+		ratingText.color = 0xFFFFFFFF;
+		switch (Highscore.getRating(songs[curSelected].songName)) {
+			case 1:
+				ratingText.text = 'D';
+			case 2:
+				ratingText.color = 0xFF00D315;
+				ratingText.text = 'C';
+			case 3:
+				ratingText.color = 0xFF66BFFF;
+				ratingText.text = 'B';
+			case 4:
+				ratingText.color = 0xFFFF4949;
+				ratingText.text = 'A';
+			case 5:
+				ratingText.color = 0xFFFFFF9B;
+				ratingText.text = 'S';
+			default:
+				ratingText.text = '?';
+		}
+
+		if (Highscore.getRating(songs[curSelected].songName) != lastRating) {
+			FlxTween.cancelTweensOf(ratingText);
+			ratingText.x = (FlxG.width * 0.7 + 600);
+			FlxTween.tween(ratingText, {x: (FlxG.width * 0.7 + 250)}, 1, {ease: FlxEase.bounceOut});
+			lastRating = Highscore.getRating(songs[curSelected].songName);
+		}
 
 		// set up color stuffs
 		mainColor = songs[curSelected].songColor;

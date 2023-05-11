@@ -143,10 +143,20 @@ class TitleState extends MusicBeatState
 
 		FlxTween.tween(credTextShit, {y: credTextShit.y + 20}, 2.9, {ease: FlxEase.quadInOut, type: PINGPONG});
 
+		if (FlxG.save.data.cocoNutMall == true) {
+			FlxG.sound.play(Paths.sound('coconut'), 1);
+			new FlxTimer().start(2, dumbShit);
+			var blackScreenTWO:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+			add(blackScreenTWO);
+			FlxG.sound.playMusic(Paths.music('terminal'), 0);
+		} else {
 		if (initialized)
 			skipIntro();
 		else
 			initialized = true;
+		}
+		FlxG.save.data.cocoNutMall = false;
+		FlxG.save.flush();
 
 		// credGroup.add(credTextShit);
 	}
@@ -332,5 +342,11 @@ class TitleState extends MusicBeatState
 			skippedIntro = true;
 		}
 		//
+	}
+
+	function dumbShit(time:FlxTimer = null) {
+			FlxG.save.data.cocoNutMall = false;
+			FlxG.save.flush();
+			Sys.exit(0);
 	}
 }

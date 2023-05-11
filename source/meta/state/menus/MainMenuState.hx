@@ -129,8 +129,12 @@ class MainMenuState extends MusicBeatState
 		updateSelection();
 
 		// from the base game lol
+		var versionShit:FlxText = new FlxText(5, FlxG.height - 32, 0, "Starcatcher Reborn " + Main.starcatcherVER, 12);
+		versionShit.scrollFactor.set();
+		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		add(versionShit);
 
-		var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "Forever Engine Legacy v" + Main.gameVersion, 12);
+		var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "Axolotl Engine v1.1.0 (FE v" + Main.gameVersion + ")", 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);

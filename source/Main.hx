@@ -43,6 +43,7 @@ class Main extends Sprite
 	};
 	public static var mainClassState:Class<FlxState> = Init;
 	public static var gameVersion:String = '0.3.1';
+	public static var starcatcherVER:String = 'DEMO 2';
 	public static var infoCounter:Overlay;
 
 	// heres gameweeks set up!

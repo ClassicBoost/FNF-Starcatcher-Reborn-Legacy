@@ -1,6 +1,8 @@
 package meta.data;
 
 import flixel.FlxG;
+import meta.state.*;
+import meta.state.PlayState;
 
 using StringTools;
 
@@ -11,6 +13,8 @@ class Highscore
 	#else
 	public static var songScores:Map<String, Int> = new Map<String, Int>();
 	#end
+
+	public static var songRating:Map<String, Int> = new Map();
 
 	public static function saveScore(song:String, score:Int = 0, ?diff:Int = 0):Void
 	{
@@ -24,6 +28,32 @@ class Highscore
 		else
 			setScore(daSong, score);
 	}
+
+	public static function saveRank(song:String, rating:Int = 0):Void
+		{	// I hope I got this to work
+			var daSong:String = formatSongNODIFF(song);
+	
+			if (songRating.exists(daSong))
+			{
+				rating = 0;
+				switch (PlayState.fuckingRankText) {
+				case 'd':
+					rating = 1;
+				case 'c':
+					rating = 2;
+				case 'b':
+					rating = 3;
+				case 'a':
+					rating = 4;
+				case 's':
+					rating = 5;
+				}
+				if (songRating.get(daSong) < rating)
+					setRating(daSong, rating);
+			}
+			else
+				setRating(daSong, rating);
+		}
 
 	public static function saveWeekScore(week:Int = 1, score:Int = 0, ?diff:Int = 0):Void
 	{
@@ -49,6 +79,14 @@ class Highscore
 		FlxG.save.flush();
 	}
 
+	static function setRating(song:String, rating:Int):Void
+	{
+		// Reminder that I don't need to format this song, it should come formatted!
+		songRating.set(song, rating);
+		FlxG.save.data.songRating = songRating;
+		FlxG.save.flush();
+	}
+
 	public static function formatSong(song:String, diff:Int):String
 	{
 		var daSong:String = song;
@@ -61,12 +99,27 @@ class Highscore
 		return daSong;
 	}
 
+	public static function formatSongNODIFF(song:String):String
+	{
+		var daSong:String = song;
+
+		return daSong;
+	}
+
 	public static function getScore(song:String, diff:Int):Int
 	{
 		if (!songScores.exists(formatSong(song, diff)))
 			setScore(formatSong(song, diff), 0);
 
 		return songScores.get(formatSong(song, diff));
+	}
+
+	public static function getRating(song:String):Int
+	{
+		if (!songRating.exists(formatSongNODIFF(song)))
+			setRating(formatSongNODIFF(song), 0);
+
+		return songRating.get(formatSongNODIFF(song));
 	}
 
 	public static function getWeekScore(week:Int, diff:Int):Int
@@ -82,6 +135,10 @@ class Highscore
 		if (FlxG.save.data.songScores != null)
 		{
 			songScores = FlxG.save.data.songScores;
+		}
+		if (FlxG.save.data.songRating != null)
+		{
+			songRating = FlxG.save.data.songRating;
 		}
 	}
 }

@@ -123,7 +123,7 @@ class DialogueBox extends FlxSpriteGroup
 		// background fade
 		bgFade = new FlxSprite(-200, -200).makeGraphic(Std.int(FlxG.width * 1.3), Std.int(FlxG.height * 1.3), FlxColor.BLACK);
 		bgFade.scrollFactor.set();
-		bgFade.alpha = 0;
+		bgFade.alpha = 1;
 		add(bgFade);
 
 		// add the dialog box
@@ -265,7 +265,7 @@ class DialogueBox extends FlxSpriteGroup
 
 				bgFade = new FlxSprite(-200, -200).makeGraphic(Std.int(FlxG.width * 1.3), Std.int(FlxG.height * 1.3), newColor);
 				bgFade.scrollFactor.set();
-				bgFade.alpha = 0;
+				bgFade.alpha = 1;
 				add(bgFade);
 			}
 
@@ -523,8 +523,8 @@ class DialogueBox extends FlxSpriteGroup
 			portrait.animation.finish();
 
 		bgFade.alpha += 0.02;
-		if (bgFade.alpha > 0.6)
-			bgFade.alpha = 0.6;
+		if (bgFade.alpha > 1)
+			bgFade.alpha = 1;
 
 		super.update(elapsed);
 	}

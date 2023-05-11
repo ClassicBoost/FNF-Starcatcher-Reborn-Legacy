@@ -43,7 +43,7 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 
 	var infoDisplay:String = CoolUtil.dashToSpace(PlayState.SONG.song);
 //	var diffDisplay:String = CoolUtil.difficultyFromNumber(PlayState.storyDifficulty);
-	var engineDisplay:String = "FOREVER ENGINE v" + Main.gameVersion;
+	var engineDisplay:String = "AXOLOTL ENGINE v1.1.0 (FE v" + Main.gameVersion + ")";
 
 	var textcolor:FlxColor;
 
@@ -61,7 +61,7 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 			barY = 64;
 
 		scoreBar = new FlxText(FlxG.width / 2, Math.floor(barY + 40), 0, scoreDisplay);
-		scoreBar.setFormat(Paths.font(PlayState.choosenfont), (PlayState.choosenfont == 'vcr.ttf' ? 18 : 20), FlxColor.WHITE);
+		scoreBar.setFormat(Paths.font(PlayState.choosenfont), (PlayState.choosenfont == 'vcr.ttf' ? 18 : PlayState.choosenfont == 'Vividly-Regular.ttf' ? 24 : 20), FlxColor.WHITE);
 	//	if (PlayState.choosenfont == 'pixel.otf') scoreBar.setFormat(Paths.font('pixel.otf'), 12, FlxColor.WHITE);
 		scoreBar.setBorderStyle(OUTLINE, FlxColor.BLACK, 1.5);
 		updateScoreText();
@@ -80,9 +80,10 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 		cornerMark.color = textcolor;
 		cornerMark.antialiasing = !PlayState.curStage.startsWith("school");
 
-		centerMark = new FlxText(0, 0, 0, '- ${infoDisplay + ' - ' + PlayState.composerStuff} -');
+		centerMark = new FlxText(0, 0, 0, '• ${infoDisplay + ' - ' + PlayState.composerStuff} •');
 		centerMark.setFormat(Paths.font(PlayState.choosenfont), 24, FlxColor.WHITE);
 		centerMark.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
+		centerMark.alpha = 0;
 		add(centerMark);
 		if (Init.trueSettings.get('Downscroll'))
 			centerMark.y = (FlxG.height - centerMark.height / 2) - 30;
@@ -148,7 +149,7 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 			divider = ' • ';
 			scoretext = 'SCR: '; accuracytext = ''; missestext = 'MISS: '; ranktext = '';
 		}
-		else if (PlayState.choosenfont == 'vcr.ttf')
+		else if (PlayState.choosenfont == 'vcr.ttf' || PlayState.choosenfont == 'Vividly-Regular.ttf')
 			divider = ' • ';
 
 		if (!PlayState.cpuControlled) {
@@ -157,7 +158,7 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 		var displayAccuracy:Bool = Init.trueSettings.get('Display Accuracy');
 		if (displayAccuracy)
 		{
-			if (PlayState.choosenfont != 'vcr.ttf') {
+			if (PlayState.choosenfont != 'vcr.ttf' && PlayState.choosenfont != 'Vividly-Regular.ttf') {
 		//	scoreBar.text += divider + 'HP: ${PlayState.healthBar.percent}%';
 		//	scoreBar.text += divider + accuracytext + Std.string(Math.floor(Timings.getAccuracy() * 100) / 100) + '%';
 			scoreBar.text += divider + missestext + Std.string(PlayState.misses);
@@ -191,6 +192,10 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 	public static function fadeOutSongText()
 	{
 		FlxTween.tween(centerMark, {alpha: 0}, 2, {ease: FlxEase.linear});
+	}
+
+	public static function fadeInSongText() {
+		FlxTween.tween(centerMark, {alpha: 1}, 1, {ease: FlxEase.linear});
 	}
 
 	public static function bopScore() {

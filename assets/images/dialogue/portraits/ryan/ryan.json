@@ -1,0 +1,16 @@
+{
+    "name": "ryan",
+    "expressions": {
+        "normal": "Normal",
+        "oops": "Oops",
+        "bleh": "Idk",
+        "scared": "Scared",
+        "yeah": "Yeah"
+    },
+    "position": "right",
+    "sounds": [
+        "Ryan_1",
+        "Ryan_2",
+        "Ryan_3"
+    ]
+}

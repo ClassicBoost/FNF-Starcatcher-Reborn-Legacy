@@ -15,6 +15,7 @@ import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import gameObjects.background.*;
+import flixel.util.FlxColor;
 import meta.CoolUtil;
 import meta.data.Conductor;
 import meta.data.dependency.FNFSprite;
@@ -54,7 +55,10 @@ class Stage extends FlxTypedGroup<FlxBasic>
 	public var treeeeees:FNFSprite;
 	public var house:FNFSprite;
 
+	public static var floatyDad:Bool = false;
+
 	var daPixelZoom = PlayState.daPixelZoom;
+	var modStage:String = '';
 
 	public var foreground:FlxTypedGroup<FlxBasic>;
 
@@ -62,6 +66,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 	{
 		super();
 		this.curStage = curStage;
+		modStage = '';
 
 		/// get hardcoded stage type if chart is fnf style
 		if (PlayState.determinedChartType == "FNF")
@@ -72,6 +77,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 			{
 				case 'haunted','mirage','chocolate','awaken':
 					curStage = 'forest';
+					modStage = 'forest';
 				case 'wtf':
 					curStage = 'baren';
 				// OG SHIT
@@ -81,7 +87,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 					curStage = 'philly-og';
 				case 'mil-og' | 'satin-og' | 'high-og':
 					curStage = 'highway-og';
-				case 'anomaly','cheating':
+				case 'cheating','thearchy':
 					curStage = 'nothing';
 				default:
 					curStage = 'stage';
@@ -92,6 +98,8 @@ class Stage extends FlxTypedGroup<FlxBasic>
 
 		// to apply to foreground use foreground.add(); instead of add();
 		foreground = new FlxTypedGroup<FlxBasic>();
+
+		floatyDad = false;
 
 		//
 		switch (curStage)
@@ -390,6 +398,9 @@ class Stage extends FlxTypedGroup<FlxBasic>
 				curStage = 'nothing';
 				// yep, nothing. Other than name and zoom
 
+				if (CoolUtil.spaceToDash(PlayState.SONG.song.toLowerCase()) == 'thearchy')
+					floatyDad = true;
+
 			default:
 				PlayState.defaultCamZoom = 0.9;
 				curStage = 'stage';
@@ -522,7 +533,8 @@ class Stage extends FlxTypedGroup<FlxBasic>
 	public function stageShit(daType:String = '') {
 		if (daType == 'litspace') {
 			spacelol.visible = true;
-			if (curStage == 'forest') {
+			switch (modStage) {
+			case 'forest':
 			house.color = 0xFF71104B;
 			treeeeees.color = 0xFF71104B;
 			}

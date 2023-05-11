@@ -18,6 +18,7 @@ import flixel.math.FlxRect;
 import flixel.system.FlxAssets.FlxSoundAsset;
 import flixel.system.FlxSound;
 import flixel.tweens.FlxEase;
+import flixel.group.FlxGroup;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxSort;
@@ -47,12 +48,31 @@ using StringTools;
 class RankingState extends MusicBeatState
 {
 	var fuckingRank:FlxSprite;
+	var fuckingRankThing:FlxSprite;
 	var theperson:FlxSprite;
-	var player:String = 'ryan';
+	public var player:String = 'ryan';
 	var disableControls = true;
 	var bgcolor:FlxSprite;
 	var coolText:FlxText;
-	// at the beginning of the playstate
+	private var colorShit:FlxColor;
+
+	var rankBoard:FlxGroup;
+	// rank board
+	var boardBG:FlxSprite;
+	var board:FlxSprite;
+	var COMBO:FlxSprite;
+	var textCombo:FlxText;
+	var ROUNDTWO:FlxSprite;
+	var TOTALSCORE:FlxSprite;
+	var textScore:FlxText;
+	var TOTALACCURACY:FlxSprite;
+	var textAccuracy:FlxText;
+	var TOTALCOMBOBREAKS:FlxSprite;
+	var textMisses:FlxText;
+	var pixelRanks:FlxSprite;
+
+	var shortTimer:Int = 5;
+
 	override function create()
 	{
 		switch (PlayState.fuckingPlayer) {
@@ -60,8 +80,10 @@ class RankingState extends MusicBeatState
 				player = 'connor';
 			case 'poptop':
 				player = 'none';
+				colorShit = 0xFFFFFFFF;
 			default:
 				player = 'ryan';
+				colorShit = 0xFFFF8E5E;
 		}
 
 		disableControls = true;
@@ -75,7 +97,12 @@ class RankingState extends MusicBeatState
 		fuckingRank.y += 800;
 		add(fuckingRank);
 
-		theperson = new FlxSprite(Paths.image('characters/rankings/$player/${PlayState.fuckingRankText}'));
+		fuckingRankThing = new FlxSprite(Paths.image('characters/rankings/characters/$player/${PlayState.fuckingRankText}-text'));
+		fuckingRankThing.antialiasing = false;
+		fuckingRankThing.y += 800;
+		add(fuckingRankThing);
+
+		theperson = new FlxSprite(Paths.image('characters/rankings/characters/$player/${PlayState.fuckingRankText}'));
 		theperson.antialiasing = true;
 		theperson.x -= 1000;
 		if (player != 'none') {
@@ -91,6 +118,7 @@ class RankingState extends MusicBeatState
 		switch (PlayState.fuckingRankText) {
 			case 'd':
 				bgcolor.color = 0xFF383838;
+				shortTimer = 1;
 			case 'c':
 				bgcolor.color = 0xFF60FF8D;
 			case 'b':
@@ -103,36 +131,150 @@ class RankingState extends MusicBeatState
 				bgcolor.color = 0xFFFFFFFF;
 		}
 
-		coolText = new FlxText(0,0,0, '');
-		coolText.setFormat(32, FlxColor.WHITE, CENTER,FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		coolText.borderSize = 2;
-		coolText.text = PlayState.fuckingRankText.toUpperCase();
-		if (PlayState.forceRank == 0) coolText.text += '\nHighest Combo: ${PlayState.highestCombo}\nScore: ${PlayState.campaignScore}\nMisses: ${PlayState.totalMisses}\n\nENTER to Continue';
-		else coolText.text += '\nUSED DEBUG TOOLS\nNO SCORE COUNTED\n\nENTER to Continue\n';
-		coolText.screenCenter();
-		coolText.visible = false;
-		coolText.scrollFactor.set();
-		add(coolText);
+		createRankBoard();
 
+		Highscore.saveRank(PlayState.SONG.song, 0);
+
+		if (PlayState.fuckingRankText == 'd') {
+		FlxG.sound.play(Paths.sound('ranks/youfail-${player}'), 1);
+		FlxG.sound.play(Paths.sound('ranks/boooo'), 0.6);
+		}
+		else
 		FlxG.sound.play(Paths.sound('ranks/sguary-spire/${PlayState.fuckingRankText}'), 0.6);
 
-		new FlxTimer().start(5, function(fuckfuck:FlxTimer)
+		new FlxTimer().start(shortTimer, function(fuckfuck:FlxTimer)
 		{
 			FlxG.camera.flash(0xFFFFFFFF, 1, null, true);
-			FlxTween.tween(theperson, {x: 0}, 1, {ease: FlxEase.cubeOut});
-			FlxTween.tween(fuckingRank, {y: 0}, 0.7, {ease: FlxEase.linear});
+			FlxTween.tween(theperson, {x: 0}, 0.2, {ease: FlxEase.cubeOut});
+			FlxTween.tween(fuckingRank, {y: 0}, 0.2, {ease: FlxEase.linear});
+			FlxTween.tween(fuckingRankThing, {y: 0}, 0.3, {ease: FlxEase.linear});
 			runSecondTimer();
 		});
 	}
+	function createRankBoard() {
+		boardBG = new FlxSprite(Paths.image('characters/rankings/board/bg'));
+		boardBG.x = 600;
+		boardBG.y = 1000;
+		add(boardBG);
+
+		board = new FlxSprite(Paths.image('characters/rankings/board/lines'));
+		board.color = colorShit;
+		board.x = 600;
+		board.y = 1000;
+		add(board);
+
+		COMBO = new FlxSprite(Paths.image('characters/rankings/board/text/combo'));
+		COMBO.x = boardBG.x + 400;
+		COMBO.y = boardBG.y + 100 + 1000;
+		COMBO.color = colorShit;
+		add(COMBO);
+
+		textCombo = new FlxText(0,0,0, '');
+		textCombo.setFormat(28, FlxColor.WHITE, CENTER,FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		textCombo.text = '${PlayState.totalCombo}';
+		textCombo.x = boardBG.x + 400;
+		textCombo.y = boardBG.y + 100 + 30 + 1000;
+		textCombo.borderSize = 2;
+		add(textCombo);
+
+		ROUNDTWO = new FlxSprite(Paths.image('characters/rankings/board/text/roundtwo'));
+		ROUNDTWO.x = boardBG.x + 80;
+		ROUNDTWO.y = boardBG.y + 100 + 1000;
+		ROUNDTWO.color = colorShit;
+		add(ROUNDTWO);
+
+		TOTALSCORE = new FlxSprite(Paths.image('characters/rankings/board/text/score'));
+		TOTALSCORE.x = boardBG.x + 60;
+		TOTALSCORE.y = boardBG.y + 200 + 1000;
+		TOTALSCORE.color = colorShit;
+		add(TOTALSCORE);
+
+		textScore = new FlxText(0,0,0, '');
+		textScore.setFormat(28, FlxColor.WHITE, LEFT,FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		textScore.text = '${PlayState.campaignScore}';
+		if (PlayState.forceRank != 0) textScore.text = 'DEBUG USED';
+		textScore.x = boardBG.x + 60;
+		textScore.y = boardBG.y + 200 + 40 + 1000;
+		textScore.borderSize = 2;
+		add(textScore);
+
+		TOTALACCURACY = new FlxSprite(Paths.image('characters/rankings/board/text/accuracy'));
+		TOTALACCURACY.x = boardBG.x + 60;
+		TOTALACCURACY.y = boardBG.y + 300 + 1000;
+		TOTALACCURACY.color = colorShit;
+		add(TOTALACCURACY);
+
+		textAccuracy = new FlxText(0,0,0, '');
+		textAccuracy.setFormat(28, FlxColor.WHITE, LEFT,FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		textAccuracy.text = '${PlayState.actualAccuracy}%';
+		textAccuracy.x = boardBG.x + 60;
+		textAccuracy.y = boardBG.y + 300 + 40 + 1000;
+		textAccuracy.borderSize = 2;
+		add(textAccuracy);
+
+		TOTALCOMBOBREAKS = new FlxSprite(Paths.image('characters/rankings/board/text/combo breaks'));
+		TOTALCOMBOBREAKS.x = boardBG.x + 60;
+		TOTALCOMBOBREAKS.y = boardBG.y + 400 + 1000;
+		TOTALCOMBOBREAKS.color = colorShit;
+		add(TOTALCOMBOBREAKS);
+
+		textMisses = new FlxText(0,0,0, '');
+		textMisses.setFormat(28, FlxColor.WHITE, LEFT,FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		textMisses.text = '${PlayState.totalMisses}';
+		textMisses.x = boardBG.x + 60;
+		textMisses.y = boardBG.y + 300 + 40 + 1000;
+		textMisses.borderSize = 2;
+		add(textMisses);
+
+		pixelRanks = new FlxSprite(Paths.image('characters/rankings/board/pixel ranks/${PlayState.fuckingRankText}'));
+		pixelRanks.color = colorShit;
+		pixelRanks.y = 1000;
+		pixelRanks.x = 10;
+		pixelRanks.scale.set(0.8, 0.8);
+		add(pixelRanks);
+
+		coolText = new FlxText(0,0,0, '');
+		coolText.setFormat(32, FlxColor.WHITE, CENTER,FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		coolText.borderSize = 2;
+	//	coolText.text = PlayState.fuckingRankText.toUpperCase();
+	//	if (PlayState.forceRank == 0) coolText.text += '\nHighest Combo: ${PlayState.highestCombo}\nScore: ${PlayState.campaignScore}\nMisses: ${PlayState.totalMisses}\n\nENTER to Continue';
+	//	else coolText.text += '\nUSED DEBUG TOOLS\nNO SCORE COUNTED\n\nENTER to Continue\n';
+		coolText.text = 'Press ENTER to continue.\n';
+		coolText.screenCenter();
+		coolText.y += 300;
+		coolText.alpha = 0;
+		coolText.visible = false;
+		coolText.scrollFactor.set();
+		add(coolText);
+	}
 	function runSecondTimer() {
+		if (shortTimer == 5)
 		new FlxTimer().start(3.5, showResults);
+		else
+		new FlxTimer().start(7.5, showResults);
 	}
 	function showResults(time:FlxTimer = null) {
 		FlxG.camera.flash(0xFFFFFFFF, 1, null, true);
-		FlxG.sound.playMusic(Paths.music('sugarySpireResults'), 0.7);
+		FlxG.sound.playMusic(Paths.music('Momentia'), 0.7);
 		coolText.visible = true;
 		bgcolor.visible = true;
 		disableControls = false;
+
+		FlxTween.tween(coolText, {alpha: 1}, 1, {ease: FlxEase.linear});
+		FlxTween.tween(boardBG, {y: 70}, 1, {ease: FlxEase.cubeOut});
+		FlxTween.tween(board, {y: 70}, 1, {ease: FlxEase.cubeOut});
+		FlxTween.tween(COMBO, {y: 100 + 50}, 1, {ease: FlxEase.cubeOut});
+		FlxTween.tween(textCombo, {y: 100 + 30 + 50}, 1, {ease: FlxEase.cubeOut});
+		FlxTween.tween(ROUNDTWO, {y: 100 + 50}, 1, {ease: FlxEase.cubeOut});
+		FlxTween.tween(TOTALSCORE, {y: 70 + 200}, 1, {ease: FlxEase.cubeOut});
+		FlxTween.tween(textScore, {y: 70 + 200 + 40}, 1, {ease: FlxEase.cubeOut});
+		FlxTween.tween(TOTALACCURACY, {y: 70 + 300}, 1, {ease: FlxEase.cubeOut});
+		FlxTween.tween(textAccuracy, {y: 70 + 300 + 40}, 1, {ease: FlxEase.cubeOut});
+		FlxTween.tween(TOTALCOMBOBREAKS, {y: 70 + 400}, 1, {ease: FlxEase.cubeOut});
+		FlxTween.tween(textMisses, {y: 70 + 400 + 40}, 1, {ease: FlxEase.cubeOut});
+		FlxTween.tween(pixelRanks, {y: -30}, 1, {ease: FlxEase.cubeOut});
+		fuckingRank.visible = false;
+		fuckingRankThing.visible = false;
 	}
 	override public function update(elapsed:Float) {
 		if (!disableControls) {
@@ -143,6 +285,8 @@ class RankingState extends MusicBeatState
 				PlayState.highestCombo = 0;
 				PlayState.totalCombo = 0;
 				PlayState.totalMisses = 0;
+				PlayState.totalSongs = 0;
+				PlayState.campaignAccuracy = 0;
 				if (!MasterEditorMenu.inTerminal) {
 					FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);
 				if (PlayState.isStoryMode) {

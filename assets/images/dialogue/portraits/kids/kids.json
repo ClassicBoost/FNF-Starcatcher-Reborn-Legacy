@@ -1,0 +1,11 @@
+{
+    "name": "kids",
+    "expressions": {
+        "normal": "Normal Talk"
+    },
+    "position": "left",
+    "sounds": [
+        "Skid",
+        "Pump"
+    ]
+}

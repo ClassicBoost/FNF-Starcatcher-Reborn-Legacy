@@ -223,7 +223,7 @@ class Character extends FNFSprite
 
 				playAnim('idle');
 				barColor = 0xFFF3FF6E;
-			case 'pico':
+			case 'pico','ian':
 				tex = Paths.getSparrowAtlas('characters/sprites/classic/Pico_FNF_assetss');
 				frames = tex;
 				animation.addByPrefix('idle', "Pico Idle Dance", 24, false);
@@ -296,12 +296,55 @@ class Character extends FNFSprite
 
 				characterData.offsetY = 40;
 				characterData.camOffsetX = 150;
-			case 'bf-dead':
+			case 'connor':
+				frames = Paths.getSparrowAtlas('characters/sprites/classic/BOYFRIEND');
+
+				animation.addByPrefix('idle', 'idle', 24, false);
+				animation.addByPrefix('singUP', 'up0', 24, false);
+				animation.addByPrefix('singDOWN', 'down0', 24, false);
+				animation.addByPrefix('singUPmiss', 'up miss0', 24, false);
+				animation.addByPrefix('singDOWNmiss', 'down miss0', 24, false);
+				if (isPlayer)
+				{
+					animation.addByPrefix('singLEFT', 'left0', 24, false);
+					animation.addByPrefix('singRIGHT', 'right0', 24, false);
+					animation.addByPrefix('singLEFTmiss', 'left miss0', 24, false);
+					animation.addByPrefix('singRIGHTmiss', 'right miss0', 24, false);
+				}
+				else
+				{
+					// Need to be flipped! REDO THIS LATER!
+					animation.addByPrefix('singLEFT', 'right0', 24, false);
+					animation.addByPrefix('singRIGHT', 'left0', 24, false);
+					animation.addByPrefix('singLEFTmiss', 'right miss0', 24, false);
+					animation.addByPrefix('singRIGHTmiss', 'left miss0', 24, false);
+				}
+				animation.addByPrefix('hey', 'hey', 24, false);
+				animation.addByPrefix('scared', 'scared', 24);
+
+				playAnim('idle');
+
+				flipX = true;
+
+				characterData.offsetY = 40;
+				characterData.camOffsetX = 150;
+				barColor = 0xFF426EFF;
+			case 'bf-dead-og':
 				frames = Paths.getSparrowAtlas('characters/sprites/classic/BOYFRIEND_DEAD');
 
 				animation.addByPrefix('firstDeath', "BF dies", 24, false);
 				animation.addByPrefix('deathLoop', "BF Dead Loop", 24, true);
 				animation.addByPrefix('deathConfirm', "BF Dead confirm", 24, false);
+
+				playAnim('firstDeath');
+
+				flipX = true;
+			case 'bf-dead':
+				frames = Paths.getSparrowAtlas('characters/sprites/main/DEATH');
+
+				animation.addByPrefix('firstDeath', "start", 12, false);
+				animation.addByPrefix('deathLoop', "idle", 24, true);
+				animation.addByPrefix('deathConfirm', "idle", 24, false);
 
 				playAnim('firstDeath');
 

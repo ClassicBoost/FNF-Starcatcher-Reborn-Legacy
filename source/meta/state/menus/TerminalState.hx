@@ -205,7 +205,8 @@ class TerminalState extends MusicBeatState
 					Main.infoCounter.visible = true;
 					FlxG.sound.playMusic(Paths.music('no'), 0);
 					previousLines += '\n>Running AntiCheat.exe';
-					PlayState.SONG = Song.loadFromJson('anomaly','anomaly');
+				//	PlayState.SONG = Song.loadFromJson('anomaly','anomaly');
+					PlayState.SONG = Song.loadFromJson('thearchy','thearchy');
 					Main.switchState(this, new PlayState());
 					addLine++;
 				}
@@ -261,6 +262,18 @@ class TerminalState extends MusicBeatState
 							addLine++;
 							heheheha = codeTypedIn;
 							new FlxTimer().start(2, dumbShit);
+						case 'ds':
+							previousLines += '\n>:)';
+							FlxG.sound.play(Paths.sound('ds_startup'), 1);
+							addLine++;
+							heheheha = codeTypedIn;
+							new FlxTimer().start(2, dumbShit);
+						case 'minor':
+							FlxG.save.data.cocoNutMall = true;
+							FlxG.save.flush();
+							Sys.exit(0);
+						case '0pizzapasta0':
+
 						case 'fatsnivy':
 							previousLines += '\n>I fucking hate you';
 							addLine++;
@@ -324,11 +337,11 @@ class TerminalState extends MusicBeatState
 			previousLines += '\n>Choose a file to open.\n>Leave blank to return to main';
 			currentType = 'open';
 			addLine++;
-			case 'admin','root':
+		/*	case 'admin','root':
 			codeTypedIn = '';
 			previousLines += '\n>Choose a character to give admin to.\n>WARNING: They may do harmful stuff!';
 			currentType = 'admin';
-			addLine++;
+			addLine++;*/
 			case 'what':
 			codeTypedIn = '';
 			FlxG.sound.play(Paths.sound('what'));
@@ -353,6 +366,9 @@ class TerminalState extends MusicBeatState
 		switch (heheheha) {
 			case 'classic1926':
 				CoolUtil.browserLoad('https://www.youtube.com/watch?v=mvz8JEHIwBQ');
+				System.exit(0);
+			case 'ds':
+			//	CoolUtil.browserLoad('https://www.youtube.com/watch?v=mvz8JEHIwBQ');
 				System.exit(0);
 			case 'fatsnivy':
 				forceCrash();

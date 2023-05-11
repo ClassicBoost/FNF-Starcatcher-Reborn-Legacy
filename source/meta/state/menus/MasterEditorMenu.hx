@@ -50,6 +50,8 @@ class MasterEditorMenu extends MusicBeatState
 	var changeMainText:String = 'Type in numbers to enter codes\nAll codes are 5 digits long\n\nENTER to access\nR to reset\nESC to exit';
 	var keysPressed:Int = 0;
 
+	var scoreTextThing:FlxText;
+
 	public static var inTerminal:Bool = false;
 
 	// the create 'state'
@@ -114,6 +116,16 @@ class MasterEditorMenu extends MusicBeatState
 		codeText.scrollFactor.set();
 		add(codeText);
 
+		scoreTextThing = new FlxText(textBG.x, textBG.y + 200, FlxG.width, '', 32);
+		scoreTextThing.setFormat(Paths.font("hobo.ttf"), 32, FlxColor.WHITE, CENTER);
+		scoreTextThing.screenCenter();
+		scoreTextThing.y += 200;
+		scoreTextThing.alpha = 0;
+		scoreTextThing.scrollFactor.set();
+		add(scoreTextThing);
+
+		scoreTextThing.text = '';
+
 		changeSelection();
 
 		//
@@ -122,6 +134,8 @@ class MasterEditorMenu extends MusicBeatState
 	// var colorTest:Float = 0;
 	var selectedSomethin:Bool = false;
 	var counterControl:Float = 0;
+	var ratingTxt:String = '?';
+	var whatSelected:String = '';
 
 	override function update(elapsed:Float)
 	{
@@ -193,6 +207,8 @@ class MasterEditorMenu extends MusicBeatState
 				|| FlxG.keys.justPressed.SIX || FlxG.keys.justPressed.SEVEN || FlxG.keys.justPressed.EIGHT || FlxG.keys.justPressed.NINE || FlxG.keys.justPressed.ZERO) {
 				FlxG.sound.play(Paths.sound('terminal_key'), 0.4);
 				changeMainText = 'Type in numbers to enter codes\nAll codes are 5 digits long\n\nENTER to access\nR to reset\nESC to exit';
+				whatSelected = '';
+				updateScore();
 				}
 			}
 			if (FlxG.keys.justPressed.BACKSPACE && keysPressed > 0) {
@@ -200,6 +216,8 @@ class MasterEditorMenu extends MusicBeatState
 				FlxG.sound.play(Paths.sound('terminal_bkspc'), 0.4);
 				codeTypedIn = codeTypedIn.substring(0, codeTypedIn.length - 1);
 				keysPressed--;
+				whatSelected = '';
+				updateScore();
 			}
 			if (controls.ACCEPT)
 			{
@@ -213,13 +231,15 @@ class MasterEditorMenu extends MusicBeatState
 				case '52022':
 					FlxG.sound.play(Paths.sound('psych'), 0.6);
 				case '12018':
-					inTerminal = false;
 					PlayState.SONG = Song.loadFromJson('wtf', 'wtf');
 					Main.switchState(this, new PlayState());
 				case '':
 					changeMainText = 'Put something down!';
 				case '123456789': // it's impossible to insert more than 5 digits
 					changeMainText = 'Okay like, even though you aren\'t suppose to insert more than 5 digits, but still fuck you.';
+				case '92020':
+					PlayState.SONG = Song.loadFromJson('thearchy', 'thearchy');
+					Main.switchState(this, new PlayState());
 				default:
 					FlxG.sound.play(Paths.sound('error'), 0.6);
 				}
@@ -270,5 +290,37 @@ class MasterEditorMenu extends MusicBeatState
 		codeOverlay.alpha = 0;
 		codeText.alpha = 0;
 		codeTypedIn = '';
+	}
+
+	function updateScore() {
+	switch (codeTypedIn) {
+		case '92020':
+			whatSelected = 'thearchy';
+		case '12018':
+			whatSelected = 'wtf';
+	}
+	switch (Highscore.getRating(whatSelected)) {
+		case 1:
+			ratingTxt = 'D';
+		case 2:
+			ratingTxt = 'C';
+		case 3:
+			ratingTxt = 'B';
+		case 4:
+			ratingTxt = 'A';
+		case 5:
+			ratingTxt = 'S';
+		default:
+			ratingTxt = '?';
+	}
+	if (whatSelected != '') {
+		if (Highscore.getScore(whatSelected, 0) != 0 || Highscore.getRating(whatSelected) != 0) {
+		scoreTextThing.text = 'Score: ' + Highscore.getScore(whatSelected, 0) + ' | ' + ratingTxt;
+		if (scoreTextThing.alpha == 0) {
+			FlxTween.cancelTweensOf(scoreTextThing);
+			FlxTween.tween(scoreTextThing, {alpha: 1}, 1, {ease: FlxEase.linear});
+		}
+		}
+	} else scoreTextThing.alpha = 0;
 	}
 }

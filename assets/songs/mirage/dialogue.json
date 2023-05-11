@@ -1,0 +1,26 @@
+{
+    "box": "speech_bubble_talking",
+    "boxState": "normal",
+    "dialogue": [
+        {
+            "portrait": "kids",
+            "expression": "normal",
+            "text": "Aww man."
+        },
+        {
+            "text": "You really are good at this"
+        },
+        {
+            "portrait": "ryan",
+            "text": "Beep bo bop"
+        },
+        {
+            "portrait": "kids",
+            "text": "We want a rematch"
+        },
+        {
+            "portrait": "ryan",
+            "text": "Bep bop"
+        }
+    ]
+}
