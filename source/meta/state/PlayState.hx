@@ -193,6 +193,8 @@ class PlayState extends MusicBeatState
 
 	public var judgementText:FlxText;
 
+	public var useNewRanking:Bool = false;
+
 	// character icons
 	public static var bfIcon:String = 'bf';
 	public static var dadIcon:String = 'dad';
@@ -223,6 +225,8 @@ class PlayState extends MusicBeatState
 
 	public static var fuckingRankText:String = 'd';
 
+	public static var roundTwoCompleted:Bool = false;
+
 	var goodNotePressed:Bool = true; // not to be confised with goodNoteHit
 
 	// stores the last judgement object
@@ -244,6 +248,7 @@ class PlayState extends MusicBeatState
 		messups = 0;
 		forceDeath = false;
 		canDie = true;
+		roundTwoCompleted = false;
 		forceRank = 0;
 		// sets up the combo object array
 		lastCombo = [];
@@ -918,26 +923,30 @@ class PlayState extends MusicBeatState
 				if (FlxG.keys.justPressed.EIGHT && Init.trueSettings.get('Debug Info')) {
 					forceRank++;
 					forceRankText.visible = true;
-					if (forceRank > 5)
+					if (forceRank > 6)
 						forceRank = 1;
 					songScore = 0;
 				}
 				switch (forceRank) {
 					case 1:
-						forceRankText.text = '>D\nC\nB\nA\nS\n';
+						forceRankText.text = '>D\nC\nB\nA\nS\nP\n';
 						fuckingRankText = 'd';
 					case 2:
-						forceRankText.text = 'D\n>C\nB\nA\nS\n';
+						forceRankText.text = 'D\n>C\nB\nA\nS\nP\n';
 						fuckingRankText = 'c';
 					case 3:
-						forceRankText.text = 'D\nC\n>B\nA\nS\n';
+						forceRankText.text = 'D\nC\n>B\nA\nS\nP\n';
 						fuckingRankText = 'b';
 					case 4:
-						forceRankText.text = 'D\nC\nB\n>A\nS\n';
+						forceRankText.text = 'D\nC\nB\n>A\nS\nP\n';
 						fuckingRankText = 'a';
 					case 5:
-						forceRankText.text = 'D\nC\nB\nA\n>S\n';
+						forceRankText.text = 'D\nC\nB\nA\n>S\nP\n';
 						fuckingRankText = 's';
+					case 6:
+						forceRankText.text = 'D\nC\nB\nA\nS\n>P\n';
+						fuckingRankText = 'p';
+						roundTwoCompleted = true;
 				}
 
 				if (FlxG.keys.justPressed.ONE && Init.trueSettings.get('Debug Info')) {
@@ -951,6 +960,9 @@ class PlayState extends MusicBeatState
 
 				if (FlxG.keys.justPressed.SIX && Init.trueSettings.get('Debug Info'))
 					cpuControlled = !cpuControlled;
+
+				if (FlxG.keys.justPressed.FIVE && Init.trueSettings.get('Debug Info'))
+					useNewRanking = !useNewRanking;
 			}
 
 			///*
@@ -2231,6 +2243,9 @@ class PlayState extends MusicBeatState
 		if (!isStoryMode)
 		{
 		//	if (Init.trueSettings.get("Debug Info"))
+			if (useNewRanking)
+			Main.switchState(this, new RankingState());
+			else
 			Main.switchState(this, new OLDRankingState());
 		//	else
 		//	Main.switchState(this, new FreeplayState());

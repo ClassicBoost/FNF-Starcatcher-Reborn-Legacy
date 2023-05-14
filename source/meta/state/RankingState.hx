@@ -55,6 +55,7 @@ class RankingState extends MusicBeatState
 	var bgcolor:FlxSprite;
 	var coolText:FlxText;
 	private var colorShit:FlxColor;
+	var postscreen:FlxSprite;
 
 	var rankBoard:FlxGroup;
 	// rank board
@@ -63,6 +64,7 @@ class RankingState extends MusicBeatState
 	var COMBO:FlxSprite;
 	var textCombo:FlxText;
 	var ROUNDTWO:FlxSprite;
+	var ROUNDTWOCOMPLETE:FlxSprite;
 	var TOTALSCORE:FlxSprite;
 	var textScore:FlxText;
 	var TOTALACCURACY:FlxSprite;
@@ -70,6 +72,8 @@ class RankingState extends MusicBeatState
 	var TOTALCOMBOBREAKS:FlxSprite;
 	var textMisses:FlxText;
 	var pixelRanks:FlxSprite;
+
+	var bg:FlxSprite; // because the color changes for P rank
 
 	var shortTimer:Int = 5;
 
@@ -89,13 +93,20 @@ class RankingState extends MusicBeatState
 		disableControls = true;
 		FlxG.sound.playMusic(Paths.music('no'), 0);
 
-		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menus/base/white'));
+		bg = new FlxSprite().loadGraphic(Paths.image('menus/base/white'));
+		bg.color = 0xFFFFFFFF;
 		add(bg);
 
 		fuckingRank = new FlxSprite(Paths.image('characters/rankings/base/${PlayState.fuckingRankText}'));
 		fuckingRank.antialiasing = true;
 		fuckingRank.y += 800;
 		add(fuckingRank);
+
+		postscreen = new FlxSprite(Paths.image('characters/rankings/characters/$player/${PlayState.fuckingRankText}-post'));
+		postscreen.antialiasing = true;
+		postscreen.screenCenter();
+		postscreen.visible = false;
+		add(postscreen);
 
 		fuckingRankThing = new FlxSprite(Paths.image('characters/rankings/characters/$player/${PlayState.fuckingRankText}-text'));
 		fuckingRankThing.antialiasing = false;
@@ -104,7 +115,9 @@ class RankingState extends MusicBeatState
 
 		theperson = new FlxSprite(Paths.image('characters/rankings/characters/$player/${PlayState.fuckingRankText}'));
 		theperson.antialiasing = true;
+		if (PlayState.fuckingRankText != 'p')
 		theperson.x -= 1000;
+		else theperson.alpha = 0;
 		if (player != 'none') {
 		add(theperson);
 		} else {
@@ -114,22 +127,10 @@ class RankingState extends MusicBeatState
 		bgcolor = new FlxSprite(0, 0).makeGraphic(3000, 3000, 0xFFFFFFFF);
 		bgcolor.visible = false;
 		bgcolor.alpha = 0.6;
-		add(bgcolor);
-		switch (PlayState.fuckingRankText) {
-			case 'd':
-				bgcolor.color = 0xFF383838;
+	//	if (PlayState.fuckingRankText != 'p')
+	//	add(bgcolor);
+		if (PlayState.fuckingRankText == 'd')
 				shortTimer = 1;
-			case 'c':
-				bgcolor.color = 0xFF60FF8D;
-			case 'b':
-				bgcolor.color = 0xFF5998FF;
-			case 'a':
-				bgcolor.color = 0xFFFF615B;
-			case 's','s+':
-				bgcolor.color = 0xFFFFF4A3;
-			default:
-				bgcolor.color = 0xFFFFFFFF;
-		}
 
 		createRankBoard();
 
@@ -140,14 +141,16 @@ class RankingState extends MusicBeatState
 		FlxG.sound.play(Paths.sound('ranks/boooo'), 0.6);
 		}
 		else
-		FlxG.sound.play(Paths.sound('ranks/sguary-spire/${PlayState.fuckingRankText}'), 0.6);
+		FlxG.sound.play(Paths.sound('ranks/sugary-spire/${PlayState.fuckingRankText}'), 0.6);
 
 		new FlxTimer().start(shortTimer, function(fuckfuck:FlxTimer)
 		{
 			FlxG.camera.flash(0xFFFFFFFF, 1, null, true);
+			if (PlayState.fuckingRankText != 'p') {
 			FlxTween.tween(theperson, {x: 0}, 0.2, {ease: FlxEase.cubeOut});
 			FlxTween.tween(fuckingRank, {y: 0}, 0.2, {ease: FlxEase.linear});
 			FlxTween.tween(fuckingRankThing, {y: 0}, 0.3, {ease: FlxEase.linear});
+			} else theperson.alpha = 1;
 			runSecondTimer();
 		});
 	}
@@ -182,6 +185,14 @@ class RankingState extends MusicBeatState
 		ROUNDTWO.y = boardBG.y + 100 + 1000;
 		ROUNDTWO.color = colorShit;
 		add(ROUNDTWO);
+
+		ROUNDTWOCOMPLETE = new FlxSprite(Paths.image('characters/rankings/board/text/roundtwoCOMPLETE'));
+		ROUNDTWOCOMPLETE.x = boardBG.x + 100;
+		ROUNDTWOCOMPLETE.y = boardBG.y + 135 + 1000;
+		ROUNDTWOCOMPLETE.visible = false;
+		if (PlayState.roundTwoCompleted) ROUNDTWOCOMPLETE.visible = true;
+		ROUNDTWOCOMPLETE.color = colorShit;
+		add(ROUNDTWOCOMPLETE);
 
 		TOTALSCORE = new FlxSprite(Paths.image('characters/rankings/board/text/score'));
 		TOTALSCORE.x = boardBG.x + 60;
@@ -255,10 +266,27 @@ class RankingState extends MusicBeatState
 	}
 	function showResults(time:FlxTimer = null) {
 		FlxG.camera.flash(0xFFFFFFFF, 1, null, true);
-		FlxG.sound.playMusic(Paths.music('Momentia'), 0.7);
+		FlxG.sound.playMusic(Paths.music('sugarySpireResults'), 0.7);
 		coolText.visible = true;
 		bgcolor.visible = true;
+		theperson.visible = false;
 		disableControls = false;
+		postscreen.visible = true;
+
+		switch (PlayState.fuckingRankText) {
+			case 'd':
+				bg.color = 0xFF383838;
+			case 'c':
+				bg.color = 0xFF60FF8D;
+			case 'b':
+				bg.color = 0xFF5998FF;
+			case 'a':
+				bg.color = 0xFFFF615B;
+			case 's','s+':
+				bg.color = 0xFFFFF4A3;
+			default:
+				bg.color = 0xFFFFFFFF;
+		}
 
 		FlxTween.tween(coolText, {alpha: 1}, 1, {ease: FlxEase.linear});
 		FlxTween.tween(boardBG, {y: 70}, 1, {ease: FlxEase.cubeOut});
@@ -266,6 +294,7 @@ class RankingState extends MusicBeatState
 		FlxTween.tween(COMBO, {y: 100 + 50}, 1, {ease: FlxEase.cubeOut});
 		FlxTween.tween(textCombo, {y: 100 + 30 + 50}, 1, {ease: FlxEase.cubeOut});
 		FlxTween.tween(ROUNDTWO, {y: 100 + 50}, 1, {ease: FlxEase.cubeOut});
+		FlxTween.tween(ROUNDTWOCOMPLETE, {y: 135 + 50}, 1, {ease: FlxEase.cubeOut});
 		FlxTween.tween(TOTALSCORE, {y: 70 + 200}, 1, {ease: FlxEase.cubeOut});
 		FlxTween.tween(textScore, {y: 70 + 200 + 40}, 1, {ease: FlxEase.cubeOut});
 		FlxTween.tween(TOTALACCURACY, {y: 70 + 300}, 1, {ease: FlxEase.cubeOut});
@@ -275,6 +304,14 @@ class RankingState extends MusicBeatState
 		FlxTween.tween(pixelRanks, {y: -30}, 1, {ease: FlxEase.cubeOut});
 		fuckingRank.visible = false;
 		fuckingRankThing.visible = false;
+		if (PlayState.fuckingRankText == 'p') {
+			bg.color = 0xFFBD6C8F;
+			pixelRanks.color = 0xFFFF42AA;
+			new FlxTimer().start(0.5, pRankSlide);
+		}
+	}
+	function pRankSlide(time:FlxTimer = null) {
+		FlxTween.tween(postscreen, {x: -350}, 1, {ease: FlxEase.cubeOut});
 	}
 	override public function update(elapsed:Float) {
 		if (!disableControls) {
