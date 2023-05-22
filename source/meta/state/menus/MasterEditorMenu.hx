@@ -4,6 +4,7 @@ import flash.text.TextField;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.display.FlxGridOverlay;
+import flixel.addons.transition.FlxTransitionableState;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import flixel.system.FlxSound;
@@ -12,7 +13,6 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.tweens.misc.ColorTween;
 import flixel.util.FlxColor;
-import flixel.addons.transition.FlxTransitionableState;
 import gameObjects.userInterface.HealthIcon;
 import lime.utils.Assets;
 import meta.MusicBeat.MusicBeatState;
@@ -20,6 +20,7 @@ import meta.data.*;
 import meta.data.Song.SwagSong;
 import meta.data.dependency.Discord;
 import meta.data.font.Alphabet;
+import meta.state.newMenu.*;
 import openfl.media.Sound;
 import sys.FileSystem;
 import sys.thread.Mutex;
@@ -162,7 +163,7 @@ class MasterEditorMenu extends MusicBeatState
 		{
 			FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);
 			inTerminal = false;
-			Main.switchState(this, new MainMenuState());
+			Main.switchState(this, new MenuState());
 		}
 
 		if (controls.ACCEPT)

@@ -60,8 +60,10 @@ class OLDRankingState extends MusicBeatState
 		switch (PlayState.fuckingPlayer) {
 			case 'connor':
 				player = 'connor';
+			case 'connor-old':
+				player = 'connor-old';
 			case 'poptop':
-				player = 'none';
+				player = 'blank';
 			default:
 				player = 'ryan';
 		}
@@ -89,6 +91,7 @@ class OLDRankingState extends MusicBeatState
 		add(theperson);
 		} else {
 			fuckingRank.x = -300;
+			fuckingRankThing.x = -300;
 		}
 
 		bgcolor = new FlxSprite(0, 0).makeGraphic(3000, 3000, 0xFFFFFFFF);

@@ -89,6 +89,8 @@ class Stage extends FlxTypedGroup<FlxBasic>
 					curStage = 'highway-og';
 				case 'cheating','thearchy':
 					curStage = 'nothing';
+				case 'ataefull':
+					curStage = 'minecraft';
 				default:
 					curStage = 'stage';
 			}
@@ -147,6 +149,15 @@ class Stage extends FlxTypedGroup<FlxBasic>
 				baren.setGraphicSize(Std.int(baren.width * 3));
 				baren.updateHitbox();
 				add(baren);
+
+			case 'minecraft':
+				curStage = 'minecraft';
+				PlayState.defaultCamZoom = 0.9;
+
+				var minecraft:FNFSprite = new FNFSprite(-50,-80).loadGraphic(Paths.image('backgrounds/minecraftnostalgia/classic'));
+			//	minecraft.setGraphicSize(Std.int(minecraft.width * 2));
+			//	minecraft.updateHitbox();
+				add(minecraft);
 
 			case 'spooky-og':
 				curStage = 'spooky-og';

@@ -167,6 +167,7 @@ class PauseSubState extends MusicBeatSubState
 					PlayState.totalSongs = 0;
 					PlayState.campaignAccuracy = 0;
 					PlayState.daAdmin = 'ryan';
+					PlayState.inChart = false;
 
 				if (!MasterEditorMenu.inTerminal) {
 					FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);

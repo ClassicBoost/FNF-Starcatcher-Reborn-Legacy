@@ -47,6 +47,10 @@ class Highscore
 					rating = 4;
 				case 's':
 					rating = 5;
+				case 's+':
+					rating = 6;
+				case 'p':
+					rating = 7;
 				}
 				if (songRating.get(daSong) < rating)
 					setRating(daSong, rating);

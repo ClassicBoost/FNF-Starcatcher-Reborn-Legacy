@@ -96,6 +96,7 @@ class MusicBeatState extends FNFUIState
 
 	public function updateBeat():Void
 	{
+		lastBeat = curStep;
 		curBeat = Math.floor(curStep / 4);
 	}
 

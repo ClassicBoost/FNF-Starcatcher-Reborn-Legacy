@@ -280,6 +280,10 @@ class TerminalState extends MusicBeatState
 							heheheha = codeTypedIn;
 							new FlxTimer().start(2, dumbShit);
 						//	System.exit(0);
+						case 'tyler':
+							previousLines += '\n>Bitch ass up';
+							addLine++;
+							heheheha = codeTypedIn;
 						default:
 							previousLines += '\n>Error or Blank\n>Returning to main';
 							addLine++;

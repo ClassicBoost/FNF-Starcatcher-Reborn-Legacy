@@ -9,6 +9,7 @@ import flixel.FlxState;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxMath;
+import haxe.Timer;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -40,6 +41,8 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 	private var stupidHealth:Float = 0;
 
 	private var timingsMap:Map<String, FlxText> = [];
+
+	var minecraftVer:FlxText;
 
 	var infoDisplay:String = CoolUtil.dashToSpace(PlayState.SONG.song);
 //	var diffDisplay:String = CoolUtil.difficultyFromNumber(PlayState.storyDifficulty);
@@ -93,6 +96,15 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 		centerMark.color = textcolor;
 		centerMark.antialiasing = !PlayState.curStage.startsWith("school");
 
+		if (PlayState.choosenfont == 'minecraft.otf') {
+		minecraftVer = new FlxText(0, 0, 0, '');
+		minecraftVer.setFormat(Paths.font(PlayState.choosenfont), 20, FlxColor.WHITE);
+		minecraftVer.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
+		add(minecraftVer);
+		minecraftVer.antialiasing = false;
+		Main.infoCounter.visible = false;
+		}
+
 		// counter
 		if (Init.trueSettings.get('Counter') != 'None')
 		{
@@ -126,10 +138,20 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 
 	var left = (Init.trueSettings.get('Counter') == 'Left');
 
+	var times:Array<Float> = [];
 	override public function update(elapsed:Float)
 	{
 		if (PlayState.cpuControlled) 
 			scoreBar.text = '[BOTPLAY]';
+
+		if (PlayState.choosenfont == 'minecraft.otf') {
+			var now:Float = Timer.stamp();
+			times.push(now);
+			while (times[0] < now - 1)
+				times.shift();
+		}
+
+		if (PlayState.choosenfont == 'minecraft.otf') minecraftVer.text = '0.0.23a_01\n${times.length} FPS\n';
 
 		updateScoreText();
 	}
@@ -149,7 +171,7 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 			divider = ' • ';
 			scoretext = 'SCR: '; accuracytext = ''; missestext = 'MISS: '; ranktext = '';
 		}
-		else if (PlayState.choosenfont == 'vcr.ttf' || PlayState.choosenfont == 'Vividly-Regular.ttf')
+		else if (PlayState.choosenfont == 'vcr.ttf' || PlayState.choosenfont == 'Vividly-Regular.ttf' || PlayState.choosenfont == 'minecraft.otf')
 			divider = ' • ';
 
 		if (!PlayState.cpuControlled) {

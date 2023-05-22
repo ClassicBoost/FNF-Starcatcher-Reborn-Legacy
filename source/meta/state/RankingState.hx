@@ -73,6 +73,8 @@ class RankingState extends MusicBeatState
 	var textMisses:FlxText;
 	var pixelRanks:FlxSprite;
 
+	var isPRank:Bool = true;
+
 	var bg:FlxSprite; // because the color changes for P rank
 
 	var shortTimer:Int = 5;
@@ -80,10 +82,11 @@ class RankingState extends MusicBeatState
 	override function create()
 	{
 		switch (PlayState.fuckingPlayer) {
-			case 'connor':
+			case 'connor','connor-old':
 				player = 'connor';
+				colorShit = 0xFF6D99FF;
 			case 'poptop':
-				player = 'none';
+				player = 'blank';
 				colorShit = 0xFFFFFFFF;
 			default:
 				player = 'ryan';
@@ -111,18 +114,20 @@ class RankingState extends MusicBeatState
 		fuckingRankThing = new FlxSprite(Paths.image('characters/rankings/characters/$player/${PlayState.fuckingRankText}-text'));
 		fuckingRankThing.antialiasing = false;
 		fuckingRankThing.y += 800;
-		add(fuckingRankThing);
 
 		theperson = new FlxSprite(Paths.image('characters/rankings/characters/$player/${PlayState.fuckingRankText}'));
 		theperson.antialiasing = true;
 		if (PlayState.fuckingRankText != 'p')
 		theperson.x -= 1000;
 		else theperson.alpha = 0;
-		if (player != 'none') {
+		if (player != 'blank') {
 		add(theperson);
 		} else {
 			fuckingRank.x = -300;
+			fuckingRankThing.x = -300;
 		}
+
+		add(fuckingRankThing);
 
 		bgcolor = new FlxSprite(0, 0).makeGraphic(3000, 3000, 0xFFFFFFFF);
 		bgcolor.visible = false;
@@ -138,7 +143,7 @@ class RankingState extends MusicBeatState
 
 		if (PlayState.fuckingRankText == 'd') {
 		FlxG.sound.play(Paths.sound('ranks/youfail-${player}'), 1);
-		FlxG.sound.play(Paths.sound('ranks/boooo'), 0.6);
+		if (player != 'connor')	FlxG.sound.play(Paths.sound('ranks/boooo'), 0.6);
 		}
 		else
 		FlxG.sound.play(Paths.sound('ranks/sugary-spire/${PlayState.fuckingRankText}'), 0.6);
@@ -271,7 +276,7 @@ class RankingState extends MusicBeatState
 		bgcolor.visible = true;
 		theperson.visible = false;
 		disableControls = false;
-		postscreen.visible = true;
+		if (player != 'blank') postscreen.visible = true;
 
 		switch (PlayState.fuckingRankText) {
 			case 'd':
@@ -302,16 +307,28 @@ class RankingState extends MusicBeatState
 		FlxTween.tween(TOTALCOMBOBREAKS, {y: 70 + 400}, 1, {ease: FlxEase.cubeOut});
 		FlxTween.tween(textMisses, {y: 70 + 400 + 40}, 1, {ease: FlxEase.cubeOut});
 		FlxTween.tween(pixelRanks, {y: -30}, 1, {ease: FlxEase.cubeOut});
-		fuckingRank.visible = false;
-		fuckingRankThing.visible = false;
 		if (PlayState.fuckingRankText == 'p') {
 			bg.color = 0xFFBD6C8F;
 			pixelRanks.color = 0xFFFF42AA;
 			new FlxTimer().start(0.5, pRankSlide);
+			isPRank = true;
+		}
+
+		if (player == 'blank') {
+			new FlxTimer().start(0.5, pRankSlide);
+			isPRank = false;
+		} else {
+			fuckingRank.visible = false;
+			fuckingRankThing.visible = false;
 		}
 	}
 	function pRankSlide(time:FlxTimer = null) {
+		if (isPRank)
 		FlxTween.tween(postscreen, {x: -350}, 1, {ease: FlxEase.cubeOut});
+		else {
+		FlxTween.tween(fuckingRank, {x: -600}, 1, {ease: FlxEase.cubeOut});
+		FlxTween.tween(fuckingRankThing, {x: -600}, 1, {ease: FlxEase.cubeOut});
+		}
 	}
 	override public function update(elapsed:Float) {
 		if (!disableControls) {

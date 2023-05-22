@@ -80,6 +80,7 @@ class GameOverSubstate extends MusicBeatSubState
 			PlayState.totalMisses = 0;
 			PlayState.totalSongs = 0;
 			PlayState.campaignAccuracy = 0;
+			PlayState.inChart = false;
 
 			if (!MasterEditorMenu.inTerminal) {
 				FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);

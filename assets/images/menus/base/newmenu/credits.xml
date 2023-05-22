@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="credits.png">
+<SubTexture name="select0000" x="0" y="0" width="207" height="366" frameX="-11" frameY="-108" frameWidth="1280" frameHeight="720" />
+<SubTexture name="select0001" x="207" y="0" width="207" height="366" frameX="-11" frameY="-108" frameWidth="1280" frameHeight="720" />
+<SubTexture name="select0002" x="414" y="0" width="207" height="366" frameX="-11" frameY="-108" frameWidth="1280" frameHeight="720" />
+<SubTexture name="idle0000" x="0" y="366" width="207" height="366" frameX="-11" frameY="-108" frameWidth="1280" frameHeight="720" />
+<SubTexture name="idle0001" x="207" y="366" width="207" height="366" frameX="-11" frameY="-108" frameWidth="1280" frameHeight="720" />
+<SubTexture name="idle0002" x="414" y="366" width="207" height="366" frameX="-11" frameY="-108" frameWidth="1280" frameHeight="720" />
+</TextureAtlas>

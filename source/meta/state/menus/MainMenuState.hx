@@ -145,6 +145,7 @@ class MainMenuState extends MusicBeatState
 	// var colorTest:Float = 0;
 	var selectedSomethin:Bool = false;
 	var counterControl:Float = 0;
+	var ogFreeplay:Bool = false;
 
 	override function update(elapsed:Float)
 	{
@@ -216,6 +217,10 @@ class MainMenuState extends MusicBeatState
 			Main.switchState(this, new MasterEditorMenu());
 		}
 
+		
+		if (FlxG.keys.justPressed.SHIFT)
+			ogFreeplay = !ogFreeplay;
+
 		if ((controls.ACCEPT) && (!selectedSomethin))
 		{
 			var daChoice:String = optionShit[Math.floor(curSelected)];
@@ -231,9 +236,9 @@ class MainMenuState extends MusicBeatState
 			switch (daChoice)
 			{
 				case 'freeplay':
-					FlxG.sound.music.fadeOut(0.3);
+					FlxG.sound.music.fadeOut(0.01);
 				case 'options':
-					FlxG.sound.music.fadeOut(0.3);
+					FlxG.sound.music.fadeOut(0.01);
 			}
 
 			menuItems.forEach(function(spr:FlxSprite)
@@ -258,7 +263,9 @@ class MainMenuState extends MusicBeatState
 							case 'story mode':
 								Main.switchState(this, new StoryMenuState());
 							case 'freeplay':
-
+								if (ogFreeplay)
+								Main.switchState(this, new FreeplayOGState());
+								else
 								Main.switchState(this, new FreeplayState());
 							case 'options':
 								transIn = FlxTransitionableState.defaultTransIn;

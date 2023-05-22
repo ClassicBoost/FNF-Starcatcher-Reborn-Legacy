@@ -15,6 +15,7 @@ import meta.MusicBeat.MusicBeatState;
 import meta.data.dependency.Discord;
 import meta.data.dependency.FNFSprite;
 import meta.data.font.Alphabet;
+import meta.state.newMenu.*;
 import meta.subState.OptionsSubstate;
 
 /**
@@ -91,8 +92,8 @@ class OptionsMenuState extends MusicBeatState
 					['Judgements', null],
 					['', null],
 				//	["UI Skin", getFromOption],
-					['Fixed Judgements', getFromOption],
-					['Simply Judgements', getFromOption],
+				//	['Fixed Judgements', getFromOption],
+				//	['Simply Judgements', getFromOption],
 					['Counter', getFromOption],
 					['', null],
 					['Notes', null],
@@ -109,7 +110,7 @@ class OptionsMenuState extends MusicBeatState
 					['Filter', getFromOption],
 					['Disable Antialiasing', getFromOption],
 					["Stage Opacity", getFromOption],
-					["Opacity Type", getFromOption],
+				//	["Opacity Type", getFromOption],
 					["Icon Bop", getFromOption],
 					["Show Song Progression", getFromOption],
 					['Reduced Movements', getFromOption],
@@ -327,7 +328,7 @@ class OptionsMenuState extends MusicBeatState
 				loadSubgroup('main');
 			else {
 				FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);
-				Main.switchState(this, new MainMenuState());
+				Main.switchState(this, new MenuState());
 			}
 		}
 	}
@@ -612,7 +613,7 @@ class OptionsMenuState extends MusicBeatState
 			FlxFlicker.flicker(activeSubgroup.members[curSelection], 0.5, 0.06 * 2, true, false, function(flick:FlxFlicker)
 			{
 				FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);
-				Main.switchState(this, new MainMenuState());
+				Main.switchState(this, new MenuState());
 				lockedMovement = false;
 			});
 		}

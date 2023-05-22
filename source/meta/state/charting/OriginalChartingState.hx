@@ -143,6 +143,8 @@ class OriginalChartingState extends MusicBeatState
 		FlxG.mouse.visible = true;
 		FlxG.save.bind('funkin', 'ninjamuffin99');
 
+		PlayState.inChart = true;
+
 		tempBpm = _song.bpm;
 
 		addSection();

@@ -229,7 +229,7 @@ class Character extends FNFSprite
 				animation.addByPrefix('idle', "Pico Idle Dance", 24, false);
 				animation.addByPrefix('singUP', 'pico Up note0', 24, false);
 				animation.addByPrefix('singDOWN', 'Pico Down Note0', 24, false);
-				if (isPlayer)
+				if (!isPlayer)
 				{
 					animation.addByPrefix('singLEFT', 'Pico NOTE LEFT0', 24, false);
 					animation.addByPrefix('singRIGHT', 'Pico Note Right0', 24, false);
@@ -252,7 +252,7 @@ class Character extends FNFSprite
 
 				flipX = true;
 				barColor = 0xFFB7D855;
-			case 'ryan':
+			case 'ryan','ryan-pixel':
 				frames = Paths.getSparrowAtlas('characters/sprites/main/BF_AVALI');
 
 				animation.addByPrefix('idle', 'idle', 24, false);
@@ -296,15 +296,34 @@ class Character extends FNFSprite
 
 				characterData.offsetY = 40;
 				characterData.camOffsetX = 150;
-			case 'connor':
-				frames = Paths.getSparrowAtlas('characters/sprites/classic/BOYFRIEND');
+			case 'steve':
+				frames = Paths.getSparrowAtlas('characters/sprites/extras/stev');
+
+				animation.addByPrefix('idle', 'idle', 24, false);
+				animation.addByPrefix('singUP', 'up', 24, false);
+				animation.addByPrefix('singRIGHT', 'left', 24, false);
+				animation.addByPrefix('singLEFT', 'right', 24, false);
+				animation.addByPrefix('singDOWN', 'down', 24, false);
+
+				playAnim('idle');
+
+				setGraphicSize(Std.int(width * 1.15));
+				updateHitbox();
+
+				antialiasing = false;
+				flipX = true;
+				characterData.camOffsetY = -100;
+				characterData.offsetY = 100;
+				characterData.offsetX = 150;
+			case 'connor-old','connor':
+				frames = Paths.getSparrowAtlas('characters/sprites/main/ConnorOLD');
 
 				animation.addByPrefix('idle', 'idle', 24, false);
 				animation.addByPrefix('singUP', 'up0', 24, false);
 				animation.addByPrefix('singDOWN', 'down0', 24, false);
 				animation.addByPrefix('singUPmiss', 'up miss0', 24, false);
 				animation.addByPrefix('singDOWNmiss', 'down miss0', 24, false);
-				if (isPlayer)
+				if (!isPlayer)
 				{
 					animation.addByPrefix('singLEFT', 'left0', 24, false);
 					animation.addByPrefix('singRIGHT', 'right0', 24, false);

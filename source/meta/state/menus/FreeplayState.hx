@@ -19,6 +19,7 @@ import meta.data.*;
 import meta.data.Song.SwagSong;
 import meta.data.dependency.Discord;
 import meta.data.font.Alphabet;
+import meta.state.newMenu.*;
 import openfl.media.Sound;
 import sys.FileSystem;
 import sys.thread.Mutex;
@@ -56,6 +57,10 @@ class FreeplayState extends MusicBeatState
 	private var bg:FlxSprite;
 	private var scoreBG:FlxSprite;
 
+	public static var characterOverrides:String = '';
+	var characterThing:FlxText;
+	var displayOverride:String = 'RYAN (DEFAULT)';
+
 	private var existingSongs:Array<String> = [];
 	private var existingDifficulties:Array<Array<String>> = [];
 
@@ -81,6 +86,7 @@ class FreeplayState extends MusicBeatState
 				existingSongs.push(j.toLowerCase());
 		}
 
+		Main.infoCounter.visible = true;
 		// */
 
 	/*	for (i in folderSongs)
@@ -149,10 +155,25 @@ class FreeplayState extends MusicBeatState
 		ratingText.x += 250;
 		add(ratingText);
 
+		var textBG:FlxSprite = new FlxSprite(0, FlxG.height - 26).makeGraphic(FlxG.width, 26, 0xFF000000);
+		textBG.alpha = 0.6;
+		add(textBG);
+
+		characterThing = new FlxText(12, FlxG.height - 24, 0, '', 12);
+		characterThing.scrollFactor.set();
+		characterThing.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		add(characterThing);
+
 		add(scoreText);
 
 		changeSelection();
 		changeDiff();
+
+		if(FlxG.save.data.daCharacterOverride != null) {
+			characterOverrides = FlxG.save.data.daCharacterOverride;
+		} else {
+			characterOverrides = 'none';
+		}
 
 		// FlxG.sound.playMusic(Paths.music('title'), 0);
 		// FlxG.sound.music.fadeIn(2, 0, 0.8);
@@ -228,7 +249,19 @@ class FreeplayState extends MusicBeatState
 		{
 			threadActive = false;
 			FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);
-			Main.switchState(this, new MainMenuState());
+			Main.switchState(this, new MenuState());
+		}
+
+		if (FlxG.keys.justPressed.TAB)
+			switchCharacter();
+
+		switch (characterOverrides) {
+			case 'none':
+				displayOverride = 'RYAN (DEFAULT)';
+			case 'connor-old','connor':
+				displayOverride = 'CONNOR';
+			case 'ian':
+				displayOverride = 'IAN';
 		}
 
 		if (accepted)
@@ -250,6 +283,8 @@ class FreeplayState extends MusicBeatState
 
 			Main.switchState(this, new PlayState());
 		}
+
+		characterThing.text = "TAB to Switch Character | Character: " + displayOverride;
 
 		// Adhere the position of all the things (I'm sorry it was just so ugly before I had to fix it Shubs)
 		scoreText.text = "PERSONAL BEST:" + lerpScore;
@@ -327,6 +362,12 @@ class FreeplayState extends MusicBeatState
 			case 5:
 				ratingText.color = 0xFFFFFF9B;
 				ratingText.text = 'S';
+			case 6:
+				ratingText.color = 0xFFFFFF9B;
+				ratingText.text = 'S+';
+			case 7:
+				ratingText.color = 0xFFD170FF;
+				ratingText.text = 'P';
 			default:
 				ratingText.text = '?';
 		}
@@ -372,6 +413,19 @@ class FreeplayState extends MusicBeatState
 
 		changeDiff();
 		changeSongPlaying();
+	}
+
+	function switchCharacter() {
+		switch (characterOverrides) {
+			case 'none':
+				characterOverrides = 'connor';
+			case 'connor-old','connor':
+				characterOverrides = 'ian';
+			case 'ian':
+				characterOverrides = 'none';
+		}
+		FlxG.save.data.daCharacterOverride = characterOverrides;
+		FlxG.save.flush();
 	}
 
 	function changeSongPlaying()

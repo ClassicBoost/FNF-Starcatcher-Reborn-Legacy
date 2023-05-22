@@ -26,6 +26,7 @@ import meta.data.*;
 import meta.data.dependency.Discord;
 import meta.data.font.Alphabet;
 import meta.state.menus.*;
+import meta.state.newMenu.*;
 import openfl.Assets;
 
 using StringTools;
@@ -63,6 +64,8 @@ class TitleState extends MusicBeatState
 	var gfDance:FlxSprite;
 	var danceLeft:Bool = false;
 	var titleText:FlxSprite;
+
+	var freakingText:FlxText;
 
 	function startIntro()
 	{
@@ -111,6 +114,10 @@ class TitleState extends MusicBeatState
 		// titleText.screenCenter(X);
 		add(titleText);
 
+		freakingText = new FlxText(0, 200, 0, '');
+		freakingText.setFormat('hobo.ttf', 80, FlxColor.WHITE, CENTER);
+		freakingText.screenCenter(X);
+
 		// var logo:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menus/base/title/logo'));
 		// logo.screenCenter();
 		// logo.antialiasing = true;
@@ -141,6 +148,8 @@ class TitleState extends MusicBeatState
 		ngSpr.screenCenter(X);
 		ngSpr.antialiasing = true;
 
+		add(freakingText);
+
 		FlxTween.tween(credTextShit, {y: credTextShit.y + 20}, 2.9, {ease: FlxEase.quadInOut, type: PINGPONG});
 
 		if (FlxG.save.data.cocoNutMall == true) {
@@ -157,6 +166,8 @@ class TitleState extends MusicBeatState
 		}
 		FlxG.save.data.cocoNutMall = false;
 		FlxG.save.flush();
+
+		FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);
 
 		// credGroup.add(credTextShit);
 	}
@@ -209,12 +220,13 @@ class TitleState extends MusicBeatState
 			#end
 		}
 
+		freakingText.screenCenter(X);
+
 		if (pressedEnter && !transitioning && skippedIntro)
 		{
 			titleText.animation.play('press');
 
-			FlxG.camera.flash(FlxColor.WHITE, 1);
-			FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
+			
 
 			transitioning = true;
 			// FlxG.sound.music.stop();
@@ -280,13 +292,24 @@ class TitleState extends MusicBeatState
 			textGroup.remove(textGroup.members[0], true);
 		}
 	}
-
+	var zoomTween:FlxTween;
 	override function beatHit()
 	{
 		super.beatHit();
 
 		logoBl.animation.play('bump');
 		danceLeft = !danceLeft;
+
+		FlxG.camera.zoom = 1.05;
+		if (zoomTween != null)
+			zoomTween.cancel();
+		zoomTween = FlxTween.tween(FlxG.camera, {zoom: 1}, 0.5, {
+			ease: FlxEase.circOut,
+			onComplete: function(twn:FlxTween)
+			{
+				zoomTween = null;
+			}
+		});
 
 		if (danceLeft)
 			gfDance.animation.play('danceRight');
@@ -298,31 +321,43 @@ class TitleState extends MusicBeatState
 		switch (curBeat)
 		{
 			case 1:
-				createCoolText(['From the creators of']);
+			//	createCoolText(['From the creators of']);
+				freakingText.text = 'From the creators of';
 			case 3:
-				addMoreText('FNF Reborn and VS Ori');
+			//	addMoreText('FNF Reborn and VS Ori');
+				freakingText.text += '\nFNF Reborn and VS Ori';
 				ngSpr.visible = true;
 			case 4:
-				deleteCoolText();
+				freakingText.text = '';
+			//	deleteCoolText();
 				ngSpr.visible = false;
 			case 5:
-				createCoolText(['Forever Engine', 'by']);
+			//	createCoolText(['Forever Engine', 'by']);
+				freakingText.text = 'Forever Engine\nBy';
 			case 7:
-				addMoreText('Yoshubs');
+				freakingText.text += '\nYoshubs';
+			//	addMoreText('Yoshubs');
 			case 8:
-				deleteCoolText();
+				freakingText.text = '';
+			//	deleteCoolText();
 			case 9:
-				createCoolText([curWacky[0]]);
+				freakingText.text = '${curWacky[0]}';
+			//	createCoolText([curWacky[0]]);
 			case 11:
-				addMoreText(curWacky[1]);
+				freakingText.text += '\n${curWacky[1]}';
+			//	addMoreText(curWacky[1]);
 			case 12:
+				freakingText.text = '';
 				deleteCoolText();
 			case 13:
-				addMoreText('FNF');
+				freakingText.text = 'FNF';
+			//	addMoreText('FNF');
 			case 14:
-				addMoreText('Starcatcher');
+				freakingText.text = 'Starcatcher';
+			//	addMoreText('Starcatcher');
 			case 15:
-				addMoreText('Reborn');
+				freakingText.text = 'Reborn';
+			//	addMoreText('Reborn');
 
 			case 16:
 				skipIntro();
@@ -333,7 +368,7 @@ class TitleState extends MusicBeatState
 
 	function skipIntro():Void
 	{
-		if (!skippedIntro)
+	/*	if (!skippedIntro)
 		{
 			remove(ngSpr);
 
@@ -341,7 +376,10 @@ class TitleState extends MusicBeatState
 			remove(credGroup);
 			skippedIntro = true;
 		}
-		//
+		//*/
+		FlxTransitionableState.skipNextTransIn = true;
+		FlxTransitionableState.skipNextTransOut = true;
+		Main.switchState(this, new MenuState());
 	}
 
 	function dumbShit(time:FlxTimer = null) {

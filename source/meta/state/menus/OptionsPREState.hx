@@ -71,8 +71,9 @@ class OptionsPREState extends MusicBeatState
 			],
 			'appearance' => [
 				[
-					["UI Skin", getFromOption],
+				//	["UI Skin", getFromOption],
 					['Filter', getFromOption],
+					["Stage Opacity", getFromOption],
 					['Disable Antialiasing', getFromOption],
 					['Reduced Movements', getFromOption],
 				]
