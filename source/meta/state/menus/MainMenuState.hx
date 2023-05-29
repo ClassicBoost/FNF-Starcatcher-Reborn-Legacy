@@ -212,9 +212,14 @@ class MainMenuState extends MusicBeatState
 			counterControl = 0;
 		}
 
-		if (FlxG.keys.justPressed.SEVEN) {
+		if (FlxG.keys.justPressed.SEVEN)
+		{
+			if (FlxG.keys.pressed.SHIFT)
+			OptionsMenuState.debugAccess = true;
+			else {
 			FlxG.sound.music.fadeOut(0.3);
 			Main.switchState(this, new MasterEditorMenu());
+			}
 		}
 
 		

@@ -165,13 +165,13 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 		var accuracytext:String = 'Accuracy: ';
 		var missestext:String = 'Combo Breaks: ';
 		var ranktext:String = 'Rank: ';
-		var divider:String = " - "; // apparently the centered bold dot isn't on the starbound font
+		var divider:String = " | "; // apparently the centered bold dot isn't on the starbound font
 
 		if (PlayState.choosenfont == 'pixel.otf') {
 			divider = ' • ';
 			scoretext = 'SCR: '; accuracytext = ''; missestext = 'MISS: '; ranktext = '';
 		}
-		else if (PlayState.choosenfont == 'vcr.ttf' || PlayState.choosenfont == 'Vividly-Regular.ttf' || PlayState.choosenfont == 'minecraft.otf')
+		else if (PlayState.choosenfont == 'vcr.ttf' || PlayState.choosenfont == 'Vividly-Regular.ttf' || PlayState.choosenfont == 'minecraft.otf' || PlayState.choosenfont == 'comic.ttf')
 			divider = ' • ';
 
 		if (!PlayState.cpuControlled) {
@@ -180,11 +180,12 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 		var displayAccuracy:Bool = Init.trueSettings.get('Display Accuracy');
 		if (displayAccuracy)
 		{
-			if (PlayState.choosenfont != 'vcr.ttf' && PlayState.choosenfont != 'Vividly-Regular.ttf') {
-		//	scoreBar.text += divider + 'HP: ${PlayState.healthBar.percent}%';
-		//	scoreBar.text += divider + accuracytext + Std.string(Math.floor(Timings.getAccuracy() * 100) / 100) + '%';
-			scoreBar.text += divider + missestext + Std.string(PlayState.misses);
-			scoreBar.text += divider + accuracytext + Std.string(Math.floor(Timings.getAccuracy() * 100) / 100) + '%${Timings.comboDisplay}';
+			if (!PlayState.useDefaultForever) {
+			scoreBar.text += divider + accuracytext + Std.string(Math.floor(Timings.getAccuracy() * 100) / 100) + '%';
+			if (PlayState.misses == 0)
+			scoreBar.text += Timings.comboDisplay;
+			else
+			scoreBar.text += Timings.comboDisplay + divider + missestext + Std.string(PlayState.misses);
 			} else { // base forever engine
 			scoreBar.text += divider + accuracytext + Std.string(Math.floor(Timings.getAccuracy() * 100) / 100) + '%${Timings.comboDisplay}';
 			scoreBar.text += divider + missestext + Std.string(PlayState.misses);

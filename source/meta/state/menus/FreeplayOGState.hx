@@ -19,6 +19,7 @@ import meta.data.*;
 import meta.data.Song.SwagSong;
 import meta.data.dependency.Discord;
 import meta.data.font.Alphabet;
+import flixel.util.FlxTimer;
 import meta.state.newMenu.*;
 import openfl.media.Sound;
 import sys.FileSystem;
@@ -67,6 +68,11 @@ class FreeplayOGState extends MusicBeatState
 	var folderSongs:Array<String> = CoolUtil.returnAssetsLibrary('songs', 'assets');
 
 	private var theSongStuff:FlxText;
+
+	private var disablebop:Bool = false;
+	private var disablethisthingy:Bool = false;
+	private var disablescreenbop:Bool = false;
+	private var lengthshit:Float = 0.6; // BPM 100
 
 	override function create()
 	{
@@ -118,11 +124,15 @@ class FreeplayOGState extends MusicBeatState
 		#end
 
 		// LOAD CHARACTERS
-		bg = new FlxSprite().loadGraphic(Paths.image('menus/base/menuDesat'));
+		bg = new FlxSprite().loadGraphic(Paths.image('menus/base/menuBGBlue'));
 		add(bg);
 
 		grpSongs = new FlxTypedGroup<Alphabet>();
 		add(grpSongs);
+
+		disablebop = false;
+
+		lengthshit = 0.6;
 
 		for (i in 0...songs.length)
 		{
@@ -177,7 +187,6 @@ class FreeplayOGState extends MusicBeatState
 		// FlxG.sound.playMusic(Paths.music('title'), 0);
 		// FlxG.sound.music.fadeIn(2, 0, 0.8);
 		selector = new FlxText();
-
 		selector.size = 40;
 		selector.text = ">";
 		// add(selector);
@@ -253,8 +262,12 @@ class FreeplayOGState extends MusicBeatState
 
 		if (controls.BACK)
 		{
+			if(zoomTween != null) zoomTween.cancel();
 			threadActive = false;
+			if (Main.useNewMenu)
 			Main.switchState(this, new MenuState());
+			else
+			Main.switchState(this, new MainMenuState());
 		}
 
 		if (accepted)
@@ -288,6 +301,13 @@ class FreeplayOGState extends MusicBeatState
 		diffText.x = scoreBG.x + (scoreBG.width / 2) - (diffText.width / 2);
 
 		theSongStuff.text = 'curBeat: $curBeat\ncurStep: $curStep\nBPM: ${songs[curSelected].bpm}\n';
+
+		if (!disablebop && !disablethisthingy) {
+			disablethisthingy = true;
+			new FlxTimer().start((lengthshit * 2), zoomCam);
+		}
+
+		FlxG.camera.zoom = FlxMath.lerp(1, FlxG.camera.zoom, CoolUtil.boundTo(1 - (elapsed * 3.125), 0, 1));
 
 		mutex.acquire();
 		if (songToPlay != null)
@@ -408,6 +428,7 @@ class FreeplayOGState extends MusicBeatState
 
 		trace("curSelected: " + curSelected);
 
+	//	updateSongBOP();
 		changeDiff();
 		changeSongPlaying();
 	}
@@ -415,21 +436,47 @@ class FreeplayOGState extends MusicBeatState
 	override function beatHit() {
 		super.beatHit();
 		if (curBeat % 2 == 0) {
-			FlxG.camera.zoom = 1.05;
-			if(zoomTween != null) zoomTween.cancel();
-			zoomTween = FlxTween.tween(FlxG.camera, {zoom: 1}, 0.5, {ease: FlxEase.circOut, onComplete: function(twn:FlxTween)
-				{
-					zoomTween = null;
-				}
-			});
+
 		}
 		Conductor.changeBPM(bpms[curSelected]);
 	//	FlxG.sound.play(Paths.sound('hitsound'), 1);
 	}
 
-	override function stepHit()
-	{
-		super.stepHit();
+	function updateSongBOP() {
+		lengthshit = 0;
+		if(zoomTween != null) zoomTween.cancel();
+		disablethisthingy = false;
+		switch (songs[curSelected].songName.toLowerCase()) {
+			case 'ataefull':
+				lengthshit = 0.308;
+			case 'mirage':
+				lengthshit = 0.444;
+			case 'test':
+				lengthshit = 0.4;
+			default:
+				disablethisthingy = true;
+		}
+	}
+
+	public function zoomCam(time:FlxTimer = null) {
+		if (!disablebop) {
+		disablebop = true;
+		if (disablethisthingy) {
+	//	FlxG.camera.zoom = 1.05; // disable this for now
+		zoomoutthing();
+		}
+		disablebop = false;
+		disablethisthingy = false;
+	}
+	}
+
+	function zoomoutthing() {
+		if(zoomTween != null) zoomTween.cancel();
+		zoomTween = FlxTween.tween(FlxG.camera, {zoom: 1}, 0.5, {ease: FlxEase.circOut, onComplete: function(twn:FlxTween)
+			{
+				zoomTween = null;
+			}
+		});
 	}
 
 	function changeSongPlaying()

@@ -39,6 +39,10 @@ class MenuState extends MusicBeatState
 		bg.screenCenter();
 		add(bg);
 
+		#if DISCORD_RPC
+		Discord.changePresence('MAIN MENU', 'Main Menu');
+		#end
+
 		FlxG.camera.flash(FlxColor.WHITE, 1);
 
         curSelected = 0;
@@ -112,8 +116,6 @@ class MenuState extends MusicBeatState
 				CoolUtil.browserLoad('https://docs.google.com/document/d/1hET9MkQNVsjbl6Dozs_g6mzvNHGj_fW5a6IHJLr2sXY/edit?usp=sharing');
             case 'options':
 				FlxG.sound.play(Paths.sound('confirmMenu'));
-				FlxTransitionableState.skipNextTransIn = true;
-				FlxTransitionableState.skipNextTransOut = true;
 				Main.switchState(this, new OptionsMenuState());
             case 'play':
                 selectedSomething = true;
@@ -124,8 +126,12 @@ class MenuState extends MusicBeatState
 
 		if (FlxG.keys.justPressed.SEVEN)
 		{
+			if (FlxG.keys.pressed.SHIFT)
+			OptionsMenuState.debugAccess = true;
+			else {
 			FlxG.sound.music.fadeOut(0.3);
 			Main.switchState(this, new MasterEditorMenu());
+			}
 		}
 
 		if (curSelected == 0 && asdfarattragf != 'play')

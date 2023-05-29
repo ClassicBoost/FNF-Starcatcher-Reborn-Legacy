@@ -96,6 +96,8 @@ class RankingState extends MusicBeatState
 		disableControls = true;
 		FlxG.sound.playMusic(Paths.music('no'), 0);
 
+		PlayState.detailsSub = "";
+
 		bg = new FlxSprite().loadGraphic(Paths.image('menus/base/white'));
 		bg.color = 0xFFFFFFFF;
 		add(bg);

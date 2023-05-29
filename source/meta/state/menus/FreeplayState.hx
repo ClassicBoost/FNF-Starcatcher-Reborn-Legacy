@@ -249,7 +249,10 @@ class FreeplayState extends MusicBeatState
 		{
 			threadActive = false;
 			FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);
+			if (Main.useNewMenu)
 			Main.switchState(this, new MenuState());
+			else
+			Main.switchState(this, new MainMenuState());
 		}
 
 		if (FlxG.keys.justPressed.TAB)

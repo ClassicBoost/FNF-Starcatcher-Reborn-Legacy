@@ -122,47 +122,47 @@ class TerminalState extends MusicBeatState
 		}
 
 		// I know this is lazy but
-		if (FlxG.keys.justPressed.ONE) { codeTypedIn += '1'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.TWO) { codeTypedIn += '2'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.THREE) { codeTypedIn += '3'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.FOUR) { codeTypedIn += '4'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.FIVE) { codeTypedIn += '5'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.SIX) { codeTypedIn += '6'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.SEVEN) { codeTypedIn += '7'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.EIGHT) { codeTypedIn += '8'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.NINE) { codeTypedIn += '9'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.ZERO) { codeTypedIn += '0'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.ONE) { codeTypedIn += '1'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.TWO) { codeTypedIn += '2'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.THREE) { codeTypedIn += '3'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.FOUR) { codeTypedIn += '4'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.FIVE) { codeTypedIn += '5'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.SIX) { codeTypedIn += '6'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.SEVEN) { codeTypedIn += '7'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.EIGHT) { codeTypedIn += '8'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.NINE) { codeTypedIn += '9'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.ZERO) { codeTypedIn += '0'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
 
-		if (FlxG.keys.justPressed.A) { codeTypedIn += 'a'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.B) { codeTypedIn += 'b'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.C) { codeTypedIn += 'c'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.D) { codeTypedIn += 'd'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.E) { codeTypedIn += 'e'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.F) { codeTypedIn += 'f'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.G) { codeTypedIn += 'g'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.H) { codeTypedIn += 'h'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.I) { codeTypedIn += 'i'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.J) { codeTypedIn += 'j'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.K) { codeTypedIn += 'k'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.L) { codeTypedIn += 'l'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.M) { codeTypedIn += 'm'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.N) { codeTypedIn += 'n'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.O) { codeTypedIn += 'o'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.P) { codeTypedIn += 'p'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.Q) { codeTypedIn += 'q'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.R) { codeTypedIn += 'r'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.S) { codeTypedIn += 's'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.T) { codeTypedIn += 't'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.U) { codeTypedIn += 'u'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.V) { codeTypedIn += 'v'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.W) { codeTypedIn += 'w'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.X) { codeTypedIn += 'x'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.Y) { codeTypedIn += 'y'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.Z) { codeTypedIn += 'z'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
-		if (FlxG.keys.justPressed.PERIOD) { codeTypedIn += '.'; keysPressed++; FlxG.sound.play(Paths.sound('terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.A) { codeTypedIn += 'a'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.B) { codeTypedIn += 'b'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.C) { codeTypedIn += 'c'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.D) { codeTypedIn += 'd'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.E) { codeTypedIn += 'e'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.F) { codeTypedIn += 'f'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.G) { codeTypedIn += 'g'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.H) { codeTypedIn += 'h'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.I) { codeTypedIn += 'i'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.J) { codeTypedIn += 'j'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.K) { codeTypedIn += 'k'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.L) { codeTypedIn += 'l'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.M) { codeTypedIn += 'm'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.N) { codeTypedIn += 'n'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.O) { codeTypedIn += 'o'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.P) { codeTypedIn += 'p'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.Q) { codeTypedIn += 'q'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.R) { codeTypedIn += 'r'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.S) { codeTypedIn += 's'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.T) { codeTypedIn += 't'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.U) { codeTypedIn += 'u'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.V) { codeTypedIn += 'v'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.W) { codeTypedIn += 'w'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.X) { codeTypedIn += 'x'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.Y) { codeTypedIn += 'y'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.Z) { codeTypedIn += 'z'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
+		if (FlxG.keys.justPressed.PERIOD) { codeTypedIn += '.'; keysPressed++; FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4); disableThisShit = false; }
 
 		if (FlxG.keys.justPressed.BACKSPACE && keysPressed > 0) {
-			FlxG.sound.play(Paths.sound('terminal_bkspc'), 0.4);
+			FlxG.sound.play(Paths.sound('terminal/terminal_bkspc'), 0.4);
 			codeTypedIn = codeTypedIn.substring(0, codeTypedIn.length - 1);
 		}
 		if (controls.ACCEPT)

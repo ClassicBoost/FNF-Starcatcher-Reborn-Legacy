@@ -59,6 +59,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 
 	var daPixelZoom = PlayState.daPixelZoom;
 	var modStage:String = '';
+	public var mood:String = '';
 
 	public var foreground:FlxTypedGroup<FlxBasic>;
 
@@ -67,6 +68,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		super();
 		this.curStage = curStage;
 		modStage = '';
+		mood = '';
 
 		/// get hardcoded stage type if chart is fnf style
 		if (PlayState.determinedChartType == "FNF")
@@ -75,9 +77,11 @@ class Stage extends FlxTypedGroup<FlxBasic>
 			// custom stage stuffs will come with forever charts
 			switch (CoolUtil.spaceToDash(PlayState.SONG.song.toLowerCase()))
 			{
-				case 'haunted','mirage','chocolate','awaken':
+				case 'haunted','mirage','chocolate','awaken','soft-reset':
 					curStage = 'forest';
 					modStage = 'forest';
+					if (CoolUtil.spaceToDash(PlayState.SONG.song.toLowerCase()) == 'awaken' || CoolUtil.spaceToDash(PlayState.SONG.song.toLowerCase()) == 'soft-reset')
+						mood = 'dark';
 				case 'wtf':
 					curStage = 'baren';
 				// OG SHIT
@@ -134,6 +138,14 @@ class Stage extends FlxTypedGroup<FlxBasic>
 				house.setGraphicSize(Std.int(house.width * 1.7));
 				house.updateHitbox();
 				add(house);
+
+				if (mood == 'dark') {
+				var nolight:FNFSprite = new FNFSprite(-250,-200).loadGraphic(Paths.image('backgrounds/' + curStage + '/whennolights'));
+				nolight.antialiasing = true;
+				nolight.setGraphicSize(Std.int(nolight.width * 1.7));
+				nolight.updateHitbox();
+				add(nolight);
+				}
 
 			case 'baren':
 				curStage = 'baren';

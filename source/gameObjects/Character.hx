@@ -268,6 +268,7 @@ class Character extends FNFSprite
 				animation.addByPrefix('scared', 'scared', 24);
 				animation.addByPrefix('hurt', 'hurt', 24, false);
 				animation.addByPrefix('dodge', 'dodge', 24, false);
+				animation.addByPrefix('ghostMiss', 'bruh', 4, false);
 
 				playAnim('idle');
 
@@ -591,7 +592,7 @@ class Character extends FNFSprite
 				// fyi if you're reading this this isn't meant to be well made, it's kind of an afterthought I wanted to mess with and
 				// I'm probably not gonna clean it up and make it an actual feature of the engine I just wanted to play other people's mods but not add their files to
 				// the engine because that'd be stealing assets
-				var fileNew = curCharacter + 'Anims';
+			/*	var fileNew = curCharacter + 'Anims';
 				if (OpenFlAssets.exists(Paths.offsetTxt(fileNew)))
 				{
 					var characterAnims:Array<String> = CoolUtil.coolTextFile(Paths.offsetTxt(fileNew));
@@ -604,7 +605,16 @@ class Character extends FNFSprite
 					}
 				}
 				else
-					return setCharacter(x, y, 'bf');
+					return setCharacter(x, y, 'bf');*/
+				frames = Paths.getSparrowAtlas('characters/sprites/main/BF_AVALI');
+
+				animation.addByPrefix('idle', 'idle', 24, false);
+
+				playAnim('idle');
+
+				flipX = true;
+
+				characterData.offsetY = 70;
 		}
 
 		// set up offsets cus why not

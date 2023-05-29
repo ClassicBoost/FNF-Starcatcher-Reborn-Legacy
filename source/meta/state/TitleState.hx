@@ -368,18 +368,21 @@ class TitleState extends MusicBeatState
 
 	function skipIntro():Void
 	{
-	/*	if (!skippedIntro)
+		if (!Main.useNewMenu) {
+		if (!skippedIntro)
 		{
 			remove(ngSpr);
 
 			FlxG.camera.flash(FlxColor.WHITE, 4);
 			remove(credGroup);
 			skippedIntro = true;
+			freakingText.visible = false;
 		}
-		//*/
+		} else {
 		FlxTransitionableState.skipNextTransIn = true;
 		FlxTransitionableState.skipNextTransOut = true;
 		Main.switchState(this, new MenuState());
+		}
 	}
 
 	function dumbShit(time:FlxTimer = null) {

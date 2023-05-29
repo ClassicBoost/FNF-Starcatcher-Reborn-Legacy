@@ -232,6 +232,15 @@ class Init extends FlxState
 			"",
 			NOT_FORCED
 		],
+		// MODES
+		'FC Mode' => [false, Checkmark, "You cannot miss, or else you die."],
+		'Harder Safeframes' => [false, Checkmark, "Your safeframes is reduced."],
+		'Avali Accurate' => [false, Checkmark, "You will often miss, P rank does not require FC, and health drain is reduced"],
+		'P Ranks Only' => [false, Checkmark, "You must P rank the song to live (See manual for info)."],
+		'Stage Fright' => [false, Checkmark, "You lose health every time they hit a note, songs that already has this will be disabled."],
+		// LANGUAGES
+		'English' => [true, Checkmark, "Very Unfinished"],
+		'Portuguese' => [false, Checkmark, "Muito Inacabado"],
 	];
 
 	public static var trueSettings:Map<String, Dynamic> = [];

@@ -46,6 +46,8 @@ class Main extends Sprite
 	public static var starcatcherVER:String = 'DEMO 2';
 	public static var infoCounter:Overlay;
 
+	public static var useNewMenu:Bool = true;
+
 	// heres gameweeks set up!
 
 	/**

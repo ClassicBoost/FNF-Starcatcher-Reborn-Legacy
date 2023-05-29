@@ -16,10 +16,10 @@ class Timings
 	// from left to right
 	// max milliseconds, score from it and percentage
 	public static var judgementsMap:Map<String, Array<Dynamic>> = [
-		"sick" => [0, 55, 350, 100, ' [MFC]'],
-		"good" => [1, 90, 200, 75, ' [GFC]'],
-		"bad" => [2, 120, 0, 50, ' [FC]'],
-		"shit" => [3, 150, -500, 25, ' [FC-]'],
+		"sick" => [0, (Init.trueSettings.get("Harder Safeframes") ? 20 : 55), 350, 100, ' | MFC'],
+		"good" => [1, (Init.trueSettings.get("Harder Safeframes") ? 40 : 90), 200, 75, ' | GFC'],
+		"bad" => [2, (Init.trueSettings.get("Harder Safeframes") ? 80 : 120), 0, 50, ' | FC'],
+		"shit" => [3, (Init.trueSettings.get("Harder Safeframes") ? 125 : 150), -500, 25, ' | FC-'],
 		"miss" => [4, 180, 0, -100],
 	];
 
@@ -27,14 +27,14 @@ class Timings
 
 	// set the score judgements for later use
 	public static var scoreRating:Map<String, Int> = [
-		"S+" => 100,
+		"P" => 100,
 		"S" => 95,
 		"A" => 90,
 		"B" => 85,
 		"C" => 80,
 		"D" => 75,
-		"E" => 70,
-		"F" => 65,
+	//	"E" => 70,
+	//	"F" => 65,
 	];
 
 	public static var ratingFinal:String = "F";

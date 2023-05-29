@@ -163,7 +163,10 @@ class MasterEditorMenu extends MusicBeatState
 		{
 			FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);
 			inTerminal = false;
+			if (Main.useNewMenu)
 			Main.switchState(this, new MenuState());
+			else
+			Main.switchState(this, new MainMenuState());
 		}
 
 		if (controls.ACCEPT)
@@ -206,7 +209,7 @@ class MasterEditorMenu extends MusicBeatState
 
 			if (FlxG.keys.justPressed.ONE || FlxG.keys.justPressed.TWO || FlxG.keys.justPressed.THREE || FlxG.keys.justPressed.FOUR || FlxG.keys.justPressed.FIVE
 				|| FlxG.keys.justPressed.SIX || FlxG.keys.justPressed.SEVEN || FlxG.keys.justPressed.EIGHT || FlxG.keys.justPressed.NINE || FlxG.keys.justPressed.ZERO) {
-				FlxG.sound.play(Paths.sound('terminal_key'), 0.4);
+				FlxG.sound.play(Paths.sound('terminal/terminal_key'), 0.4);
 				changeMainText = 'Type in numbers to enter codes\nAll codes are 5 digits long\n\nENTER to access\nR to reset\nESC to exit';
 				whatSelected = '';
 				updateScore();
@@ -214,7 +217,7 @@ class MasterEditorMenu extends MusicBeatState
 			}
 			if (FlxG.keys.justPressed.BACKSPACE && keysPressed > 0) {
 			//	codeTypedIn--;
-				FlxG.sound.play(Paths.sound('terminal_bkspc'), 0.4);
+				FlxG.sound.play(Paths.sound('terminal/terminal_bkspc'), 0.4);
 				codeTypedIn = codeTypedIn.substring(0, codeTypedIn.length - 1);
 				keysPressed--;
 				whatSelected = '';
@@ -242,7 +245,7 @@ class MasterEditorMenu extends MusicBeatState
 					PlayState.SONG = Song.loadFromJson('thearchy', 'thearchy');
 					Main.switchState(this, new PlayState());
 				default:
-					FlxG.sound.play(Paths.sound('error'), 0.6);
+					FlxG.sound.play(Paths.sound('terminal/error'), 0.6);
 				}
 				keysPressed = 0;
 				codeTypedIn = '';

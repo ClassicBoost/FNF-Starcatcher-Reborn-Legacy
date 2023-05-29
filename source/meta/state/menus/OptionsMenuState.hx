@@ -34,6 +34,8 @@ class OptionsMenuState extends MusicBeatState
 
 	var lockedMovement:Bool = false;
 
+	public static var debugAccess:Bool = false;
+
 	override public function create():Void
 	{
 		super.create();
@@ -58,6 +60,7 @@ class OptionsMenuState extends MusicBeatState
 					['preferences', callNewGroup],
 					['appearance', callNewGroup],
 					['controls', openControlmenu],
+					['languages', callNewGroup],
 					['exit', exitMenu]
 				]
 			],
@@ -84,7 +87,15 @@ class OptionsMenuState extends MusicBeatState
 					#if !neko ["Framerate Cap", getFromOption], #end
 					['FPS Counter', getFromOption],
 					['Memory Counter', getFromOption],
-					['Debug Info', getFromOption],
+					[(debugAccess ? 'Debug Info' : ''), (debugAccess ? getFromOption : null)],
+					['', null],
+					['Modifiers', null],
+					['', null],
+					['FC Mode', getFromOption],
+					['Harder Safeframes', getFromOption],
+					['Avali Accurate', getFromOption],
+					['P Ranks Only', getFromOption],
+					['Stage Fright', getFromOption],
 				]
 			],
 			'appearance' => [
@@ -115,7 +126,14 @@ class OptionsMenuState extends MusicBeatState
 					["Show Song Progression", getFromOption],
 					['Reduced Movements', getFromOption],
 				]
+			],
+			'languages' => [
+				[
+					['English', getFromOption],
+					['Portuguese', getFromOption],
+				]
 			]
+
 		];
 
 		for (category in categoryMap.keys())
@@ -142,7 +160,7 @@ class OptionsMenuState extends MusicBeatState
 		add(camFollow);
 
 		infoText = new FlxText(5, FlxG.height - 24, 0, "", 32);
-		infoText.setFormat("VCR OSD Mono", 20, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		infoText.setFormat(Paths.font("pixel-berry.ttf"), 14, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		infoText.textField.background = true;
 		infoText.textField.backgroundColor = FlxColor.BLACK;
 		infoText.scrollFactor.x = 0;
@@ -328,7 +346,10 @@ class OptionsMenuState extends MusicBeatState
 				loadSubgroup('main');
 			else {
 				FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);
+				if (Main.useNewMenu)
 				Main.switchState(this, new MenuState());
+				else
+				Main.switchState(this, new MainMenuState());
 			}
 		}
 	}
@@ -613,7 +634,10 @@ class OptionsMenuState extends MusicBeatState
 			FlxFlicker.flicker(activeSubgroup.members[curSelection], 0.5, 0.06 * 2, true, false, function(flick:FlxFlicker)
 			{
 				FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);
+				if (Main.useNewMenu)
 				Main.switchState(this, new MenuState());
+				else
+				Main.switchState(this, new MainMenuState());
 				lockedMovement = false;
 			});
 		}

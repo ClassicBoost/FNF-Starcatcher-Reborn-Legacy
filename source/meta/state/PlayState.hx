@@ -74,7 +74,7 @@ class PlayState extends MusicBeatState
 	public static var cpuControlled:Bool = false;
 	public static var practiceMode:Bool = false;
 
-	public static var choosenfont:String = 'hobo.ttf';
+	public static var choosenfont:String = 'pixel-berry.ttf';
 
 	public static var campaignScore:Int = 0;
 
@@ -87,6 +87,8 @@ class PlayState extends MusicBeatState
 	public static var assetModifier:String = 'base';
 	public static var changeableSkin:String = 'default';
 
+	private var healthToLower:Float = 0;
+
 	private var unspawnNotes:Array<Note> = [];
 	private var ratingArray:Array<String> = [];
 	private var allSicks:Bool = true;
@@ -94,7 +96,7 @@ class PlayState extends MusicBeatState
 	// if you ever wanna add more keys
 	private var numberOfKeys:Int = 4;
 
-	public static var composerStuff:String;
+	public static var composerStuff:String = 'null';
 
 	public static var inChart:Bool = false;
 
@@ -177,6 +179,8 @@ class PlayState extends MusicBeatState
 
 	var latedamage:Int = 3;
 
+	public static var useDefaultForever:Bool = false;
+
 	private var theSongStuff:FlxText;
 
 	var storyDifficultyText:String = "";
@@ -202,7 +206,7 @@ class PlayState extends MusicBeatState
 
 	public var judgementText:FlxText;
 
-	public var useNewRanking:Bool = false;
+	public var useNewRanking:Bool = true;
 
 	private var idotChanged:Bool = false;
 
@@ -217,6 +221,8 @@ class PlayState extends MusicBeatState
 	public static var uiHUD:ClassHUD;
 
 	private var showStats:Bool = false;
+
+	var noLap2:Bool = true;
 
 	public static var daPixelZoom:Float = 6;
 	public static var determinedChartType:String = "";
@@ -235,6 +241,8 @@ class PlayState extends MusicBeatState
 	public static var forceDeath = false;
 
 	public static var fuckingRankText:String = 'd';
+
+	private var fuckYouNoHit:Bool = false;
 
 	// different players
 	var bftwobutfake:Character;
@@ -264,7 +272,10 @@ class PlayState extends MusicBeatState
 		canDie = true;
 		roundTwoCompleted = false;
 		forceRank = 0;
+		useDefaultForever = false;
 		idotChanged = false;
+		noLap2 = true;
+		healthToLower = 0;
 		// sets up the combo object array
 		lastCombo = [];
 
@@ -326,7 +337,7 @@ class PlayState extends MusicBeatState
 		stageBuild = new Stage(curStage);
 		add(stageBuild);
 
-		if (curStage.startsWith("school") || curStage.startsWith("minecraft")) {
+		if (curStage.startsWith("school")) {
 			isPixelStage = true;
 		} else {
 			isPixelStage = false;
@@ -370,7 +381,7 @@ class PlayState extends MusicBeatState
 			assetModifier = 'pixel';
 
 			choosenfont = 'pixel.otf';
-		} else choosenfont = 'hobo.ttf';
+		} else choosenfont = 'pixel-berry.ttf';
 
 		gf.color = 0xFFFFFFFF;
 		dadOpponent.color = 0xFFFFFFFF;
@@ -407,6 +418,9 @@ class PlayState extends MusicBeatState
 		blackBG.alpha = 0;
 		blackBG.scrollFactor.set(0, 0);
 		add(blackBG);
+
+		if (stageBuild.mood == 'dark')
+			blackBG.alpha = 0.5;
 
 		// strum setup
 		strumLines = new FlxTypedGroup<Strumline>();
@@ -491,6 +505,8 @@ class PlayState extends MusicBeatState
 		fuckingRank.x += 1000;
 		add(fuckingRank);
 
+		composerStuff = 'null';
+
 		switch (curSong.toLowerCase()) {
 			case 'mirage':
 			composerStuff = 'Spades';
@@ -500,13 +516,14 @@ class PlayState extends MusicBeatState
 			scoreRequired = 687;
 			forceCenter = true;
 			gf.visible = false;
-			choosenfont = 'Vividly-Regular.ttf';
+			useDefaultForever = true;
 			fuckingRank.visible = false;
 			case 'thearchy':
 			composerStuff = 'Original by Maevings | Cover by Classic1926';
-			choosenfont = 'Vividly-Regular.ttf';
 			fuckingRank.visible = false;
 			gf.visible = false;
+			useDefaultForever = true;
+			healthToLower = 0.005;
 		//	boyfriend.visible = false;
 			case 'blam':
 			composerStuff = 'Spades';
@@ -516,14 +533,24 @@ class PlayState extends MusicBeatState
 			fuckingRank.visible = false;
 			gf.visible = false;
 			boyfriend.visible = false;
+			useDefaultForever = true;
+			healthToLower = 0.005;
 			case 'error':
 			choosenfont = 'vcr.ttf';
 			fuckingRank.visible = false;
 			case 'ataefull':
 			choosenfont = 'minecraft.otf';
+			noLap2 = false;
 			scoreRequired = 977;
 			gf.visible = false;
 			hasTWOplayers = true;
+			healthToLower = 0.01;
+			case 'awaken':
+				healthToLower = 0.007;
+			case 'vac':
+			choosenfont = 'comic.ttf';
+			gf.visible = false;
+			canPause = false;
 		}
 
 		if (!hasTWOplayers)
@@ -737,7 +764,7 @@ class PlayState extends MusicBeatState
 								eligable = false;
 						}
 
-						if (eligable)
+						if (eligable && !fuckYouNoHit)
 						{
 							goodNoteHit(coolNote, boyfriend, boyfriendStrums, firstNote); // then hit the note
 							pressedNotes.push(coolNote);
@@ -748,7 +775,7 @@ class PlayState extends MusicBeatState
 				}
 				else // else just call bad notes
 					if (!Init.trueSettings.get('Ghost Tapping') || antimashshit)
-						missNoteCheck(true, key, boyfriend, true);
+						missNoteCheck(true, key, boyfriend, true, true);
 				Conductor.songPosition = previousTime;
 			}
 
@@ -860,23 +887,21 @@ class PlayState extends MusicBeatState
 			FlxG.sound.play(Paths.sound('hitsound'), 1);
 		}
 
-		if (choosenfont == 'minecraft.otf' || choosenfont == 'vcr.ttf' || PlayState.choosenfont == 'Vividly-Regular.ttf') {
+		if (choosenfont == 'minecraft.otf' || useDefaultForever) {
 		var iconLerp = 0.5;
 		iconP1.setGraphicSize(Std.int(FlxMath.lerp(iconP1.initialWidth, iconP1.width, iconLerp)));
 		iconP2.setGraphicSize(Std.int(FlxMath.lerp(iconP2.initialWidth, iconP2.width, iconLerp)));
 		} else {
-		var mult:Float = FlxMath.lerp(1, iconP1.scale.x, CoolUtil.boundTo(1 - (elapsed * 30), 0, 1));
+		var mult:Float = FlxMath.lerp(1, iconP1.scale.x, CoolUtil.boundTo(1 - (elapsed * 20), 0, 1));
 		iconP1.scale.set(mult, mult);
-		var mult:Float = FlxMath.lerp(1, iconP2.scale.x, CoolUtil.boundTo(1 - (elapsed * 30), 0, 1));
+		var mult:Float = FlxMath.lerp(1, iconP2.scale.x, CoolUtil.boundTo(1 - (elapsed * 20), 0, 1));
 		iconP2.scale.set(mult, mult);
 		}
 
 		// messups are just mechanic fails, nothing else, as well with note misses, and you only get a P rank if you also have a MFC
 		if (misses == 0 && messups == 0 && songScore != 0 && !cpuControlled && !practiceMode) displayRank = 'P';
 
-		if (cpuControlled && (curSong.toLowerCase() == 'anomaly' || curSong.toLowerCase() == 'cheating') && !Init.trueSettings.get('Debug Info')) forceDeath = true;
-
-
+		if (cpuControlled && (curSong.toLowerCase() == 'vac') && !Init.trueSettings.get('Debug Info')) forceDeath = true;
 
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();
@@ -900,7 +925,7 @@ class PlayState extends MusicBeatState
 		}
 
 		if (forceRank == 0) {
-		if (choosenfont != 'vcr.ttf' && PlayState.choosenfont != 'Vividly-Regular.ttf') {
+		if (!useDefaultForever) {
 		if (songScore >= (scoreRequired * 0.25) && songScore < (scoreRequired * 0.6)) {
 			fuckingRankText = 'c';
 		} else if (songScore >= (scoreRequired * 0.5) && songScore < (scoreRequired * 0.9)) {
@@ -908,11 +933,11 @@ class PlayState extends MusicBeatState
 		} else if (songScore >= (scoreRequired * 0.8) && songScore < (scoreRequired * 0.99)) {
 			fuckingRankText = 'a';
 		} else if (songScore >= (scoreRequired * 0.95) && songScore < scoreRequired) {
-			if (roundTwoCompleted && (Math.floor(Timings.getAccuracy() * 100) / 100) >= 99 && misses == 0) fuckingRankText = 'p';
+			if (roundTwoCompleted && (Math.floor(Timings.getAccuracy() * 100) / 100) >= 98 && misses == 0) fuckingRankText = 'p';
 			else fuckingRankText = 's';
-		} else if (songScore >= scoreRequired && (Math.floor(Timings.getAccuracy() * 100) / 100) >= 99.99 && misses == 0) {
-			if (roundTwoCompleted && (Math.floor(Timings.getAccuracy() * 100) / 100) >= 99 && misses == 0) fuckingRankText = 'p'; // get a P rank instead
-			else fuckingRankText = 's+';
+		} else if (songScore >= scoreRequired && (Math.floor(Timings.getAccuracy() * 100) / 100) >= 99.99 && noLap2) {
+			if (misses == 0 || Init.trueSettings.get("Avali Accurate"))
+			fuckingRankText = 'p'; // get a P rank instead
 		} else if (songScore < (scoreRequired * 0.3)) {
 			fuckingRankText = 'd';
 		}} else {
@@ -930,10 +955,17 @@ class PlayState extends MusicBeatState
 			FlxTween.tween(fuckingRank, {"scale.x": 0.35, "scale.y": 0.35}, 0.5, {ease: FlxEase.cubeOut});
 			shitfart = fuckingRankText;
 
+			if (!useDefaultForever && fuckingRankText != 's' && fuckingRankText != 'p') {
 			hurtText.text = 'YOU GOT ENOUGH SCORE FOR RANK ${fuckingRankText.toUpperCase()}';
 			displayMidText();
+			}
 		}
 		totalCombo = combo;
+
+		if (Init.trueSettings.get('Debug Info'))
+		songDetails = 'NO LEAKS! - Rank: ' + fuckingRankText.toUpperCase();
+		else
+		songDetails = CoolUtil.dashToSpace(SONG.song) + ' - Rank: ' + fuckingRankText.toUpperCase();
 
 		if (totalCombo > highestCombo)
 		highestCombo = totalCombo;
@@ -1475,6 +1507,9 @@ class PlayState extends MusicBeatState
 					if (Init.trueSettings.get("Anti Mash"))
 					antimashshit = true;
 
+					if (Init.trueSettings.get("Avali Accurate"))
+						fuckYouNoHit = true;
+
 					ClassHUD.bopScore();
 				}
 				else if (coolNote.isSustainNote)
@@ -1489,19 +1524,27 @@ class PlayState extends MusicBeatState
 			} else {
 				switch (dadOpponent.curCharacter) {
 					case 'monster','monster-christmas':
-						if (health > 0.5) health -= 0.007;
+						if (health > 0.5) health -= healthToLower;
 					case 'bf','bf-pixel','bf-car','bf-christmas':
 						if (health > 0.1 && !coolNote.isSustainNote) health -= 0.025;
 				}
 				if (curSong.toLowerCase() == 'anomaly' || curSong.toLowerCase() == 'cheating') {
 					if (!coolNote.isSustainNote && !Init.trueSettings.get("Reduced Movements")) camHUD.angle = FlxG.random.int(-30, 30);
-					health -= 0.005;
+					health -= healthToLower;
 				}
 				if (curSong.toLowerCase() == 'thearchy') {
 					canDie = false;
 					if (health > 0.7)
-					health -= 0.005;
+					health -= healthToLower;
 				}
+				if (curSong.toLowerCase() == 'vac') {
+					if (!Init.trueSettings.get("Reduced Movements") && misses >= 1)	camHUD.shake(0.003, 0.1);
+					health -= healthToLower;
+				}
+				if (curSong.toLowerCase() == 'ataefull') {
+					if (!coolNote.isSustainNote && health > 0.1) health -= healthToLower;
+				}
+				if (Init.trueSettings.get('Stage Fright') && healthToLower == 0 && health > 0.1) health -= 0.01;
 				if (!coolNote.isSustainNote) {
 					opponentSploosh(coolNote, characterStrums);
 				}
@@ -1513,26 +1556,32 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	function missNoteCheck(?includeAnimation:Bool = false, direction:Int = 0, character:Character, popMiss:Bool = false, lockMiss:Bool = false)
+	function missNoteCheck(?includeAnimation:Bool = false, direction:Int = 0, character:Character, popMiss:Bool = false, lockMiss:Bool = false, ?ghostTapFail:Bool = false)
 	{
 		if (includeAnimation)
 		{
 			var stringDirection:String = UIStaticArrow.getArrowFromNumber(direction);
 
-			FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
+			FlxG.sound.play(Paths.soundRandom('hurt/missnote', 1, 3), FlxG.random.float(0.1, 0.2));
 			switch (boyfriend.curCharacter) {
 				case 'bf-og':
 
 				case 'poptop':
-					FlxG.sound.play(Paths.sound('poptop_notice1'), 0.7);
+					FlxG.sound.play(Paths.sound('hurt/poptop_notice1'), 0.7);
 				case 'ryan','ryan-car','ryan-christmas','ryan-pixel':
-					FlxG.sound.play(Paths.sound('avalihurt'), 0.7);
+					FlxG.sound.play(Paths.sound('hurt/avalihurt'), 0.7);
 				case 'connor','connor-car','connor-christmas','connor-pixel':
-					FlxG.sound.play(Paths.sound('connorhurt'), 0.7);
+					FlxG.sound.play(Paths.sound('hurt/connorhurt'), 0.7);
 				default:
 					
 			}
 			character.playAnim('sing' + stringDirection.toUpperCase() + 'miss', lockMiss);
+
+			if (ghostTapFail || songScore <= 0) {
+			character.playAnim('ghostMiss', lockMiss);
+			FlxG.sound.play(Paths.sound('hurt/ghostMiss'), 0.7);
+			}
+
 			forceLose = true;
 		}
 		judgementText.text = 'Miss\nx$combo';
@@ -1783,7 +1832,7 @@ class PlayState extends MusicBeatState
 
 	function popUpCombo(?cache:Bool = false)
 	{
-		if (choosenfont == 'vcr.ttf' || PlayState.choosenfont == 'Vividly-Regular.ttf') {
+		if (useDefaultForever) {
 		var comboString:String = Std.string(combo);
 		var negative = false;
 		if ((comboString.startsWith('-')) || (combo == 0))
@@ -1857,6 +1906,10 @@ class PlayState extends MusicBeatState
 		else
 			combo--;
 
+		if (Init.trueSettings.get('FC Mode')) health = -9;
+
+		if (fuckingRankText == 'p') fuckingRankText = 's';
+
 		forceLose = true;
 
 		// misses
@@ -1864,11 +1917,22 @@ class PlayState extends MusicBeatState
 		misses++;
 		messups++;
 
+		if (curSong.toLowerCase() == 'vac')
+			{
+				FlxG.camera.flash(FlxColor.RED, 0.15);
+
+				FlxG.sound.play(Paths.soundRandom('huh/powerup', 1, 2), 1);
+			}
+
 		// display negative combo
 		if (popMiss)
 		{
 			// doesnt matter miss ratings dont have timings
 			displayRating("miss", 'late');
+
+			if (Init.trueSettings.get("Avali Accurate"))
+			health -= 0.01;
+			else
 			health -= 0.1;
 		}
 		popUpCombo();
@@ -1903,12 +1967,12 @@ class PlayState extends MusicBeatState
 		 */
 
 		var rating = ForeverAssets.generateRating('$daRating', (daRating == 'sick' ? allSicks : false), timing, assetModifier, changeableSkin, 'UI');
-		if (choosenfont == 'vcr.ttf' || PlayState.choosenfont == 'Vividly-Regular.ttf')
+		if (useDefaultForever)
 		add(rating);
 
 		if (!Init.trueSettings.get('Simply Judgements'))
 		{
-			if (choosenfont == 'vcr.ttf' || PlayState.choosenfont == 'Vividly-Regular.ttf')
+			if (useDefaultForever)
 			add(rating);
 
 			FlxTween.tween(rating, {alpha: 0}, 0.2, {
@@ -1925,7 +1989,7 @@ class PlayState extends MusicBeatState
 			{
 				lastRating.kill();
 			}
-			if (choosenfont == 'vcr.ttf' || PlayState.choosenfont == 'Vividly-Regular.ttf')
+			if (useDefaultForever)
 			add(rating);
 			lastRating = rating;
 			FlxTween.tween(rating, {y: rating.y + 20}, 0.2, {type: FlxTweenType.BACKWARD, ease: FlxEase.circOut});
@@ -1957,13 +2021,16 @@ class PlayState extends MusicBeatState
 				if (Timings.judgementsMap.get(Timings.smallestRating)[0] < Timings.judgementsMap.get(daRating)[0])
 					Timings.smallestRating = daRating;
 			}
-			if (choosenfont != 'vcr.ttf' && PlayState.choosenfont != 'Vividly-Regular.ttf') {
+			if (!useDefaultForever) {
 			var stupidRating:String = '?';
 			judgementText.color = 0xFFFFFFFF;
 			switch (daRating) {
 				case 'sick','sick-early','sick-late':
 					stupidRating = 'Sick!!';
-					if (allSicks) judgementText.color = 0xFFFFEBBE;
+					if (allSicks) {
+						judgementText.color = 0xFFFFEBBE;
+						stupidRating = 'NICE ONE!!';
+					}
 				case 'good','good-early','good-late':
 					stupidRating = 'Meh';
 				case 'bad','bad-early','bad-late':
@@ -2020,7 +2087,10 @@ class PlayState extends MusicBeatState
 		Conductor.changeBPM(songData.bpm);
 
 		// String that contains the mode defined here so it isn't necessary to call changePresence for each mode
-		songDetails = CoolUtil.dashToSpace(SONG.song) + ' - ' + CoolUtil.difficultyFromNumber(storyDifficulty);
+		if (Init.trueSettings.get('Debug Info'))
+			songDetails = 'NO LEAKS! - Rank: ' + fuckingRankText.toUpperCase();
+		else
+		songDetails = CoolUtil.dashToSpace(SONG.song) + ' - Rank: ' + fuckingRankText.toUpperCase();
 
 		// String for when the game is paused
 		detailsPausedText = "Paused - " + songDetails;
@@ -2098,6 +2168,7 @@ class PlayState extends MusicBeatState
 	}
 
 	var bopbopbop:Bool = false;
+	var sidetoSide = false;
 
 	override function stepHit()
 	{
@@ -2168,6 +2239,15 @@ class PlayState extends MusicBeatState
 						FlxG.camera.flash(FlxColor.WHITE, 3);
 						bopbopbop = false;
 				}
+			case 'epitome':
+					switch (curStep) {
+						case 128,384,896:
+							sidetoSide = true;
+						case 256,512,1024:
+							sidetoSide = false;
+						case 260,516,1028:
+							camHUD.angle = 0;
+					}
 		}
 
 		///*
@@ -2218,6 +2298,7 @@ class PlayState extends MusicBeatState
 			add(bfbutfake);
 			boyfriend.setCharacter(1050,850, idiot);
 			boyfriend.flipX = false;
+			iconP1.updateIcon(idiot, true);
 		} else {
 			remove(bfbutfake);
 			boyfriend.setCharacter(750, 850, SONG.player1);
@@ -2225,6 +2306,7 @@ class PlayState extends MusicBeatState
 			bftwobutfake = new Character(); // switch bf
 			bftwobutfake.setCharacter(1050,850, idiot);
 			add(bftwobutfake);
+			iconP1.updateIcon(SONG.player1, true);
 		}
 	}
 
@@ -2251,6 +2333,8 @@ class PlayState extends MusicBeatState
 		bftwobutfake.animation.play('idle');
 		bfbutfake.animation.play('idle');
 		}
+
+		fuckYouNoHit = false;
 
 		if (Init.trueSettings.get('Icon Bop') && (!isPixelStage || choosenfont == 'minecraft.otf'))
 			{
@@ -2296,6 +2380,15 @@ class PlayState extends MusicBeatState
 
 		// stage stuffs
 		stageBuild.stageUpdate(curBeat, boyfriend, gf, dadOpponent);
+
+		if (sidetoSide) {
+			if (curBeat % 2 == 0) {
+				FlxTween.tween(camHUD, {"angle": 5}, Conductor.stepCrochet / 1000, {ease: FlxEase.circInOut});
+			}
+			else {
+				FlxTween.tween(camHUD, {"angle": -5}, Conductor.stepCrochet / 1000, {ease: FlxEase.circInOut});
+			}
+		}
 
 		if (curSong.toLowerCase() == 'bopeebo')
 		{
@@ -2409,6 +2502,13 @@ class PlayState extends MusicBeatState
 
 	function endSong():Void
 	{
+		if ((Math.floor(Timings.getAccuracy() * 100) / 100) >= 99.99 && noLap2 && !cpuControlled && songScore >= 1050) // If you got a 100% accuracy yet not enough score you've be givin a P rank anyway
+			if (misses == 0 || Init.trueSettings.get("Avali Accurate"))
+			fuckingRankText = 'p';
+
+		if (Init.trueSettings.get("P Ranks Only") && fuckingRankText != 'p')
+			health -= 69;
+
 		canPause = false;
 		songMusic.volume = 0;
 		vocals.volume = 0;
@@ -2685,7 +2785,7 @@ class PlayState extends MusicBeatState
 			switch (swagCounter)
 			{
 				case 0:
-					FlxG.sound.play(Paths.sound('intro3-' + assetModifier), 0.6);
+					FlxG.sound.play(Paths.sound('countdowns/$assetModifier/intro3'), 0.6);
 					Conductor.songPosition = -(Conductor.crochet * 4);
 				case 1:
 					var ready:FlxSprite = new FlxSprite().loadGraphic(Paths.image(introAlts[0]));
@@ -2704,7 +2804,7 @@ class PlayState extends MusicBeatState
 							ready.destroy();
 						}
 					});
-					FlxG.sound.play(Paths.sound('intro2-' + assetModifier), 0.6);
+					FlxG.sound.play(Paths.sound('countdowns/$assetModifier/intro2'), 0.6);
 
 					Conductor.songPosition = -(Conductor.crochet * 3);
 				case 2:
@@ -2723,7 +2823,7 @@ class PlayState extends MusicBeatState
 							set.destroy();
 						}
 					});
-					FlxG.sound.play(Paths.sound('intro1-' + assetModifier), 0.6);
+					FlxG.sound.play(Paths.sound('countdowns/$assetModifier/intro1'), 0.6);
 
 					Conductor.songPosition = -(Conductor.crochet * 2);
 				case 3:
@@ -2744,7 +2844,7 @@ class PlayState extends MusicBeatState
 							go.destroy();
 						}
 					});
-					FlxG.sound.play(Paths.sound('introGo-' + assetModifier), 0.6);
+					FlxG.sound.play(Paths.sound('countdowns/$assetModifier/introGo'), 0.6);
 
 					Conductor.songPosition = -(Conductor.crochet * 1);
 			}
