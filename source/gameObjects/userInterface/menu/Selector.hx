@@ -20,8 +20,9 @@ class Selector extends FlxTypedSpriteGroup<FlxSprite>
 
 	public var fpsCap:Bool = false;
 	public var darkBG:Bool = false;
+	public var healthAlpha:Bool = false;
 
-	public function new(x:Float = 0, y:Float = 0, word:String, options:Array<String>, fpsCap:Bool = false, darkBG:Bool = false)
+	public function new(x:Float = 0, y:Float = 0, word:String, options:Array<String>, fpsCap:Bool = false, darkBG:Bool = false, healthAlpha:Bool = false)
 	{
 		// call back the function
 		super(x, y);
@@ -36,6 +37,7 @@ class Selector extends FlxTypedSpriteGroup<FlxSprite>
 
 		this.fpsCap = fpsCap;
 		this.darkBG = darkBG;
+		this.healthAlpha = healthAlpha;
 
 		#if html5
 		// lol heres how we fuck with everyone
@@ -53,7 +55,7 @@ class Selector extends FlxTypedSpriteGroup<FlxSprite>
 		#end
 
 		chosenOptionString = Init.trueSettings.get(word);
-		if (fpsCap || darkBG)
+		if (fpsCap || darkBG || healthAlpha)
 		{
 			chosenOptionString = Std.string(Init.trueSettings.get(word));
 			optionChosen = new Alphabet(FlxG.width / 2 + 200, shiftY + 20, chosenOptionString, false, false);

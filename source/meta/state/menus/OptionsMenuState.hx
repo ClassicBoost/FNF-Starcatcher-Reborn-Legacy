@@ -87,7 +87,6 @@ class OptionsMenuState extends MusicBeatState
 					#if !neko ["Framerate Cap", getFromOption], #end
 					['FPS Counter', getFromOption],
 					['Memory Counter', getFromOption],
-					[(debugAccess ? 'Debug Info' : ''), (debugAccess ? getFromOption : null)],
 					['', null],
 					['Modifiers', null],
 					['', null],
@@ -96,6 +95,8 @@ class OptionsMenuState extends MusicBeatState
 					['Avali Accurate', getFromOption],
 					['P Ranks Only', getFromOption],
 					['Stage Fright', getFromOption],
+					['', null],
+					[(debugAccess ? 'Debug Info' : ''), (debugAccess ? getFromOption : null)],
 				]
 			],
 			'appearance' => [
@@ -105,6 +106,7 @@ class OptionsMenuState extends MusicBeatState
 				//	["UI Skin", getFromOption],
 				//	['Fixed Judgements', getFromOption],
 				//	['Simply Judgements', getFromOption],
+					["Ranks Skin", getFromOption],
 					['Counter', getFromOption],
 					['', null],
 					['Notes', null],
@@ -121,6 +123,8 @@ class OptionsMenuState extends MusicBeatState
 					['Filter', getFromOption],
 					['Disable Antialiasing', getFromOption],
 					["Stage Opacity", getFromOption],
+					["Health Bar Opacity", getFromOption],
+					["Font Style", getFromOption],
 				//	["Opacity Type", getFromOption],
 					["Icon Bop", getFromOption],
 					["Show Song Progression", getFromOption],
@@ -440,7 +444,7 @@ class OptionsMenuState extends MusicBeatState
 					case Init.SettingTypes.Selector:
 						// selector
 						var selector:Selector = new Selector(10, letter.y, letter.text, Init.gameSettings.get(letter.text)[4],
-							(letter.text == 'Framerate Cap') ? true : false, (letter.text == 'Stage Opacity') ? true : false);
+							(letter.text == 'Framerate Cap') ? true : false, (letter.text == 'Stage Opacity') ? true : false, (letter.text == 'Health Bar Opacity') ? true : false);
 							selector.scrollFactor.x = 0;
 							selector.scrollFactor.y = 0;
 						extrasMap.set(letter, selector);
@@ -512,6 +516,7 @@ class OptionsMenuState extends MusicBeatState
 	{
 		var fps = selector.fpsCap;
 		var bgdark = selector.darkBG;
+		var alphahp = selector.healthAlpha;
 		if (fps)
 		{
 			// bro I dont even know if the engine works in html5 why am I even doing this
@@ -560,6 +565,29 @@ class OptionsMenuState extends MusicBeatState
 			selector.chosenOptionString = Std.string(originaldark);
 			selector.optionChosen.text = Std.string(originaldark);
 			Init.trueSettings.set(activeSubgroup.members[curSelection].text, originaldark);
+			Init.saveSettings();
+		}
+		else if (alphahp) {
+			// lazily hardcoded darkness cap
+			var originalalphahp = Init.trueSettings.get(activeSubgroup.members[curSelection].text);
+			var increase = 5 * updateBy;
+			if (originalalphahp + increase < 0)
+				increase = 0;
+			// high darkness cap
+			if (originalalphahp + increase > 100)
+				increase = 0;
+
+			if (updateBy == -1)
+				selector.selectorPlay('left', 'press');
+			else
+				selector.selectorPlay('right', 'press');
+
+			FlxG.sound.play(Paths.sound('scrollMenu'));
+
+			originalalphahp += increase;
+			selector.chosenOptionString = Std.string(originalalphahp);
+			selector.optionChosen.text = Std.string(originalalphahp);
+			Init.trueSettings.set(activeSubgroup.members[curSelection].text, originalalphahp);
 			Init.saveSettings();
 		}
 		else if (!fps && !bgdark)

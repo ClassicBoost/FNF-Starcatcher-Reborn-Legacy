@@ -248,7 +248,6 @@ class FreeplayState extends MusicBeatState
 		if (controls.BACK)
 		{
 			threadActive = false;
-			FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.7);
 			if (Main.useNewMenu)
 			Main.switchState(this, new MenuState());
 			else
@@ -263,7 +262,7 @@ class FreeplayState extends MusicBeatState
 				displayOverride = 'RYAN (DEFAULT)';
 			case 'connor-old','connor':
 				displayOverride = 'CONNOR';
-			case 'ian':
+			case 'ian-player':
 				displayOverride = 'IAN';
 		}
 
@@ -296,7 +295,7 @@ class FreeplayState extends MusicBeatState
 		scoreBG.x = FlxG.width - scoreBG.width;
 		diffText.x = scoreBG.x + (scoreBG.width / 2) - (diffText.width / 2);
 
-		mutex.acquire();
+	/*	mutex.acquire();
 		if (songToPlay != null)
 		{
 			FlxG.sound.playMusic(songToPlay);
@@ -309,7 +308,7 @@ class FreeplayState extends MusicBeatState
 
 			songToPlay = null;
 		}
-		mutex.release();
+		mutex.release();*/
 	}
 
 	var lastDifficulty:String;
@@ -423,8 +422,8 @@ class FreeplayState extends MusicBeatState
 			case 'none':
 				characterOverrides = 'connor';
 			case 'connor-old','connor':
-				characterOverrides = 'ian';
-			case 'ian':
+				characterOverrides = 'ian-player';
+			case 'ian-player':
 				characterOverrides = 'none';
 		}
 		FlxG.save.data.daCharacterOverride = characterOverrides;

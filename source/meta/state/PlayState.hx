@@ -108,16 +108,12 @@ class PlayState extends MusicBeatState
 
 	var forceLose:Bool = false;
 
-	var hurtText:FlxText;
-
 	// Discord RPC variables
 	public static var songDetails:String = "";
 	public static var detailsSub:String = "";
 	public static var detailsPausedText:String = "";
 
 	private static var prevCamFollow:FlxObject;
-
-	public var fuckingRank:FlxSprite;
 
 	private var blackBG:FlxSprite;
 
@@ -131,8 +127,6 @@ class PlayState extends MusicBeatState
 
 	public static var misses:Int = 0;
 	public static var totalMisses:Int = 0;
-
-	public static var messups:Int = 0; // now this would seem like combo breaks but failing mechanics will also remove your P rank
 
 	public var songhasmechanics:Bool = false;
 	public static var displayRank:String = 'F';
@@ -150,6 +144,9 @@ class PlayState extends MusicBeatState
 	private var paused:Bool = false;
 	var startedCountdown:Bool = false;
 	var inCutscene:Bool = false;
+
+	public var energySine:Float = 0;
+	public var energyEffect:FlxSprite;
 
 	var forceCenter:Bool = false;
 
@@ -200,13 +197,9 @@ class PlayState extends MusicBeatState
 
 	private var antimashshit:Bool = false;
 
-	public static var fuckingPlayer:String = 'ryan';
-
-	public var scoreRequired:Int = 1500; // basically how much notes there is in that song.
-
 	public var judgementText:FlxText;
 
-	public var useNewRanking:Bool = true;
+	public var useNewRanking:Bool = false;
 
 	private var idotChanged:Bool = false;
 
@@ -229,6 +222,17 @@ class PlayState extends MusicBeatState
 
 	public var bopType:String = 'both';
 
+	// Pizza Tower Shit
+	public var fuckingRank:FlxSprite;
+	var hurtText:FlxText;
+	public static var messups:Int = 0; // now this would seem like combo breaks but failing mechanics will also remove your P rank
+	public var failedPrank:Bool = false;
+	public static var fuckingRankText:String = 'd';
+	public static var fuckingPlayer:String = 'ryan';
+	public var scoreRequired:Int = 1500; // basically how much notes there is in that song.
+
+	public static var actualMisses:Int = 0;
+
 	// strumlines
 	private var dadStrums:Strumline;
 	private var boyfriendStrums:Strumline;
@@ -240,7 +244,7 @@ class PlayState extends MusicBeatState
 
 	public static var forceDeath = false;
 
-	public static var fuckingRankText:String = 'd';
+
 
 	private var fuckYouNoHit:Bool = false;
 
@@ -248,6 +252,12 @@ class PlayState extends MusicBeatState
 	var bftwobutfake:Character;
 	var bfbutfake:Character;
 	private var hasTWOplayers:Bool = false;
+
+	// ENERGY
+	private var energyBar:FlxBar;
+	private var energyBarBG:FlxSprite;
+	public var energyig:Float = 0;
+	public var doubleTime:Bool = false;
 
 	var goodNotePressed:Bool = true; // not to be confised with goodNoteHit
 
@@ -267,6 +277,7 @@ class PlayState extends MusicBeatState
 		combo = 0;
 		health = 1;
 		misses = 0;
+		actualMisses = 0;
 		messups = 0;
 		forceDeath = false;
 		canDie = true;
@@ -276,6 +287,8 @@ class PlayState extends MusicBeatState
 		idotChanged = false;
 		noLap2 = true;
 		healthToLower = 0;
+		energyig = 0;
+		doubleTime = false;
 		// sets up the combo object array
 		lastCombo = [];
 
@@ -381,7 +394,7 @@ class PlayState extends MusicBeatState
 			assetModifier = 'pixel';
 
 			choosenfont = 'pixel.otf';
-		} else choosenfont = 'pixel-berry.ttf';
+		} else choosenfont = Init.trueSettings.get("Font Style") + '.ttf';
 
 		gf.color = 0xFFFFFFFF;
 		dadOpponent.color = 0xFFFFFFFF;
@@ -487,9 +500,57 @@ class PlayState extends MusicBeatState
 		dadIcon = dadOpponent.curCharacter;
 
 		fuckingRank = new FlxSprite();
-		if (!isPixelStage)
-		fuckingRank.frames = Paths.getSparrowAtlas('UI/default/base/RANKS');
-		else fuckingRank.frames = Paths.getSparrowAtlas('UI/default/pixel/RANKS');
+		fuckingRank.frames = Paths.getSparrowAtlas('UI/ranks/${Init.trueSettings.get('Ranks Skin')}');
+
+		composerStuff = 'null';
+
+		switch (curSong.toLowerCase()) {
+			case 'mirage':
+			composerStuff = 'Spades';
+			scoreRequired = 500; //142,450
+			case 'wtf':
+			composerStuff = 'I can\'t find the original source who made this';
+			scoreRequired = 850;
+			forceCenter = true;
+			gf.visible = false;
+			useDefaultForever = true;
+			fuckingRank.visible = false;
+			case 'thearchy':
+			composerStuff = 'Original by Maevings | Cover by Classic1926';
+			fuckingRank.visible = false;
+			gf.visible = false;
+			useDefaultForever = true;
+			healthToLower = 0.005;
+		//	boyfriend.visible = false;
+			case 'blam':
+			composerStuff = 'Spades';
+			scoreRequired = 525; // 165,200
+			case 'anomaly','cheating':
+			choosenfont = 'vcr.ttf';
+			fuckingRank.visible = false;
+			gf.visible = false;
+			boyfriend.visible = false;
+			useDefaultForever = true;
+			healthToLower = 0.005;
+			case 'error':
+			choosenfont = 'vcr.ttf';
+			fuckingRank.visible = false;
+			case 'ataefull':
+			choosenfont = 'minecraft.otf';
+			fuckingRank.frames = Paths.getSparrowAtlas('UI/ranks/pixel');
+			noLap2 = false;
+			scoreRequired = 1050;
+			gf.visible = false;
+			hasTWOplayers = true;
+			healthToLower = 0.01;
+			case 'awaken':
+				healthToLower = 0.007;
+			case 'vac':
+			choosenfont = 'comic.ttf';
+			gf.visible = false;
+			canPause = false;
+		}
+
 		fuckingRank.animation.addByPrefix('p', 'P', 24, true);
 		fuckingRank.animation.addByPrefix('s+', 'S+', 24, true);
 		fuckingRank.animation.addByPrefix('s', 'S0', 24, true);
@@ -505,60 +566,19 @@ class PlayState extends MusicBeatState
 		fuckingRank.x += 1000;
 		add(fuckingRank);
 
-		composerStuff = 'null';
-
-		switch (curSong.toLowerCase()) {
-			case 'mirage':
-			composerStuff = 'Spades';
-			scoreRequired = 407; //142,450
-			case 'wtf':
-			composerStuff = 'I can\'t find the original source who made this';
-			scoreRequired = 687;
-			forceCenter = true;
-			gf.visible = false;
-			useDefaultForever = true;
-			fuckingRank.visible = false;
-			case 'thearchy':
-			composerStuff = 'Original by Maevings | Cover by Classic1926';
-			fuckingRank.visible = false;
-			gf.visible = false;
-			useDefaultForever = true;
-			healthToLower = 0.005;
-		//	boyfriend.visible = false;
-			case 'blam':
-			composerStuff = 'Spades';
-			scoreRequired = 472; // 165,200
-			case 'anomaly','cheating':
-			choosenfont = 'vcr.ttf';
-			fuckingRank.visible = false;
-			gf.visible = false;
-			boyfriend.visible = false;
-			useDefaultForever = true;
-			healthToLower = 0.005;
-			case 'error':
-			choosenfont = 'vcr.ttf';
-			fuckingRank.visible = false;
-			case 'ataefull':
-			choosenfont = 'minecraft.otf';
-			noLap2 = false;
-			scoreRequired = 977;
-			gf.visible = false;
-			hasTWOplayers = true;
-			healthToLower = 0.01;
-			case 'awaken':
-				healthToLower = 0.007;
-			case 'vac':
-			choosenfont = 'comic.ttf';
-			gf.visible = false;
-			canPause = false;
-		}
-
 		if (!hasTWOplayers)
 			remove(bftwobutfake);
 
 		scoreRequired = (scoreRequired * 350);
 
 		uiHUD = new ClassHUD();
+
+		energyEffect = new FlxSprite(1200,70).loadGraphic(Paths.image('UI/default/base/energyUse'));
+		energyEffect.scrollFactor.set();
+		energyEffect.cameras = [camHUD];
+		energyEffect.visible = false;
+		energyEffect.screenCenter();
+		add(energyEffect);
 
 		songPosBG = new FlxSprite(0, 10).loadGraphic(Paths.image(ForeverTools.returnSkinAsset('healthBar', PlayState.assetModifier, PlayState.changeableSkin, 'UI')));
 		if (!Init.trueSettings.get('Downscroll'))
@@ -590,6 +610,28 @@ class PlayState extends MusicBeatState
 		healthBarBG.screenCenter(X);
 		healthBarBG.scrollFactor.set();
 		add(healthBarBG);
+
+		energyBarBG = new FlxSprite(1200,70).loadGraphic(Paths.image('UI/default/base/energyBar'));
+		energyBarBG.scrollFactor.set();
+		energyBarBG.cameras = [camHUD];
+
+		energyBar = new FlxBar(energyBarBG.x, energyBarBG.y, RIGHT_TO_LEFT, 275, 19, this, 'energyig', 0, 100);
+		energyBar.scrollFactor.set();
+		energyBar.screenCenter();
+		energyBar.x = 1115;
+		energyBar.y = 205;
+		energyBar.createFilledBar(0xFF3F3F3F, 0xFF3FFF3F);
+		energyBar.numDivisions = 1000; // how much lag does this cause?
+		energyBar.cameras = [camHUD];
+		energyBar.angle = 90;
+
+		if (!useDefaultForever) {
+		add(energyBar);
+		add(energyBarBG);
+		}
+
+		if (Init.trueSettings.get("Debug Info"))
+			useNewRanking = true;
 
 		fuckingRank.y = healthBarBG.y - 30;
 
@@ -660,6 +702,18 @@ class PlayState extends MusicBeatState
 		{
 			FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyPress);
 			FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyRelease);
+		}
+
+		if (SONG.player1 == 'ryan' || SONG.player1 == 'ryan-car' || SONG.player1 == 'ryan-christmas' || SONG.player1 == 'ryan-pixel') {
+		switch (FreeplayState.characterOverrides) {
+			case 'connor':
+				GameOverSubstate.deathSound = 'connorFRICK';
+			case 'ian':
+				GameOverSubstate.deathSound = 'hylotlKO';
+			default:
+				GameOverSubstate.deathSound = 'avaliKO';
+		}} else {
+			GameOverSubstate.deathSound = 'default';
 		}
 
 		Paths.clearUnusedMemory();
@@ -823,6 +877,11 @@ class PlayState extends MusicBeatState
 		healthBar.cameras = [camHUD];
 		iconP1.cameras = [camHUD];
 		iconP2.cameras = [camHUD];
+
+		healthBar.alpha = (Init.trueSettings.get("Health Bar Opacity") / 100);
+		healthBarBG.alpha = (Init.trueSettings.get("Health Bar Opacity") / 100);
+		iconP1.alpha = (Init.trueSettings.get("Health Bar Opacity") / 100);
+		iconP2.alpha = (Init.trueSettings.get("Health Bar Opacity") / 100);
 	}
 
 	private function getKeyFromEvent(key:FlxKey):Int
@@ -887,6 +946,9 @@ class PlayState extends MusicBeatState
 			FlxG.sound.play(Paths.sound('hitsound'), 1);
 		}
 
+		energySine += 180 * elapsed;
+		energyEffect.alpha = 1 - Math.sin((Math.PI * energySine) / 180);
+
 		if (choosenfont == 'minecraft.otf' || useDefaultForever) {
 		var iconLerp = 0.5;
 		iconP1.setGraphicSize(Std.int(FlxMath.lerp(iconP1.initialWidth, iconP1.width, iconLerp)));
@@ -899,9 +961,41 @@ class PlayState extends MusicBeatState
 		}
 
 		// messups are just mechanic fails, nothing else, as well with note misses, and you only get a P rank if you also have a MFC
-		if (misses == 0 && messups == 0 && songScore != 0 && !cpuControlled && !practiceMode) displayRank = 'P';
+		if (misses == 0 && messups == 0 && songScore != 0 && !cpuControlled && !practiceMode && !failedPrank) displayRank = 'P';
 
 		if (cpuControlled && (curSong.toLowerCase() == 'vac') && !Init.trueSettings.get('Debug Info')) forceDeath = true;
+
+		if (energyig > 100) {
+			energyig = 100;
+			FlxG.sound.play(Paths.sound('energy_full'));
+
+			hurtText.text = 'BOOST READY TO USE';
+			displayMidText();
+		}
+
+		if (energyig < 0) {
+			energyig = 0;
+			if (doubleTime) FlxG.sound.play(Paths.sound('energy_out'));
+			doubleTime = false;
+		}
+
+		if (health < 0)
+			health = 0;
+
+		if (doubleTime) {
+			energyig -= 0.04;
+			energyEffect.visible = true;
+		} else energyEffect.visible = false;
+
+		if (FlxG.keys.justPressed.SPACE && !doubleTime) {
+			if (energyig >= 100)
+			doubleTime = true;
+			else {
+			FlxG.sound.play(Paths.sound('nav_insufficient_fuel'));
+			hurtText.text = 'NOT ENOUGH ENERGY';
+			displayMidText();
+			}
+		}
 
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();
@@ -926,16 +1020,16 @@ class PlayState extends MusicBeatState
 
 		if (forceRank == 0) {
 		if (!useDefaultForever) {
-		if (songScore >= (scoreRequired * 0.25) && songScore < (scoreRequired * 0.6)) {
+		if (songScore >= (scoreRequired * 0.25) && songScore < (scoreRequired * 0.45)) {
 			fuckingRankText = 'c';
-		} else if (songScore >= (scoreRequired * 0.5) && songScore < (scoreRequired * 0.9)) {
+		} else if (songScore >= (scoreRequired * 0.45) && songScore < (scoreRequired * 0.65)) {
 			fuckingRankText = 'b';
-		} else if (songScore >= (scoreRequired * 0.8) && songScore < (scoreRequired * 0.99)) {
+		} else if (songScore >= (scoreRequired * 0.65) && songScore < (scoreRequired * 0.95)) {
 			fuckingRankText = 'a';
-		} else if (songScore >= (scoreRequired * 0.95) && songScore < scoreRequired) {
+		} else if (songScore >= (scoreRequired * 0.95)) {
 			if (roundTwoCompleted && (Math.floor(Timings.getAccuracy() * 100) / 100) >= 98 && misses == 0) fuckingRankText = 'p';
 			else fuckingRankText = 's';
-		} else if (songScore >= scoreRequired && (Math.floor(Timings.getAccuracy() * 100) / 100) >= 99.99 && noLap2) {
+		} else if (songScore >= scoreRequired && (Math.floor(Timings.getAccuracy() * 100) / 100) >= 99.99) {
 			if (misses == 0 || Init.trueSettings.get("Avali Accurate"))
 			fuckingRankText = 'p'; // get a P rank instead
 		} else if (songScore < (scoreRequired * 0.3)) {
@@ -954,11 +1048,6 @@ class PlayState extends MusicBeatState
 			fuckingRank.scale.set(0.45, 0.45);
 			FlxTween.tween(fuckingRank, {"scale.x": 0.35, "scale.y": 0.35}, 0.5, {ease: FlxEase.cubeOut});
 			shitfart = fuckingRankText;
-
-			if (!useDefaultForever && fuckingRankText != 's' && fuckingRankText != 'p') {
-			hurtText.text = 'YOU GOT ENOUGH SCORE FOR RANK ${fuckingRankText.toUpperCase()}';
-			displayMidText();
-			}
 		}
 		totalCombo = combo;
 
@@ -1212,8 +1301,6 @@ class PlayState extends MusicBeatState
 				deaths += 1;
 
 				openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
-
-				FlxG.sound.play(Paths.sound('fnf_loss_sfx' + GameOverSubstate.stageSuffix));
 
 				#if DISCORD_RPC
 				Discord.changePresence("Game Over - " + songDetails, detailsSub, iconRPC);
@@ -1511,6 +1598,8 @@ class PlayState extends MusicBeatState
 						fuckYouNoHit = true;
 
 					ClassHUD.bopScore();
+
+					if (!doubleTime && energyig < 100 && !useDefaultForever) energyig += 2;
 				}
 				else if (coolNote.isSustainNote)
 				{
@@ -1519,6 +1608,7 @@ class PlayState extends MusicBeatState
 					{
 						Timings.updateAccuracy(100, true, coolNote.parentNote.childrenNotes.length);
 						healthCall(100 / coolNote.parentNote.childrenNotes.length);
+						if (!doubleTime && energyig < 100 && !useDefaultForever) energyig += 0.1;
 					}
 				}
 			} else {
@@ -1562,6 +1652,7 @@ class PlayState extends MusicBeatState
 		{
 			var stringDirection:String = UIStaticArrow.getArrowFromNumber(direction);
 
+			if (health >= 0.1) {
 			FlxG.sound.play(Paths.soundRandom('hurt/missnote', 1, 3), FlxG.random.float(0.1, 0.2));
 			switch (boyfriend.curCharacter) {
 				case 'bf-og':
@@ -1574,7 +1665,7 @@ class PlayState extends MusicBeatState
 					FlxG.sound.play(Paths.sound('hurt/connorhurt'), 0.7);
 				default:
 					
-			}
+			}}
 			character.playAnim('sing' + stringDirection.toUpperCase() + 'miss', lockMiss);
 
 			if (ghostTapFail || songScore <= 0) {
@@ -1807,7 +1898,7 @@ class PlayState extends MusicBeatState
 		Timings.updateAccuracy(Timings.judgementsMap.get(baseRating)[3]);
 		if (!cpuControlled) {
 		score = Std.int(Timings.judgementsMap.get(baseRating)[2]);
-		songScore += score;
+		songScore += (doubleTime == true ? (score * 2) : score);
 		} else songScore = 0;
 
 		popUpCombo();
@@ -1901,10 +1992,7 @@ class PlayState extends MusicBeatState
 		if (((combo > 5) || (combo < 0)) && (gf.animOffsets.exists('sad')))
 			gf.playAnim('sad');
 
-		if (combo > 0)
-			combo = 0; // bitch lmao
-		else
-			combo--;
+	
 
 		if (Init.trueSettings.get('FC Mode')) health = -9;
 
@@ -1912,10 +2000,21 @@ class PlayState extends MusicBeatState
 
 		forceLose = true;
 
-		// misses
-		songScore -= 1000;
-		misses++;
-		messups++;
+		energyig -= 20;
+
+		actualMisses++;
+
+		if (energyig <= 0) {
+			if (combo > 0)
+				combo = 0; // bitch lmao
+			else
+				combo--;
+
+			// misses
+			songScore -= 500;
+			misses++;
+			messups++;
+		}
 
 		if (curSong.toLowerCase() == 'vac')
 			{
@@ -2051,7 +2150,7 @@ class PlayState extends MusicBeatState
 	{
 		// health += 0.012;
 		var healthBase:Float = 0.06;
-		health += (healthBase * (ratingMultiplier / 100));
+		health += (healthBase * (ratingMultiplier / 100) * (doubleTime == true ? 2 : 1));
 	}
 
 	function startSong():Void
@@ -2125,22 +2224,37 @@ class PlayState extends MusicBeatState
 	function owwhyyouhurtme() {
 		var missesRequired:Int = 20;
 		var daCharacter:String = 'RYAN';
-		if (FreeplayState.characterOverrides == 'connor') missesRequired = 1;
+		if (FreeplayState.characterOverrides == 'connor' || boyfriend.curCharacter == 'ironlord') missesRequired = 1;
 
 		switch (FreeplayState.characterOverrides) {
 			case 'connor':
 				daCharacter = 'CONNOR';
-			case 'ian':
+			case 'ian-player':
 				daCharacter = 'IAN';
-			case 'poptop':
-				daCharacter = 'THE POPTOP';
 			case 'carson':
 				daCharacter = 'CARSON';
+			case 'bf':
+				daCharacter = 'BOYFRIEND';
 			default:
 				daCharacter = 'RYAN';
 		}
 
-		if (misses % missesRequired == 0) {
+		switch (boyfriend.curCharacter) {
+			case 'connor':
+				daCharacter = 'CONNOR';
+			case 'bf':
+				daCharacter = 'BOYFRIEND';
+			case 'ian-player':
+				daCharacter = 'IAN';
+			case 'poptop':
+				daCharacter = 'THE POPTOP';
+			case 'eilyo':
+				daCharacter = 'EILYO';
+			case 'ironlord':
+				daCharacter = 'IRONLORD';
+		}
+
+		if (misses % missesRequired == 0 && misses != 0) {
 			hurtText.text = 'YOU\'VE HURT $daCharacter $misses TIMES';
 			displayMidText();
 		}
@@ -2341,6 +2455,11 @@ class PlayState extends MusicBeatState
 				iconP1.setGraphicSize(Std.int(iconP1.width + 30));
 				iconP2.setGraphicSize(Std.int(iconP2.width + 30));
 
+				if (!useDefaultForever) {
+				FlxTween.angle(iconP1, -15, 0, Conductor.crochet / 1500 * gfSpeed, {ease: FlxEase.quadOut});
+				FlxTween.angle(iconP2, 15, 0, Conductor.crochet / 1500 * gfSpeed, {ease: FlxEase.quadOut});
+				}
+
 			/*	if (curBeat % 2 == 0) {
 				if (health >= 0.4) FlxTween.angle(iconP1, -15, 0, Conductor.crochet / 1150 * gfSpeed, {ease: FlxEase.quadOut});
 				if (health <= 1.6) FlxTween.angle(iconP2, 15, 0, Conductor.crochet / 1150 * gfSpeed, {ease: FlxEase.quadOut});
@@ -2530,7 +2649,7 @@ class PlayState extends MusicBeatState
 		if (!isStoryMode)
 		{
 		//	if (Init.trueSettings.get("Debug Info"))
-			if (useNewRanking || Init.trueSettings.get("Debug Info"))
+			if (useNewRanking)
 			Main.switchState(this, new RankingState());
 			else
 			Main.switchState(this, new OLDRankingState());

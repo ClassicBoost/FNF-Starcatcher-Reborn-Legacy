@@ -104,6 +104,12 @@ class Init extends FlxState
 			'Darkens non-ui elements, useful if you find the characters and backgrounds distracting.',
 			NOT_FORCED
 		],
+		'Health Bar Opacity' => [
+			Checkmark,
+			Selector,
+			'Lower the number the more transparent the health bar and icons be.',
+			NOT_FORCED
+		],
 		'Hitsounds' => [
 			false,
 			Checkmark,
@@ -128,6 +134,13 @@ class Init extends FlxState
 			'Choose whether the filter will be behind the notes or the UI',
 			NOT_FORCED,
 			['UI', 'Notes']
+		],
+		'Ranks Skin' => [
+			'default',
+			Selector,
+			'Choose what skin the ingame rank should be',
+			NOT_FORCED,
+			['default', 'classic']
 		],
 		'Counter' => [
 			'None',
@@ -170,6 +183,13 @@ class Init extends FlxState
 			"Chooses a style for hold note clippings; StepMania: Holds under Receptors; FNF: Holds over receptors",
 			NOT_FORCED,
 			['StepMania', 'FNF']
+		],
+		"Font Style" => [
+			'vcr',
+			Selector,
+			"Chooses a style for the ingame font",
+			NOT_FORCED,
+			['vcr', 'hobo', 'pixel-berry', 'Vividly-Regular']
 		],
 		"UI Skin" => [
 			'default',
@@ -367,6 +387,11 @@ class Init extends FlxState
 			|| trueSettings.get("Stage Opacity") < 0
 			|| trueSettings.get("Stage Opacity") > 100)
 			trueSettings.set("Stage Opacity", 100);
+
+		if (!Std.isOfType(trueSettings.get("Health Bar Opacity"), Int)
+			|| trueSettings.get("Health Bar Opacity") < 0
+			|| trueSettings.get("Health Bar Opacity") > 100)
+			trueSettings.set("Health Bar Opacity", 100);
 
 		// 'hardcoded' ui skins
 		gameSettings.get("UI Skin")[4] = CoolUtil.returnAssetsLibrary('UI');

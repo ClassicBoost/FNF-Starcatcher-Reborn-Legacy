@@ -182,10 +182,10 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 		{
 			if (!PlayState.useDefaultForever) {
 			scoreBar.text += divider + accuracytext + Std.string(Math.floor(Timings.getAccuracy() * 100) / 100) + '%';
-			if (PlayState.misses == 0)
+			if (PlayState.misses == 0 && PlayState.actualMisses == 0)
 			scoreBar.text += Timings.comboDisplay;
 			else
-			scoreBar.text += Timings.comboDisplay + divider + missestext + Std.string(PlayState.misses);
+			scoreBar.text += Timings.comboDisplay + divider + missestext + Std.string(PlayState.misses) + ' (${PlayState.actualMisses})';
 			} else { // base forever engine
 			scoreBar.text += divider + accuracytext + Std.string(Math.floor(Timings.getAccuracy() * 100) / 100) + '%${Timings.comboDisplay}';
 			scoreBar.text += divider + missestext + Std.string(PlayState.misses);

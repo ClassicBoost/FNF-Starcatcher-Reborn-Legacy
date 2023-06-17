@@ -18,8 +18,8 @@ class Timings
 	public static var judgementsMap:Map<String, Array<Dynamic>> = [
 		"sick" => [0, (Init.trueSettings.get("Harder Safeframes") ? 20 : 55), 350, 100, ' | MFC'],
 		"good" => [1, (Init.trueSettings.get("Harder Safeframes") ? 40 : 90), 200, 75, ' | GFC'],
-		"bad" => [2, (Init.trueSettings.get("Harder Safeframes") ? 80 : 120), 0, 50, ' | FC'],
-		"shit" => [3, (Init.trueSettings.get("Harder Safeframes") ? 125 : 150), -500, 25, ' | FC-'],
+		"bad" => [2, (Init.trueSettings.get("Harder Safeframes") ? 80 : 120), 75, 50, ' | FC'],
+		"shit" => [3, (Init.trueSettings.get("Harder Safeframes") ? 125 : 150), 0, 25, ' | FC-'],
 		"miss" => [4, 180, 0, -100],
 	];
 

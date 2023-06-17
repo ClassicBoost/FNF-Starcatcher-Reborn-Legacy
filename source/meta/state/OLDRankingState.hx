@@ -82,7 +82,6 @@ class OLDRankingState extends MusicBeatState
 		fuckingRankThing = new FlxSprite(Paths.image('characters/rankings/characters/$player/${PlayState.fuckingRankText}-text'));
 		fuckingRankThing.antialiasing = false;
 		fuckingRankThing.y += 800;
-		add(fuckingRankThing);
 
 		theperson = new FlxSprite(Paths.image('characters/rankings/characters/$player/${PlayState.fuckingRankText}'));
 		theperson.antialiasing = true;
@@ -93,6 +92,8 @@ class OLDRankingState extends MusicBeatState
 			fuckingRank.x = -300;
 			fuckingRankThing.x = -300;
 		}
+
+		add(fuckingRankThing);
 
 		bgcolor = new FlxSprite(0, 0).makeGraphic(3000, 3000, 0xFFFFFFFF);
 		bgcolor.visible = false;
