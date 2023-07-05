@@ -82,9 +82,10 @@ class OptionsMenuState extends MusicBeatState
 					['', null],
 					['Meta Settings', null],
 					['', null],
+					['Ranking Screen', getFromOption],
 					['Hitsounds', getFromOption],
 					['Auto Pause', getFromOption],
-					#if !neko ["Framerate Cap", getFromOption], #end
+				//	#if !neko ["Framerate Cap", getFromOption], #end
 					['FPS Counter', getFromOption],
 					['Memory Counter', getFromOption],
 					['', null],
@@ -95,6 +96,7 @@ class OptionsMenuState extends MusicBeatState
 					['Avali Accurate', getFromOption],
 					['P Ranks Only', getFromOption],
 					['Stage Fright', getFromOption],
+					['Back to the Basics', getFromOption],
 					['', null],
 					[(debugAccess ? 'Debug Info' : ''), (debugAccess ? getFromOption : null)],
 				]

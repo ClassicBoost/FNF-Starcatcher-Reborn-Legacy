@@ -16,10 +16,10 @@ class Timings
 	// from left to right
 	// max milliseconds, score from it and percentage
 	public static var judgementsMap:Map<String, Array<Dynamic>> = [
-		"sick" => [0, (Init.trueSettings.get("Harder Safeframes") ? 20 : 55), 350, 100, ' | MFC'],
-		"good" => [1, (Init.trueSettings.get("Harder Safeframes") ? 40 : 90), 200, 75, ' | GFC'],
-		"bad" => [2, (Init.trueSettings.get("Harder Safeframes") ? 80 : 120), 75, 50, ' | FC'],
-		"shit" => [3, (Init.trueSettings.get("Harder Safeframes") ? 125 : 150), 0, 25, ' | FC-'],
+		"sick" => [0, (Init.trueSettings.get("Harder Safeframes") ? 20 : Init.trueSettings.get("Back to the Basics") ? 45 : 55), 350, 100, (PlayState.useDefaultForever ? ' [MFC]' : ' | MFC')],
+		"good" => [1, (Init.trueSettings.get("Harder Safeframes") ? 40 : Init.trueSettings.get("Back to the Basics") ? 90 : 90), 200, 75, (PlayState.useDefaultForever ? ' [GFC]' : ' | GFC')],
+		"bad" => [2, (Init.trueSettings.get("Harder Safeframes") ? 80 : Init.trueSettings.get("Back to the Basics") ? 135 : 120), 75, 50, (PlayState.useDefaultForever ? ' [FC]' : ' | FC')],
+		"shit" => [3, (Init.trueSettings.get("Harder Safeframes") ? 125 : Init.trueSettings.get("Back to the Basics") ? 157.5 : 150), 0, 25, (PlayState.useDefaultForever ? ' [FC-]' : ' | FC-')],
 		"miss" => [4, 180, 0, -100],
 	];
 
@@ -37,7 +37,7 @@ class Timings
 	//	"F" => 65,
 	];
 
-	public static var ratingFinal:String = "F";
+	public static var ratingFinal:String = "N/A";
 	public static var notesHit:Int = 0;
 	public static var segmentsHit:Int = 0;
 	public static var comboDisplay:String = '';
@@ -67,7 +67,7 @@ class Timings
 		notesHit = 0;
 		segmentsHit = 0;
 
-		ratingFinal = "F";
+		ratingFinal = "N/A";
 
 		comboDisplay = '';
 	}
@@ -99,8 +99,10 @@ class Timings
 		{
 			if (PlayState.misses < 10)
 				comboDisplay = ' [SDCB]';
-			if (PlayState.misses >= 65)
+			if (PlayState.misses >= 65 && PlayState.misses < 500)
 				comboDisplay = ' [Skill Issue]';
+			if (PlayState.misses >= 500)
+				comboDisplay = ' [wtf?]';
 		}
 
 		// this updates the most so uh

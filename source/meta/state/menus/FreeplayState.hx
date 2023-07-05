@@ -424,6 +424,8 @@ class FreeplayState extends MusicBeatState
 			case 'connor-old','connor':
 				characterOverrides = 'ian-player';
 			case 'ian-player':
+				characterOverrides = 'carson';
+			case 'carson':
 				characterOverrides = 'none';
 		}
 		FlxG.save.data.daCharacterOverride = characterOverrides;

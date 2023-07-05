@@ -9,6 +9,7 @@ import flixel.math.FlxMath;
 import flixel.math.FlxRect;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
+import flixel.util.FlxColor;
 import flixel.util.FlxSort;
 import meta.data.Conductor;
 import meta.data.Timings;
@@ -61,10 +62,15 @@ class UIStaticArrow extends FlxSprite
 	// literally just character code
 	public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void
 	{
-		if (AnimName == 'confirm')
+		if (AnimName == 'confirm') {
+			color = PlayState.currentColor;
 			alpha = 1;
-		else
-			alpha = setAlpha;
+		}
+		else {
+			color = 0xFFFFFFFF;
+			if (!PlayState.isPixelStage) alpha = setAlpha;
+			else alpha = 1;
+		}
 
 		animation.play(AnimName, Force, Reversed, Frame);
 		updateHitbox();
@@ -76,6 +82,12 @@ class UIStaticArrow extends FlxSprite
 		}
 		else
 			offset.set(0, 0);
+	}
+
+	override function update(elapsed:Float)
+	{
+			super.update(elapsed);
+
 	}
 
 	public function addOffset(name:String, x:Float = 0, y:Float = 0)
@@ -166,6 +178,8 @@ class Strumline extends FlxTypedGroup<FlxBasic>
 			staticArrow.angleTo = 0;
 			staticArrow.y -= 10;
 			staticArrow.playAnim('static');
+
+			staticArrow.color = PlayState.currentColor;
 
 			staticArrow.alpha = 0;
 			FlxTween.tween(staticArrow, {y: staticArrow.initialY, alpha: staticArrow.setAlpha}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * i)});

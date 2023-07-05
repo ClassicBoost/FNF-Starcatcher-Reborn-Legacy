@@ -93,6 +93,8 @@ class Stage extends FlxTypedGroup<FlxBasic>
 					curStage = 'highway-og';
 				case 'cheating','thearchy':
 					curStage = 'nothing';
+				case 'dancebound':
+					curStage = 'school';
 				case 'ataefull':
 					curStage = 'minecraft';
 				default:
@@ -460,7 +462,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 	// return the girlfriend's type
 	public function returnGFtype(curStage)
 	{
-		var gfVersion:String = 'gf';
+		var gfVersion:String = 'gone';
 
 		switch (curStage)
 		{

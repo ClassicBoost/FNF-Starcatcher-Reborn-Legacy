@@ -1,7 +1,8 @@
 package gameObjects.userInterface.notes;
 
 import meta.data.dependency.FNFSprite;
-
+import flixel.util.FlxColor;
+import meta.state.PlayState;
 /**
 	Create the note splashes in week 7 whenever you get a sick!
 **/
@@ -17,6 +18,8 @@ class NoteSplash extends FNFSprite
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
+
+		color = PlayState.currentColor;
 
 		// kill the note splash if it's done
 		if (animation.finished)

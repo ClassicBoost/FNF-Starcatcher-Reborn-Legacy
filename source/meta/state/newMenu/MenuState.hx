@@ -34,6 +34,20 @@ class MenuState extends MusicBeatState
     var creds:FlxSprite;
     override function create() {
         selectedSomething = false;
+
+		var skyBG:FlxSprite = new FlxSprite();
+		var hours:Int = Date.now().getHours();
+		if(hours > 19 || hours < 6) {
+			skyBG.loadGraphic(Paths.image('backgrounds/shared/bg-dark'));
+		} else if(hours >= 6 && hours < 17) {
+			skyBG.loadGraphic(Paths.image('backgrounds/shared/sky'));
+		} else {
+			skyBG.loadGraphic(Paths.image('backgrounds/shared/bgsunset'));
+		}
+		skyBG.screenCenter();
+		add(skyBG);
+
+
 		var bg:FlxSprite = new FlxSprite();
 		bg.loadGraphic(Paths.image('menus/base/newmenu/bg'));
 		bg.screenCenter();

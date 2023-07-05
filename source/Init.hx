@@ -98,6 +98,13 @@ class Init extends FlxState
 			'Turn this off if the icon bop is distracting.',
 			NOT_FORCED
 		],
+		'Ranking Screen' => [
+			'Normal',
+			Selector,
+			'What ranking screen should it use?',
+			NOT_FORCED,
+			['Normal', 'Alt', 'Old']
+		],
 		'Stage Opacity' => [
 			Checkmark,
 			Selector,
@@ -140,7 +147,7 @@ class Init extends FlxState
 			Selector,
 			'Choose what skin the ingame rank should be',
 			NOT_FORCED,
-			['default', 'classic']
+			['default', 'classic', 'sugaryspire']
 		],
 		'Counter' => [
 			'None',
@@ -258,6 +265,7 @@ class Init extends FlxState
 		'Avali Accurate' => [false, Checkmark, "You will often miss, P rank does not require FC, and health drain is reduced"],
 		'P Ranks Only' => [false, Checkmark, "You must P rank the song to live (See manual for info)."],
 		'Stage Fright' => [false, Checkmark, "You lose health every time they hit a note, songs that already has this will be disabled."],
+		'Back to the Basics' => [false, Checkmark, "Health and Safeframes will be reverted back to default Forever Engine."],
 		// LANGUAGES
 		'English' => [true, Checkmark, "Very Unfinished"],
 		'Portuguese' => [false, Checkmark, "Muito Inacabado"],

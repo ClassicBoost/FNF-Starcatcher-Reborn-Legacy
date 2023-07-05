@@ -167,6 +167,12 @@ class Character extends FNFSprite
 				playAnim('idle');
 				characterData.offsetY = 150;
 				barColor = 0xFF6699FF;
+
+			case 'gone3':
+				frames = Paths.getSparrowAtlas('characters/sprites/main/gone');
+
+				animation.addByPrefix('idle', 'idle', 24, false);
+				barColor = 0xFF000000;
 			case 'mom':
 				tex = Paths.getSparrowAtlas('characters/sprites/classic/Mom_Assets');
 				frames = tex;
@@ -223,7 +229,7 @@ class Character extends FNFSprite
 
 				playAnim('idle');
 				barColor = 0xFFF3FF6E;
-			case 'pico','ian':
+			case 'pico','ian','ian-player':
 				tex = Paths.getSparrowAtlas('characters/sprites/classic/Pico_FNF_assetss');
 				frames = tex;
 				animation.addByPrefix('idle', "Pico Idle Dance", 24, false);

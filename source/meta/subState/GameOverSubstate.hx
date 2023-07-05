@@ -67,6 +67,11 @@ class GameOverSubstate extends MusicBeatSubState
 		FlxG.sound.play(Paths.sound('gameover/' + deathSound));
 
 		bf.playAnim('firstDeath');
+
+		new FlxTimer().start(0.5, function(tmr:FlxTimer)
+			{
+				FlxG.sound.play(Paths.sound('cutscenes/DED'));
+			});
 	}
 
 	override function update(elapsed:Float)

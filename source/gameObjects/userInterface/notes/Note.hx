@@ -85,6 +85,8 @@ class Note extends FNFSprite
 	{
 		super.update(elapsed);
 
+		color = PlayState.currentColor;
+
 		if (mustPress)
 		{
 			if (strumTime > Conductor.songPosition - (Timings.msThreshold) && strumTime < Conductor.songPosition + (Timings.msThreshold))
